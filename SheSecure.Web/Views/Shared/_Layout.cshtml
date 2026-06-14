@@ -22,97 +22,101 @@
     {
         <!-- Sidebar -->
         <nav id="sidebar">
+            <button id="sidebarToggle" class="btn btn-sm text-white d-none d-md-flex align-items-center justify-content-center" style="position: absolute; right: -15px; top: 30px; background: var(--ss-card); border: 1px solid var(--ss-border); border-radius: 50%; width: 30px; height: 30px; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: all 0.3s ease;">
+                <i class="bi bi-chevron-left" style="font-size: 14px;"></i>
+            </button>
+
             <div class="sidebar-brand">
-                <div class="logo-icon">🛡️</div>
-                <span>SheSecure</span>
+                <div class="logo-icon" style="transition: transform 0.3s ease;">🛡️</div>
+                <span class="sidebar-brand-text">SheSecure</span>
             </div>
 
             <div class="sidebar-nav mt-2">
                 <!-- All roles -->
-                <div class="nav-section">Main</div>
+                <div class="nav-section sidebar-text">Main</div>
                 <a asp-controller="Dashboard" asp-action="Index"
-                       class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
-                    <i class="bi bi-speedometer2"></i> Dashboard
+                       class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                    <i class="bi bi-speedometer2"></i> <span class="sidebar-text">Dashboard</span>
                 </a>
 
                 <!-- Employee & above -->
                 @if (role == "Employee" || role == "Manager" || role == "HR" || role == "Admin")
                 {
-                    <div class="nav-section">Safety</div>
+                    <div class="nav-section sidebar-text">Safety</div>
                     <a asp-controller="SafeReach" asp-action="Index"
-                           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "SafeReach" ? "active" : "")">
-                        <i class="bi bi-shield-check"></i> Safe Check-In
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "SafeReach" ? "active" : "")">
+                        <i class="bi bi-shield-check"></i> <span class="sidebar-text">Safe Check-In</span>
                     </a>
                     <a asp-controller="Emergency" asp-action="Index"
-                           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" ? "active" : "")">
-                        <i class="bi bi-exclamation-octagon"></i> SOS / Emergency
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" ? "active" : "")">
+                        <i class="bi bi-exclamation-octagon"></i> <span class="sidebar-text">SOS / Emergency</span>
                     </a>
 
-                    <div class="nav-section">Wellness</div>
+                    <div class="nav-section sidebar-text">Wellness</div>
                     <a asp-controller="Wellness" asp-action="Index"
-                           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Wellness" ? "active" : "")">
-                        <i class="bi bi-heart-pulse"></i> Mood & Wellness
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wellness" ? "active" : "")">
+                        <i class="bi bi-heart-pulse"></i> <span class="sidebar-text">Mood & Wellness</span>
                     </a>
                     <a asp-controller="WFH" asp-action="Index"
-                           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "WFH" ? "active" : "")">
-                        <i class="bi bi-house-door"></i> WFH Requests
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "WFH" ? "active" : "")">
+                        <i class="bi bi-house-door"></i> <span class="sidebar-text">WFH Requests</span>
                     </a>
 
-                    <div class="nav-section">Complaints</div>
+                    <div class="nav-section sidebar-text">Complaints</div>
                     <a asp-controller="Complaint" asp-action="Index"
-                           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Complaint" ? "active" : "")">
-                        <i class="bi bi-file-earmark-text"></i> My Complaints
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Complaint" ? "active" : "")">
+                        <i class="bi bi-file-earmark-text"></i> <span class="sidebar-text">My Complaints</span>
                     </a>
                 }
 
                 <!-- HR / POSH -->
                 @if (role == "HR" || role == "Admin")
                 {
-                    <div class="nav-section">HR / POSH</div>
+                    <div class="nav-section sidebar-text">HR / POSH</div>
                     <a asp-controller="Complaint" asp-action="All"
-                           class="@(ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
-                        <i class="bi bi-folder2-open"></i> All Complaints
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
+                        <i class="bi bi-folder2-open"></i> <span class="sidebar-text">All Complaints</span>
                     </a>
                 }
 
                 <!-- Manager -->
                 @if (role == "Manager" || role == "Admin")
                 {
-                    <div class="nav-section">Manager</div>
+                    <div class="nav-section sidebar-text">Manager</div>
                     <a asp-controller="WFH" asp-action="Approvals"
-                           class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Approvals" ? "active" : "")">
-                        <i class="bi bi-check2-square"></i> WFH Approvals
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Approvals" ? "active" : "")">
+                        <i class="bi bi-check2-square"></i> <span class="sidebar-text">WFH Approvals</span>
                     </a>
                 }
 
                 <!-- Security -->
                 @if (role == "Security" || role == "Admin")
                 {
-                    <div class="nav-section">Security</div>
+                    <div class="nav-section sidebar-text">Security</div>
                     <a asp-controller="Emergency" asp-action="All"
-                           class="@(ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
-                        <i class="bi bi-bell-fill"></i> All Alerts
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
+                        <i class="bi bi-bell-fill"></i> <span class="sidebar-text">All Alerts</span>
                     </a>
                 }
 
                 <!-- Notifications — all roles -->
-                <div class="nav-section">Account</div>
+                <div class="nav-section sidebar-text">Account</div>
                 <a asp-controller="Notification" asp-action="Index"
-                       class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Notification" ? "active" : "")">
-                    <i class="bi bi-bell"></i> Notifications
+                       class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Notification" ? "active" : "")">
+                    <i class="bi bi-bell"></i> <span class="sidebar-text">Notifications</span>
                 </a>
             </div>
 
             <div class="sidebar-footer">
-                <div class="d-flex align-items-center gap-3 mb-3">
-                    <div class="user-avatar">@initials</div>
-                    <div>
+                <div class="d-flex align-items-center gap-3 mb-3 sidebar-text">
+                    <div class="user-avatar flex-shrink-0">@initials</div>
+                    <div class="sidebar-text">
                         <div style="font-size:14px;font-weight:600;color:var(--ss-text)">@userName</div>
                         <div class="status-chip neutral mt-1" style="font-size:10px;padding:2px 6px;">@role</div>
                     </div>
                 </div>
-                <a asp-controller="Auth" asp-action="Logout" class="btn-ss-outline w-100 text-center d-block" style="text-decoration:none;">
-                    <i class="bi bi-box-arrow-right"></i> Logout
+                <a asp-controller="Auth" asp-action="Logout" class="btn-ss-outline w-100 text-center d-block nav-item nav-link" style="text-decoration:none;">
+                    <i class="bi bi-box-arrow-right"></i> <span class="sidebar-text">Logout</span>
                 </a>
             </div>
         </nav>
@@ -122,14 +126,17 @@
             <div id="topbar">
                 <div class="topbar-title">@ViewData["Title"]</div>
                 <div class="topbar-right">
-                    <button class="sos-btn" onclick="triggerSOS()" title="Emergency SOS">SOS</button>
+                    <button class="sos-btn hover-lift" onclick="triggerSOS()" title="Emergency SOS" style="position: relative;">
+                        <span style="position:absolute; inset:-2px; border-radius:50%; border:2px solid rgba(239,68,68,0.5); animation: pulse-ring 1.5s infinite;"></span>
+                        SOS
+                    </button>
                     <a asp-controller="Notification" asp-action="Index" style="text-decoration:none">
-                        <button class="notif-btn">
+                        <button class="notif-btn hover-lift">
                             <i class="bi bi-bell"></i>
                             <span class="notif-badge" id="notifCount" style="display:none">0</span>
                         </button>
                     </a>
-                    <div class="user-pill">
+                    <div class="user-pill hover-lift">
                         <div class="user-avatar">@initials</div>
                         <span class="ms-1 me-2">@userName</span>
                     </div>
@@ -145,9 +152,51 @@
         @RenderBody()
     }
 
+        <!-- Mobile Bottom Nav -->
+        <div class="mobile-bottom-nav">
+            <a asp-controller="Dashboard" asp-action="Index" class="mobile-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                <i class="bi bi-speedometer2"></i>
+                <span>Home</span>
+            </a>
+            <a asp-controller="Wellness" asp-action="Index" class="mobile-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wellness" ? "active" : "")">
+                <i class="bi bi-heart-pulse"></i>
+                <span>Wellness</span>
+            </a>
+            
+            <!-- Center FAB -->
+            <div style="position: relative; width: 56px; height: 56px;">
+                <div class="mobile-fab-container">
+                    <button class="mobile-fab" onclick="triggerSOS()">
+                        🚨
+                    </button>
+                </div>
+            </div>
+
+            <a asp-controller="Complaint" asp-action="Index" class="mobile-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Complaint" ? "active" : "")">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>Reports</span>
+            </a>
+            <a asp-controller="Notification" asp-action="Index" class="mobile-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Notification" ? "active" : "")">
+                <i class="bi bi-bell"></i>
+                <span>Alerts</span>
+            </a>
+        </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script>
+        // Sidebar Toggle Logic
+        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('sidebar-collapsed');
+            document.getElementById('main-content').classList.toggle('main-content-expanded');
+            const icon = this.querySelector('i');
+            if (icon.classList.contains('bi-chevron-left')) {
+                icon.classList.replace('bi-chevron-left', 'bi-chevron-right');
+            } else {
+                icon.classList.replace('bi-chevron-right', 'bi-chevron-left');
+            }
+        });
+
         function triggerSOS() {
             if (confirm('🚨 Trigger Emergency SOS Alert?')) {
                 fetch('/Emergency/SOS', { method: 'POST' })

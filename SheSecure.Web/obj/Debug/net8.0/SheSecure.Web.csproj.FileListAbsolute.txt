@@ -37,7 +37,6 @@ C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.build.json
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.development.json
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\swae.build.ex.cache
-C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\SheSecur.68DD1820.Up2Date
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\SheSecure.Web.dll
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\refint\SheSecure.Web.dll
@@ -45,3 +44,4 @@ C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\SheSecure.Web.pdb
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\SheSecure.Web.genruntimeconfig.cache
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\ref\SheSecure.Web.dll
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\SheSecure.Web.sourcelink.json
+C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

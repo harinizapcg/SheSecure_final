@@ -19,21 +19,21 @@
 
 @if (TempData["Success"] != null)
 {
-    <div class="alert-glass success mb-4">
+    <div class="alert-glass success mb-4 fade-in-up">
         <i class="bi bi-check-circle fs-5"></i>
         <span>@TempData["Success"]</span>
     </div>
 }
 @if (TempData["Error"] != null)
 {
-    <div class="alert-glass error mb-4">
+    <div class="alert-glass error mb-4 fade-in-up">
         <i class="bi bi-exclamation-circle fs-5"></i>
         <span>@TempData["Error"]</span>
     </div>
 }
 
 <!-- Complaint Header -->
-<div class="glass-panel p-4 mb-4">
+<div class="glass-panel p-4 mb-4 fade-in-up">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
         <div>
             <h4 class="mb-1 fw-bold text-white">@subject</h4>
@@ -51,7 +51,7 @@
     <!-- Left: Comments + Upload -->
     <div class="col-md-7">
         <!-- Comments -->
-        <div class="glass-card mb-4">
+        <div class="glass-card mb-4 fade-in-up delay-100">
             <h5 class="section-title">💬 Comments</h5>
 
             @if (!comments.EnumerateArray().Any())
@@ -70,7 +70,7 @@
                         var isInternal = c.GetProperty("isInternal").GetBoolean();
                         var createdAt = c.GetProperty("createdAt").GetString();
 
-                        <div class="p-3" style="background: @(isInternal ? "rgba(168,85,247,0.08)" : "rgba(15,23,42,0.5)"); border: 1px solid @(isInternal ? "rgba(168,85,247,0.2)" : "var(--ss-border)"); border-radius: 12px;">
+                        <div class="p-3 hover-lift" style="background: @(isInternal ? "rgba(168,85,247,0.08)" : "rgba(15,23,42,0.5)"); border: 1px solid @(isInternal ? "rgba(168,85,247,0.2)" : "var(--ss-border)"); border-radius: 12px;">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span class="fw-medium text-white" style="font-size: 13px;">
                                     User #@uid
@@ -110,20 +110,20 @@
                 {
                     <input type="hidden" name="isInternal" value="false" />
                 }
-                <button type="submit" class="btn-ss py-2 px-4">
+                <button type="submit" class="btn-ss py-2 px-4 ripple">
                     <i class="bi bi-send me-2"></i>Add Comment
                 </button>
             </form>
         </div>
 
         <!-- Upload Evidence -->
-        <div class="glass-card">
+        <div class="glass-card fade-in-up delay-200">
             <h5 class="section-title">📎 Upload Evidence</h5>
             <form method="post" asp-action="UploadFile" enctype="multipart/form-data" class="mt-3">
                 <input type="hidden" name="complaintId" value="@id" />
                 <div class="d-flex gap-2">
                     <input type="file" name="file" class="form-control" required />
-                    <button type="submit" class="btn-ss">Upload</button>
+                    <button type="submit" class="btn-ss ripple">Upload</button>
                 </div>
                 <div class="mt-2" style="font-size: 12px; color: var(--ss-muted);">
                     Accepted formats: PDF, Images, Documents
@@ -137,7 +137,7 @@
         <!-- Update Status (HR only) -->
         @if (role == "HR" || role == "Admin")
         {
-            <div class="glass-card mb-4">
+            <div class="glass-card mb-4 fade-in-up delay-100">
                 <h5 class="section-title">🔄 Update Status</h5>
                 <form method="post" asp-action="UpdateStatus" class="mt-3">
                     <input type="hidden" name="complaintId" value="@id" />
@@ -153,15 +153,15 @@
                     <div class="mb-3">
                         <textarea name="resolutionNotes" rows="2" class="form-control" placeholder="Resolution notes..." style="resize: none;"></textarea>
                     </div>
-                    <button type="submit" class="btn-ss w-100 py-2">
+                    <button type="submit" class="btn-ss w-100 py-2 ripple">
                         Update Status
                     </button>
                 </form>
             </div>
         }
 
-        <!-- Status History -->
-        <div class="glass-card">
+        <!-- Status History Timeline -->
+        <div class="glass-card fade-in-up delay-200 h-100">
             <h5 class="section-title">🕐 Status History</h5>
             @if (!history.EnumerateArray().Any())
             {
@@ -171,31 +171,36 @@
             }
             else
             {
-                <div class="mt-3 position-relative" style="padding-left: 10px;">
-                    <div style="position: absolute; left: 14px; top: 10px; bottom: 10px; width: 2px; background: var(--ss-border);"></div>
-                    
-                    @foreach (var h in history.EnumerateArray())
-                    {
-                        var oldSt = h.GetProperty("oldStatus").GetString();
-                        var newSt = h.GetProperty("newStatus").GetString();
-                        var remarks = h.GetProperty("remarks").GetString();
-                        var changedAt = h.GetProperty("changedAt").GetString();
+                <div class="timeline-container">
+                    @{
+                        var historyArray = history.EnumerateArray().ToArray();
+                        for (int i = 0; i < historyArray.Length; i++)
+                        {
+                            var h = historyArray[i];
+                            var oldSt = h.GetProperty("oldStatus").GetString();
+                            var newSt = h.GetProperty("newStatus").GetString();
+                            var remarks = h.GetProperty("remarks").GetString();
+                            var changedAt = h.GetProperty("changedAt").GetString();
+                            var isLatest = i == historyArray.Length - 1; // latest is at the end of the array typically, or reverse? Assuming last is latest
 
-                        <div class="position-relative mb-4" style="padding-left: 24px;">
-                            <div style="position: absolute; left: 0; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--ss-accent2); box-shadow: 0 0 8px var(--ss-accent2);"></div>
-                            <div class="fw-medium text-white" style="font-size: 14px;">
-                                @oldSt <i class="bi bi-arrow-right mx-1 text-muted"></i> @newSt
-                            </div>
-                            @if (!string.IsNullOrEmpty(remarks))
-                            {
-                                <div class="mt-1" style="font-size: 13px; color: var(--ss-text);">
-                                    @remarks
+                            <div class="timeline-item @(isLatest ? "active" : "")">
+                                <div class="fw-bold text-white mb-1" style="font-size: 14px;">
+                                    Status updated to <span class="text-gradient">@newSt</span>
                                 </div>
-                            }
-                            <div class="mt-1" style="font-size: 11px; color: var(--ss-muted);">
-                                @DateTime.Parse(changedAt!).ToString("dd MMM yyyy, hh:mm tt")
+                                <div class="mb-1" style="font-size: 12px; color: var(--ss-muted);">
+                                    Previously: @oldSt
+                                </div>
+                                @if (!string.IsNullOrEmpty(remarks))
+                                {
+                                    <div class="p-2 mt-2" style="background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 13px; color: var(--ss-text);">
+                                        @remarks
+                                    </div>
+                                }
+                                <div class="mt-2 fw-medium" style="font-size: 11px; color: var(--ss-muted);">
+                                    @DateTime.Parse(changedAt!).ToString("dd MMM yyyy, hh:mm tt")
+                                </div>
                             </div>
-                        </div>
+                        }
                     }
                 </div>
             }
@@ -203,8 +208,8 @@
     </div>
 </div>
 
-<div class="mt-4">
-    <a asp-action="Index" class="btn-ss-outline" style="text-decoration: none;">
+<div class="mt-4 fade-in-up delay-300">
+    <a asp-action="Index" class="btn-ss-outline ripple" style="text-decoration: none;">
         <i class="bi bi-arrow-left me-2"></i>Back to Complaints
     </a>
 </div>

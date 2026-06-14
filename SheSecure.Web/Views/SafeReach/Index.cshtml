@@ -2,42 +2,91 @@
     ViewData["Title"] = "Safe Check-In";
     var records = (System.Text.Json.JsonElement)ViewBag.Records;
     var role = Context.Session.GetString("Role") ?? "";
+    
+    // Find if user has any pending check-in
+    var pendingRecord = records.EnumerateArray()
+                               .FirstOrDefault(r => r.GetProperty("status").GetString() == "Pending");
+    bool hasPending = pendingRecord.ValueKind != System.Text.Json.JsonValueKind.Undefined;
 }
 
 <!-- Alerts -->
 @if (TempData["Success"] != null)
 {
-    <div class="alert-glass success mb-4">
+    <div class="alert-glass success mb-4 fade-in-up">
         <i class="bi bi-check-circle fs-5"></i>
         <span>@TempData["Success"]</span>
     </div>
 }
 @if (TempData["Error"] != null)
 {
-    <div class="alert-glass error mb-4">
+    <div class="alert-glass error mb-4 fade-in-up">
         <i class="bi bi-exclamation-circle fs-5"></i>
         <span>@TempData["Error"]</span>
     </div>
 }
 
 <div class="row g-4">
-    <!-- Create Check-In Form -->
+    <!-- Left Panel -->
     <div class="col-md-4">
-        <div class="glass-card mb-4">
-            <h5 class="section-title">🛡 New Safe Check-In</h5>
-            <form method="post" asp-action="Create" class="mt-4">
-                <div class="mb-4">
-                    <label class="form-label">Expected Arrival Time</label>
-                    <input type="datetime-local" name="expectedArrivalTime" class="form-control" required />
+        @if (hasPending)
+        {
+            var pendingId = pendingRecord.GetProperty("id").GetInt32();
+            var expectedTime = pendingRecord.GetProperty("expectedArrivalTime").GetString();
+            
+            <div class="glass-card mb-4 fade-in-up" style="border: 1px solid rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.05);">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 10px #f59e0b; animation: pulse-sos 2s infinite;"></span>
+                    <h5 class="section-title text-warning m-0">Active Check-In</h5>
                 </div>
-                <button type="submit" class="btn-ss w-100 py-2">
-                    <i class="bi bi-shield-check me-2"></i>Submit Check-In
-                </button>
-            </form>
-        </div>
+                
+                <div class="text-center mb-4">
+                    <div style="font-size: 13px; color: var(--ss-muted);">Expected Arrival</div>
+                    <div class="fw-bold text-white fs-5">@DateTime.Parse(expectedTime!).ToString("hh:mm tt")</div>
+                    <div style="font-size: 11px; color: var(--ss-muted);">Today</div>
+                </div>
+
+                <!-- Progress Flow Visual -->
+                <div class="progress-flow mt-2 mb-4 px-2">
+                    <div class="progress-step completed">
+                        <div class="progress-icon"><i class="bi bi-geo-alt"></i></div>
+                        <span style="font-size: 10px; color: var(--ss-success);">Started</span>
+                    </div>
+                    <div class="progress-step active">
+                        <div class="progress-icon"><i class="bi bi-clock-history"></i></div>
+                        <span style="font-size: 10px; color: var(--ss-accent);">Traveling</span>
+                    </div>
+                    <div class="progress-step">
+                        <div class="progress-icon" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1);"><i class="bi bi-check2"></i></div>
+                        <span style="font-size: 10px; color: var(--ss-muted);">Reached</span>
+                    </div>
+                </div>
+
+                <form method="post" asp-action="Acknowledge" class="mt-4">
+                    <input type="hidden" name="safeReachId" value="@pendingId" />
+                    <button type="submit" class="btn-ss w-100 py-3 ripple" style="background: linear-gradient(135deg, #10b981, #059669); border: none; box-shadow: 0 4px 15px rgba(16,185,129,0.3);">
+                        <i class="bi bi-check-circle-fill me-2"></i>I Reached Safely
+                    </button>
+                </form>
+            </div>
+        }
+        else
+        {
+            <div class="glass-card mb-4 fade-in-up hover-lift">
+                <h5 class="section-title">🛡 New Safe Check-In</h5>
+                <form method="post" asp-action="Create" class="mt-4">
+                    <div class="mb-4">
+                        <label class="form-label">Expected Arrival Time</label>
+                        <input type="datetime-local" name="expectedArrivalTime" class="form-control" required />
+                    </div>
+                    <button type="submit" class="btn-ss w-100 py-2 ripple" style="background: linear-gradient(135deg, var(--ss-safety), #0284c7);">
+                        <i class="bi bi-shield-check me-2"></i>Start Check-In
+                    </button>
+                </form>
+            </div>
+        }
 
         <!-- Info Card -->
-        <div class="glass-card-sm border-start border-4 border-info" style="border-radius: 8px;">
+        <div class="glass-card-sm border-start border-4 border-info fade-in-up delay-100 hover-lift" style="border-radius: 8px;">
             <div class="d-flex align-items-center gap-2 mb-2">
                 <i class="bi bi-info-circle text-info"></i>
                 <span class="fw-medium text-white" style="font-size: 14px;">How it works</span>
@@ -54,14 +103,14 @@
 
     <!-- Records Table -->
     <div class="col-md-8">
-        <div class="glass-card h-100">
-            <h5 class="section-title">📋 Check-In Records</h5>
+        <div class="glass-card h-100 fade-in-up delay-200">
+            <h5 class="section-title">📋 Activity History</h5>
 
             @if (!records.EnumerateArray().Any())
             {
                 <div class="empty-state">
-                    <div class="empty-state-icon">🛡</div>
-                    <h5>No check-ins yet</h5>
+                    <div class="empty-state-icon" style="animation: float 4s ease-in-out infinite;">🛡</div>
+                    <h5 class="text-white">No check-ins yet</h5>
                     <p>Start a safe check-in when traveling late or to remote areas.</p>
                 </div>
             }
@@ -75,7 +124,7 @@
                                 <th>Employee ID</th>
                                 <th>Expected Arrival</th>
                                 <th>Status</th>
-                                <th>Acknowledged At</th>
+                                <th>Completed</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -95,12 +144,15 @@
                                                : status == "Pending" ? "warning"
                                                : "error";
 
-                                <tr>
+                                <tr class="hover-lift">
                                     <td class="text-muted">#@id</td>
-                                    <td class="fw-medium">@empId</td>
+                                    <td class="fw-medium text-white">@empId</td>
                                     <td style="font-size: 13px; color: var(--ss-text);">@DateTime.Parse(expectedTime!).ToString("dd MMM yyyy, hh:mm tt")</td>
                                     <td>
-                                        <span class="status-chip @statusClass">@status</span>
+                                        <span class="status-chip @statusClass">
+                                            @if(status == "Pending") { <span style="width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block;animation:pulse-sos 1s infinite;"></span> }
+                                            @status
+                                        </span>
                                     </td>
                                     <td style="color: var(--ss-muted); font-size: 13px;">
                                         @(acknowledgedAt != null
@@ -110,28 +162,19 @@
                                     <td>
                                         @if (!isAcknowledged)
                                         {
-                                            <div class="d-flex gap-2">
-                                                <form method="post" asp-action="Acknowledge" class="m-0">
-                                                    <input type="hidden" name="safeReachId" value="@id" />
-                                                    <button type="submit" class="btn btn-sm btn-outline-success border-0" style="background: rgba(16,185,129,0.1); border-radius: 6px;">
-                                                        <i class="bi bi-check2-all me-1"></i>Ack
+                                            @if (role == "Manager" || role == "Security" || role == "Admin")
+                                            {
+                                                <form method="post" asp-action="Escalate" class="m-0">
+                                                    <input type="hidden" name="id" value="@id" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger border-0 ripple" style="background: rgba(239,68,68,0.1); border-radius: 6px;">
+                                                        <i class="bi bi-exclamation-triangle me-1"></i>Escalate
                                                     </button>
                                                 </form>
-
-                                                @if (role == "Manager" || role == "Security" || role == "Admin")
-                                                {
-                                                    <form method="post" asp-action="Escalate" class="m-0">
-                                                        <input type="hidden" name="id" value="@id" />
-                                                        <button type="submit" class="btn btn-sm btn-outline-danger border-0" style="background: rgba(233,69,96,0.1); border-radius: 6px;">
-                                                            <i class="bi bi-exclamation-triangle me-1"></i>Escalate
-                                                        </button>
-                                                    </form>
-                                                }
-                                            </div>
+                                            }
                                         }
                                         else
                                         {
-                                            <span style="font-size: 13px; color: #34d399;"><i class="bi bi-check2"></i> Done</span>
+                                            <span style="font-size: 13px; color: #34d399;"><i class="bi bi-check2-circle"></i> Done</span>
                                         }
                                     </td>
                                 </tr>

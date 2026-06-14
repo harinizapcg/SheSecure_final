@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SheSecure.DashboardService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+641c1fd35e0cdda9e85259dd2dcf35cc9124c797")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f305dbfcabe65ec08d00f6d0e0484f4b6e6db608")]
 [assembly: System.Reflection.AssemblyProductAttribute("SheSecure.DashboardService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SheSecure.DashboardService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
