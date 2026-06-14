@@ -7,85 +7,54 @@
 
 @if (TempData["Success"] != null)
 {
-    <div class="ss-alert alert alert-success mb-4">
-        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+    <div class="alert-glass success mb-4">
+        <i class="bi bi-check-circle fs-5"></i>
+        <span>@TempData["Success"]</span>
     </div>
 }
 @if (TempData["Error"] != null)
 {
-    <div class="ss-alert alert alert-danger mb-4">
-        <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+    <div class="alert-glass error mb-4">
+        <i class="bi bi-exclamation-circle fs-5"></i>
+        <span>@TempData["Error"]</span>
     </div>
 }
 
 <div class="row g-4">
-
     <!-- SOS Trigger Form -->
     <div class="col-md-4">
-
         <!-- Big SOS Button -->
-        <div class="ss-card mb-3" style="text-align:center;padding:30px 20px">
-            <div style="font-size:13px;color:var(--ss-muted);margin-bottom:16px">
-                Press in case of emergency
-            </div>
+        <div class="glass-card mb-4 text-center py-5">
+            <h6 class="mb-4 text-muted">Press in case of emergency</h6>
             <button onclick="document.getElementById('sosForm').scrollIntoView({behavior:'smooth'})"
-                    style="width:100px;height:100px;border-radius:50%;
-                background:linear-gradient(135deg,#e94560,#c0392b);
-                border:none;color:white;font-size:24px;font-weight:700;
-                cursor:pointer;box-shadow:0 0 30px rgba(233,69,96,0.6);
-                transition:box-shadow 0.2s"
-                    onmouseover="this.style.boxShadow='0 0 50px rgba(233,69,96,0.9)'"
-                    onmouseout="this.style.boxShadow='0 0 30px rgba(233,69,96,0.6)'">
+                    class="btn-sos shadow-lg">
                 SOS
             </button>
-            <div style="font-size:12px;color:var(--ss-muted);margin-top:16px">
-                Security will be notified immediately
-            </div>
+            <p class="mt-4 mb-0 text-muted" style="font-size: 13px;">Security will be notified immediately</p>
         </div>
 
         <!-- SOS Form -->
-        <div class="ss-card" id="sosForm">
-            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
-                🚨 Trigger SOS Alert
-            </div>
-            <form method="post" asp-action="SOS">
+        <div class="glass-card" id="sosForm">
+            <h5 class="section-title text-danger">🚨 Trigger SOS Alert</h5>
+            <form method="post" asp-action="SOS" class="mt-4">
                 <div class="mb-3">
-                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
-                        Your Location
-                    </label>
-                    <input type="text" name="location" class="form-control"
-                           style="background:#0f3460;border:1px solid var(--ss-border);
-                    color:var(--ss-text);border-radius:8px"
-                           placeholder="e.g. Block A - Parking Area" required />
+                    <label class="form-label">Your Location</label>
+                    <input type="text" name="location" class="form-control" placeholder="e.g. Block A - Parking Area" required />
                 </div>
                 <div class="mb-3">
-                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
-                        Severity
-                    </label>
-                    <select name="severity" class="form-select"
-                            style="background:#0f3460;border:1px solid var(--ss-border);
-                        color:var(--ss-text);border-radius:8px;padding:10px 14px"
-                            required>
+                    <label class="form-label">Severity</label>
+                    <select name="severity" class="form-select" required>
                         <option value="Low">Low</option>
                         <option value="Medium">Medium</option>
                         <option value="High" selected>High</option>
                         <option value="Critical">Critical</option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
-                        Description
-                    </label>
-                    <textarea name="description" rows="3" class="form-control"
-                              style="background:#0f3460;border:1px solid var(--ss-border);
-                    color:var(--ss-text);border-radius:8px;resize:none"
-                              placeholder="Briefly describe the situation..."
-                              required></textarea>
+                <div class="mb-4">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" rows="3" class="form-control" placeholder="Briefly describe the situation..." required style="resize: none;"></textarea>
                 </div>
-                <button type="submit"
-                        style="background:linear-gradient(135deg,#e94560,#c0392b);
-                    border:none;color:white;border-radius:8px;padding:11px;
-                    font-size:14px;font-weight:600;width:100%;cursor:pointer">
+                <button type="submit" class="btn btn-danger w-100 py-2 fw-bold shadow-sm" style="border-radius: 10px; background: linear-gradient(135deg, #e94560, #c0392b); border: none;">
                     🚨 Send SOS Alert
                 </button>
             </form>
@@ -94,89 +63,104 @@
 
     <!-- My Alert History -->
     <div class="col-md-8">
-
         @if (activeCount > 0)
         {
-            <div style="background:rgba(233,69,96,0.1);border:1px solid rgba(233,69,96,0.3);
-                border-radius:10px;padding:12px 16px;margin-bottom:16px;
-                font-size:13px;color:#f87171">
-                <i class="bi bi-exclamation-triangle me-2"></i>
-                You have <strong>@activeCount active</strong> SOS alert(s).
-                Security has been notified.
+            <div class="alert-glass error mb-4">
+                <i class="bi bi-exclamation-triangle-fill fs-5 text-danger"></i>
+                <span>You have <strong>@activeCount active</strong> SOS alert(s). Security has been notified.</span>
             </div>
         }
 
-        <div class="ss-card">
-            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
-                📋 My Alert History
-            </div>
+        <div class="glass-card h-100">
+            <h5 class="section-title">📋 My Alert History</h5>
 
             @if (!alerts.EnumerateArray().Any())
             {
-                <div style="text-align:center;padding:40px;color:var(--ss-muted)">
-                    <div style="font-size:36px;margin-bottom:10px">🛡</div>
-                    No emergency alerts triggered.
+                <div class="empty-state">
+                    <div class="empty-state-icon">🛡</div>
+                    <h5>No emergencies reported</h5>
+                    <p>You have not triggered any SOS alerts.</p>
                 </div>
             }
             else
             {
-                <table class="table" style="color:var(--ss-text);font-size:13px">
-                    <thead>
-                        <tr style="border-color:var(--ss-border);color:var(--ss-muted)">
-                            <th>ID</th>
-                            <th>Location</th>
-                            <th>Description</th>
-                            <th>Severity</th>
-                            <th>Status</th>
-                            <th>Triggered</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var a in alerts.EnumerateArray())
-                        {
-                            var id = a.GetProperty("id").GetInt32();
-                            var location = a.GetProperty("location").GetString();
-                            var description = a.GetProperty("description").GetString();
-                            var severity = a.GetProperty("severity").GetString();
-                            var status = a.GetProperty("status").GetString();
-                            var triggeredAt = a.GetProperty("triggeredAt").GetString();
-
-                            var statusColor = status == "Active" ? "#e94560" : "#34d399";
-                            var severityColor = severity == "Critical" ? "#e94560"
-                                             : severity == "High" ? "#f97316"
-                                             : severity == "Medium" ? "#fbbf24"
-                                             : "#34d399";
-
-                            <tr style="border-color:var(--ss-border)">
-                                <td>@id</td>
-                                <td style="color:var(--ss-muted)">@location</td>
-                                <td style="color:var(--ss-muted);max-width:160px;
-                                    overflow:hidden;text-overflow:ellipsis;
-                                    white-space:nowrap">
-                                    @description
-                                </td>
-                                <td>
-                                    <span style="font-size:11px;padding:2px 8px;border-radius:20px;
-                                        background:@(severityColor)22;color:@severityColor;
-                                        border:1px solid @(severityColor)55">
-                                        @severity
-                                    </span>
-                                </td>
-                                <td>
-                                    <span style="font-size:11px;padding:2px 8px;border-radius:20px;
-                                        background:@(statusColor)22;color:@statusColor;
-                                        border:1px solid @(statusColor)55">
-                                        @status
-                                    </span>
-                                </td>
-                                <td style="color:var(--ss-muted)">
-                                    @DateTime.Parse(triggeredAt!).ToString("dd MMM, hh:mm tt")
-                                </td>
+                <div class="table-responsive mt-3">
+                    <table class="table-glass table border-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Location</th>
+                                <th>Description</th>
+                                <th>Severity</th>
+                                <th>Status</th>
+                                <th>Triggered</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var a in alerts.EnumerateArray())
+                            {
+                                var id = a.GetProperty("id").GetInt32();
+                                var location = a.GetProperty("location").GetString();
+                                var description = a.GetProperty("description").GetString();
+                                var severity = a.GetProperty("severity").GetString();
+                                var status = a.GetProperty("status").GetString();
+                                var triggeredAt = a.GetProperty("triggeredAt").GetString();
+
+                                var statusClass = status == "Active" ? "error" : "success";
+                                var severityClass = severity == "Critical" ? "error"
+                                                 : severity == "High" ? "warning"
+                                                 : severity == "Medium" ? "info"
+                                                 : "success";
+
+                                <tr>
+                                    <td class="text-muted">#@id</td>
+                                    <td class="fw-medium">@location</td>
+                                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color: var(--ss-muted);">
+                                        @description
+                                    </td>
+                                    <td>
+                                        <span class="status-chip @severityClass">@severity</span>
+                                    </td>
+                                    <td>
+                                        <span class="status-chip @statusClass">@status</span>
+                                    </td>
+                                    <td style="color: var(--ss-muted); font-size: 13px;">
+                                        @DateTime.Parse(triggeredAt!).ToString("dd MMM, hh:mm tt")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             }
         </div>
     </div>
 </div>
+<style>
+    .btn-sos {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #e94560, #ef4444);
+        border: none;
+        color: white;
+        font-size: 28px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 0 30px rgba(233, 69, 96, 0.4);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .btn-sos:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 50px rgba(233, 69, 96, 0.6);
+        background: linear-gradient(135deg, #f43f5e, #dc2626);
+    }
+    .btn-sos:active {
+        transform: scale(0.95);
+        box-shadow: 0 0 20px rgba(233, 69, 96, 0.8);
+    }
+</style>

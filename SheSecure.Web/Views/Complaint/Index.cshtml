@@ -5,32 +5,28 @@
 
 @if (TempData["Success"] != null)
 {
-    <div class="ss-alert alert alert-success mb-4">
-        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+    <div class="alert-glass success mb-4">
+        <i class="bi bi-check-circle fs-5"></i>
+        <span>@TempData["Success"]</span>
     </div>
 }
 @if (TempData["Error"] != null)
 {
-    <div class="ss-alert alert alert-danger mb-4">
-        <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+    <div class="alert-glass error mb-4">
+        <i class="bi bi-exclamation-circle fs-5"></i>
+        <span>@TempData["Error"]</span>
     </div>
 }
 
 <div class="row g-4">
-
     <!-- Raise Complaint Form -->
     <div class="col-md-4">
-        <div class="ss-card">
-            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
-                📋 Raise a Complaint
-            </div>
-            <form method="post" asp-action="Create">
+        <div class="glass-card">
+            <h5 class="section-title">📋 Raise a Complaint</h5>
+            <form method="post" asp-action="Create" class="mt-4">
                 <div class="mb-3">
-                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">Category</label>
-                    <select name="category" class="form-select"
-                            style="background:#0f3460;border:1px solid var(--ss-border);
-                        color:var(--ss-text);border-radius:8px;padding:10px 14px"
-                            required>
+                    <label class="form-label">Category</label>
+                    <select name="category" class="form-select" required>
                         <option value="" disabled selected>Select category</option>
                         <option value="Workplace Harassment">Workplace Harassment</option>
                         <option value="Bullying">Bullying</option>
@@ -42,45 +38,34 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">Subject</label>
-                    <input type="text" name="subject" class="form-control"
-                           style="background:#0f3460;border:1px solid var(--ss-border);
-                    color:var(--ss-text);border-radius:8px"
-                           placeholder="Brief subject of your complaint" required />
+                    <label class="form-label">Subject</label>
+                    <input type="text" name="subject" class="form-control" placeholder="Brief subject of your complaint" required />
                 </div>
                 <div class="mb-3">
-                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">Priority</label>
-                    <select name="priority" class="form-select"
-                            style="background:#0f3460;border:1px solid var(--ss-border);
-                        color:var(--ss-text);border-radius:8px;padding:10px 14px"
-                            required>
+                    <label class="form-label">Priority</label>
+                    <select name="priority" class="form-select" required>
                         <option value="Low">Low</option>
                         <option value="Medium" selected>Medium</option>
                         <option value="High">High</option>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">Description</label>
-                    <textarea name="description" rows="4" class="form-control"
-                              style="background:#0f3460;border:1px solid var(--ss-border);
-                    color:var(--ss-text);border-radius:8px;resize:none"
-                              placeholder="Describe the incident in detail..." required></textarea>
+                    <label class="form-label">Description</label>
+                    <textarea name="description" rows="4" class="form-control" placeholder="Describe the incident in detail..." required style="resize: none;"></textarea>
                 </div>
-                <div class="mb-3">
-                    <div class="form-check">
-                        <input type="checkbox" name="isAnonymous" value="true"
-                               class="form-check-input" id="anonCheck" />
-                        <label class="form-check-label"
-                               style="font-size:13px;color:var(--ss-muted)" for="anonCheck">
+                <div class="mb-4">
+                    <div class="form-check d-flex align-items-center gap-2">
+                        <input type="checkbox" name="isAnonymous" value="true" class="form-check-input mt-0" id="anonCheck" />
+                        <label class="form-check-label form-label mb-0" for="anonCheck" style="cursor:pointer">
                             Submit anonymously
                         </label>
                     </div>
-                    <div style="font-size:11px;color:var(--ss-muted);margin-top:4px">
-                        <i class="bi bi-shield-lock"></i>
-                        Your identity will be hidden from the respondent.
+                    <div class="mt-2" style="font-size:12px;color:var(--ss-muted)">
+                        <i class="bi bi-shield-lock text-gradient me-1"></i>
+                        Your identity will be completely hidden from the respondent.
                     </div>
                 </div>
-                <button type="submit" class="btn-ss btn w-100">
+                <button type="submit" class="btn-ss w-100 py-2">
                     <i class="bi bi-send me-2"></i>Submit Complaint
                 </button>
             </form>
@@ -89,24 +74,23 @@
 
     <!-- Complaints List -->
     <div class="col-md-8">
-        <div class="ss-card">
-            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
-                📂 My Complaints
-            </div>
+        <div class="glass-card h-100">
+            <h5 class="section-title">📂 My Complaints</h5>
 
             @if (!complaints.EnumerateArray().Any())
             {
-                <div style="text-align:center;padding:40px;color:var(--ss-muted)">
-                    <div style="font-size:36px;margin-bottom:10px">📋</div>
-                    No complaints raised yet.
+                <div class="empty-state">
+                    <div class="empty-state-icon">📋</div>
+                    <h5>No complaints yet</h5>
+                    <p>You haven't raised any complaints.</p>
                 </div>
             }
             else
             {
-                <div style="overflow-x:auto">
-                    <table class="table" style="color:var(--ss-text);font-size:13px">
+                <div class="table-responsive mt-3">
+                    <table class="table-glass table border-0">
                         <thead>
-                            <tr style="border-color:var(--ss-border);color:var(--ss-muted)">
+                            <tr>
                                 <th>Ref No.</th>
                                 <th>Subject</th>
                                 <th>Status</th>
@@ -123,35 +107,28 @@
                                 var status = c.GetProperty("status").GetString();
                                 var createdAt = c.GetProperty("createdAt").GetString();
 
-                                var statusColor = status == "Resolved" ? "#34d399"
-                                               : status == "Under Investigation" ? "#a855f7"
-                                               : status == "Under Review" ? "#38bdf8"
-                                               : status == "Closed" ? "#94a3b8"
-                                               : "#fbbf24";
+                                var chipClass = status == "Resolved" ? "success"
+                                               : status == "Under Investigation" ? "info"
+                                               : status == "Under Review" ? "warning"
+                                               : status == "Closed" ? "neutral"
+                                               : "warning";
 
-                                <tr style="border-color:var(--ss-border)">
-                                    <td style="font-size:11px;color:var(--ss-muted);
-                                        font-family:monospace">
-                                        @cmpNum?.Substring(0, Math.Min(16, cmpNum.Length))...
+                                <tr>
+                                    <td style="font-family: monospace; color: var(--ss-muted);">
+                                        @cmpNum?.Substring(0, Math.Min(12, cmpNum.Length))...
                                     </td>
-                                    <td>@subject</td>
+                                    <td class="fw-medium">@subject</td>
                                     <td>
-                                        <span style="font-size:11px;padding:3px 10px;
-                                            border-radius:20px;
-                                            background:@(statusColor)22;
-                                            color:@statusColor;
-                                            border:1px solid @(statusColor)55">
+                                        <span class="status-chip @chipClass">
                                             @status
                                         </span>
                                     </td>
-                                    <td style="color:var(--ss-muted)">
+                                    <td style="color: var(--ss-muted);">
                                         @DateTime.Parse(createdAt!).ToString("dd MMM yyyy")
                                     </td>
                                     <td>
-                                        <a asp-action="Detail" asp-route-id="@id"
-                                               style="font-size:12px;color:var(--ss-accent2);
-                                            text-decoration:none">
-                                            View →
+                                        <a asp-action="Detail" asp-route-id="@id" class="btn-ss-outline" style="padding: 4px 12px; font-size: 12px;">
+                                            View
                                         </a>
                                     </td>
                                 </tr>

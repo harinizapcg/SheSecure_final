@@ -5,36 +5,28 @@
 
 @if (TempData["Success"] != null)
 {
-    <div class="ss-alert alert alert-success mb-4">
-        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+    <div class="alert-glass success mb-4">
+        <i class="bi bi-check-circle fs-5"></i>
+        <span>@TempData["Success"]</span>
     </div>
 }
 @if (TempData["Error"] != null)
 {
-    <div class="ss-alert alert alert-danger mb-4">
-        <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+    <div class="alert-glass error mb-4">
+        <i class="bi bi-exclamation-circle fs-5"></i>
+        <span>@TempData["Error"]</span>
     </div>
 }
-<div style="color:yellow;font-size:12px">
-    DEBUG — Filtering by EmployeeId: @ViewBag.DebugEmployeeId
-</div>
-<div class="row g-4">
 
+<div class="row g-4">
     <!-- Request Form -->
     <div class="col-md-4">
-        <div class="ss-card">
-            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
-                🏠 New WFH Request
-            </div>
-            <form method="post" asp-action="Create">
+        <div class="glass-card mb-4">
+            <h5 class="section-title">🏠 New WFH Request</h5>
+            <form method="post" asp-action="Create" class="mt-4">
                 <div class="mb-3">
-                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
-                        Request Type
-                    </label>
-                    <select name="requestType" class="form-select"
-                            style="background:#0f3460;border:1px solid var(--ss-border);
-                        color:var(--ss-text);border-radius:8px;padding:10px 14px"
-                            required>
+                    <label class="form-label">Request Type</label>
+                    <select name="requestType" class="form-select" required>
                         <option value="" disabled selected>Select type</option>
                         <option value="WFH">Work From Home</option>
                         <option value="Counselling">Counselling</option>
@@ -43,34 +35,23 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
-                        Priority
-                    </label>
-                    <select name="priority" class="form-select"
-                            style="background:#0f3460;border:1px solid var(--ss-border);
-                        color:var(--ss-text);border-radius:8px;padding:10px 14px"
-                            required>
+                    <label class="form-label">Priority</label>
+                    <select name="priority" class="form-select" required>
                         <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
+                        <option value="Medium" selected>Medium</option>
                         <option value="High">High</option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
-                        Description
-                    </label>
-                    <textarea name="description" rows="4" class="form-control"
-                              style="background:#0f3460;border:1px solid var(--ss-border);
-                    color:var(--ss-text);border-radius:8px;resize:none"
-                              placeholder="Briefly describe your reason..."
-                              required></textarea>
-                    <div style="font-size:11px;color:var(--ss-muted);margin-top:5px">
-                        <i class="bi bi-shield-lock"></i>
+                <div class="mb-4">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" rows="4" class="form-control" placeholder="Briefly describe your reason..." required style="resize: none;"></textarea>
+                    <div class="mt-2" style="font-size: 12px; color: var(--ss-muted);">
+                        <i class="bi bi-shield-lock text-gradient me-1"></i>
                         Your reason is privacy-protected and visible only to your manager.
                     </div>
                 </div>
-                <button type="submit" class="btn-ss btn w-100">
-                    <i class="bi bi-house-door me-2"></i>Submit Request
+                <button type="submit" class="btn-ss w-100 py-2">
+                    <i class="bi bi-send me-2"></i>Submit Request
                 </button>
             </form>
         </div>
@@ -78,24 +59,23 @@
 
     <!-- My Requests Table -->
     <div class="col-md-8">
-        <div class="ss-card">
-            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
-                📋 My WFH Requests
-            </div>
+        <div class="glass-card h-100">
+            <h5 class="section-title">📋 My WFH Requests</h5>
 
             @if (!requests.EnumerateArray().Any())
             {
-                <div style="text-align:center;padding:40px;color:var(--ss-muted)">
-                    <div style="font-size:36px;margin-bottom:10px">🏠</div>
-                    No WFH requests yet. Submit one above!
+                <div class="empty-state">
+                    <div class="empty-state-icon">🏠</div>
+                    <h5>No requests yet</h5>
+                    <p>You haven't submitted any WFH or Flexi requests.</p>
                 </div>
             }
             else
             {
-                <div style="overflow-x:auto">
-                    <table class="table" style="color:var(--ss-text);font-size:13px">
+                <div class="table-responsive mt-3">
+                    <table class="table-glass table border-0">
                         <thead>
-                            <tr style="border-color:var(--ss-border);color:var(--ss-muted)">
+                            <tr>
                                 <th>ID</th>
                                 <th>Type</th>
                                 <th>Priority</th>
@@ -114,37 +94,23 @@
                                 var status = r.GetProperty("status").GetString();
                                 var createdAt = r.GetProperty("createdAt").GetString();
 
-                                var statusColor = status == "Approved" ? "#34d399"
-                                               : status == "Rejected" ? "#e94560"
-                                               : status == "Pending" ? "#fbbf24"
-                                               : "#94a3b8";
+                                var statusClass = status == "Approved" ? "success"
+                                               : status == "Rejected" ? "error"
+                                               : "warning";
 
-                                var priorityColor = priority == "High" ? "#e94560"
-                                                 : priority == "Medium" ? "#fbbf24"
-                                                 : "#34d399";
+                                var priorityClass = priority == "High" ? "error"
+                                                 : priority == "Medium" ? "warning"
+                                                 : "success";
 
-                                <tr style="border-color:var(--ss-border)">
-                                    <td>@id</td>
-                                    <td>@reqType</td>
-                                    <td>
-                                        <span style="font-size:11px;padding:2px 8px;border-radius:20px;
-                                            background:@(priorityColor)22;color:@priorityColor;
-                                            border:1px solid @(priorityColor)55">
-                                            @priority
-                                        </span>
-                                    </td>
-                                    <td style="color:var(--ss-muted);max-width:200px;
-                                        overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                                <tr>
+                                    <td class="text-muted">#@id</td>
+                                    <td class="fw-medium">@reqType</td>
+                                    <td><span class="status-chip @priorityClass">@priority</span></td>
+                                    <td style="color: var(--ss-muted); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                                         @desc
                                     </td>
-                                    <td>
-                                        <span style="font-size:11px;padding:3px 10px;border-radius:20px;
-                                            background:@(statusColor)22;color:@statusColor;
-                                            border:1px solid @(statusColor)55">
-                                            @status
-                                        </span>
-                                    </td>
-                                    <td style="color:var(--ss-muted)">
+                                    <td><span class="status-chip @statusClass">@status</span></td>
+                                    <td style="color: var(--ss-muted); font-size: 13px;">
                                         @DateTime.Parse(createdAt!).ToString("dd MMM yyyy")
                                     </td>
                                 </tr>

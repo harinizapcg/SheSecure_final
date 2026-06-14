@@ -208,3 +208,4 @@ C:\POC\SheSecureH-main\SheSecure.DashboardService\obj\Debug\net8.0\refint\SheSec
 C:\POC\SheSecureH-main\SheSecure.DashboardService\obj\Debug\net8.0\SheSecure.DashboardService.pdb
 C:\POC\SheSecureH-main\SheSecure.DashboardService\obj\Debug\net8.0\SheSecure.DashboardService.genruntimeconfig.cache
 C:\POC\SheSecureH-main\SheSecure.DashboardService\obj\Debug\net8.0\ref\SheSecure.DashboardService.dll
+C:\POC\SheSecureH-main\SheSecure.DashboardService\obj\Debug\net8.0\SheSecure.DashboardService.sourcelink.json

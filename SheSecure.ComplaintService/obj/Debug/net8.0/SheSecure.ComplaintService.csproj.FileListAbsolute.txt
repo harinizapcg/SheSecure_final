@@ -156,3 +156,4 @@ C:\POC\SheSecureH-main\SheSecure.ComplaintService\obj\Debug\net8.0\refint\SheSec
 C:\POC\SheSecureH-main\SheSecure.ComplaintService\obj\Debug\net8.0\SheSecure.ComplaintService.pdb
 C:\POC\SheSecureH-main\SheSecure.ComplaintService\obj\Debug\net8.0\SheSecure.ComplaintService.genruntimeconfig.cache
 C:\POC\SheSecureH-main\SheSecure.ComplaintService\obj\Debug\net8.0\ref\SheSecure.ComplaintService.dll
+C:\POC\SheSecureH-main\SheSecure.ComplaintService\obj\Debug\net8.0\SheSecure.ComplaintService.sourcelink.json

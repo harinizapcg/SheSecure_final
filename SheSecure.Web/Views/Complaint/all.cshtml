@@ -3,24 +3,23 @@
     var complaints = (System.Text.Json.JsonElement)ViewBag.Complaints;
 }
 
-<div class="ss-card">
-    <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
-        📂 All Complaints (POSH)
-    </div>
+<div class="glass-card">
+    <h5 class="section-title">📂 All Complaints (HR/POSH)</h5>
 
     @if (!complaints.EnumerateArray().Any())
     {
-        <div style="text-align:center;padding:40px;color:var(--ss-muted)">
-            <div style="font-size:36px;margin-bottom:10px">📂</div>
-            No complaints found.
+        <div class="empty-state">
+            <div class="empty-state-icon">📂</div>
+            <h5>No complaints found</h5>
+            <p>There are currently no complaints in the system.</p>
         </div>
     }
     else
     {
-        <div style="overflow-x:auto">
-            <table class="table" style="color:var(--ss-text);font-size:13px">
+        <div class="table-responsive mt-3">
+            <table class="table-glass table border-0">
                 <thead>
-                    <tr style="border-color:var(--ss-border);color:var(--ss-muted)">
+                    <tr>
                         <th>Ref No.</th>
                         <th>Subject</th>
                         <th>Status</th>
@@ -37,33 +36,28 @@
                         var status = c.GetProperty("status").GetString();
                         var createdAt = c.GetProperty("createdAt").GetString();
 
-                        var statusColor = status == "Resolved" ? "#34d399"
-                                       : status == "Under Investigation" ? "#a855f7"
-                                       : status == "Under Review" ? "#38bdf8"
-                                       : status == "Closed" ? "#94a3b8"
-                                       : "#fbbf24";
+                        var chipClass = status == "Resolved" ? "success"
+                                       : status == "Under Investigation" ? "info"
+                                       : status == "Under Review" ? "warning"
+                                       : status == "Closed" ? "neutral"
+                                       : "warning";
 
-                        <tr style="border-color:var(--ss-border)">
-                            <td style="font-size:11px;color:var(--ss-muted);font-family:monospace">
-                                @cmpNum?.Substring(0, Math.Min(16, cmpNum.Length))...
+                        <tr>
+                            <td style="font-family: monospace; color: var(--ss-muted);">
+                                @cmpNum?.Substring(0, Math.Min(12, cmpNum.Length))...
                             </td>
-                            <td>@subject</td>
+                            <td class="fw-medium">@subject</td>
                             <td>
-                                <span style="font-size:11px;padding:3px 10px;border-radius:20px;
-                                    background:@(statusColor)22;color:@statusColor;
-                                    border:1px solid @(statusColor)55">
+                                <span class="status-chip @chipClass">
                                     @status
                                 </span>
                             </td>
-                            <td style="color:var(--ss-muted)">
+                            <td style="color: var(--ss-muted);">
                                 @DateTime.Parse(createdAt!).ToString("dd MMM yyyy")
                             </td>
                             <td>
-                                <a asp-controller="Complaint" asp-action="Detail"
-                                       asp-route-id="@id"
-                                       style="font-size:12px;color:var(--ss-accent2);
-                                    text-decoration:none">
-                                    View →
+                                <a asp-controller="Complaint" asp-action="Detail" asp-route-id="@id" class="btn-ss-outline" style="padding: 4px 12px; font-size: 12px;">
+                                    View
                                 </a>
                             </td>
                         </tr>

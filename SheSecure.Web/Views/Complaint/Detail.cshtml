@@ -10,107 +10,98 @@
     var subject = complaint.TryGetProperty("subject", out var sub) ? sub.GetString() : "";
     var status = complaint.TryGetProperty("status", out var st) ? st.GetString() : "";
 
-    var statusColor = status == "Resolved" ? "#34d399"
-                   : status == "Under Investigation" ? "#a855f7"
-                   : status == "Under Review" ? "#38bdf8"
-                   : status == "Closed" ? "#94a3b8"
-                   : "#fbbf24";
+    var chipClass = status == "Resolved" ? "success"
+                   : status == "Under Investigation" ? "info"
+                   : status == "Under Review" ? "warning"
+                   : status == "Closed" ? "neutral"
+                   : "warning";
 }
 
 @if (TempData["Success"] != null)
 {
-    <div class="ss-alert alert alert-success mb-4">
-        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+    <div class="alert-glass success mb-4">
+        <i class="bi bi-check-circle fs-5"></i>
+        <span>@TempData["Success"]</span>
     </div>
 }
 @if (TempData["Error"] != null)
 {
-    <div class="ss-alert alert alert-danger mb-4">
-        <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+    <div class="alert-glass error mb-4">
+        <i class="bi bi-exclamation-circle fs-5"></i>
+        <span>@TempData["Error"]</span>
     </div>
 }
 
 <!-- Complaint Header -->
-<div class="ss-card mb-4">
+<div class="glass-panel p-4 mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
         <div>
-            <div style="font-size:18px;font-weight:600;color:var(--ss-text)">@subject</div>
-            <div style="font-size:12px;color:var(--ss-muted);margin-top:4px;font-family:monospace">
-                @cmpNum
+            <h4 class="mb-1 fw-bold text-white">@subject</h4>
+            <div style="font-size:13px; color:var(--ss-muted); font-family:monospace">
+                REF: @cmpNum
             </div>
         </div>
-        <span style="font-size:13px;padding:5px 14px;border-radius:20px;
-            background:@(statusColor)22;color:@statusColor;
-            border:1px solid @(statusColor)55">
+        <span class="status-chip @chipClass" style="font-size: 13px; padding: 6px 16px;">
             @status
         </span>
     </div>
 </div>
 
 <div class="row g-4">
-
     <!-- Left: Comments + Upload -->
     <div class="col-md-7">
-
         <!-- Comments -->
-        <div class="ss-card mb-4">
-            <div style="font-size:14px;font-weight:500;color:var(--ss-text);margin-bottom:16px">
-                💬 Comments
-            </div>
+        <div class="glass-card mb-4">
+            <h5 class="section-title">💬 Comments</h5>
 
             @if (!comments.EnumerateArray().Any())
             {
-                <div style="text-align:center;padding:20px;color:var(--ss-muted);font-size:13px">
-                    No comments yet.
+                <div class="empty-state py-4">
+                    <p class="mb-0">No comments yet.</p>
                 </div>
             }
             else
             {
-                @foreach (var c in comments.EnumerateArray())
-                {
-                    var uid = c.GetProperty("userId").GetInt32();
-                    var comment = c.GetProperty("comment").GetString();
-                    var isInternal = c.GetProperty("isInternal").GetBoolean();
-                    var createdAt = c.GetProperty("createdAt").GetString();
+                <div class="d-flex flex-column gap-3 mt-3">
+                    @foreach (var c in comments.EnumerateArray())
+                    {
+                        var uid = c.GetProperty("userId").GetInt32();
+                        var comment = c.GetProperty("comment").GetString();
+                        var isInternal = c.GetProperty("isInternal").GetBoolean();
+                        var createdAt = c.GetProperty("createdAt").GetString();
 
-                    <div style="background:@(isInternal ? "rgba(168,85,247,0.08)" : "rgba(15,52,96,0.5)");
-                        border:1px solid @(isInternal ? "rgba(168,85,247,0.2)" : "var(--ss-border)");
-                        border-radius:10px;padding:12px 14px;margin-bottom:10px">
-                        <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-                            <span style="font-size:12px;font-weight:500;color:var(--ss-text)">
-                                User #@uid
-                                @if (isInternal)
-                                {
-                                    <span style="font-size:10px;background:rgba(168,85,247,0.2);
-                                    color:#a855f7;padding:1px 6px;border-radius:10px;
-                                    margin-left:6px">Internal</span>
-                                }
-                            </span>
-                            <span style="font-size:11px;color:var(--ss-muted)">
-                                @DateTime.Parse(createdAt!).ToString("dd MMM, hh:mm tt")
-                            </span>
+                        <div class="p-3" style="background: @(isInternal ? "rgba(168,85,247,0.08)" : "rgba(15,23,42,0.5)"); border: 1px solid @(isInternal ? "rgba(168,85,247,0.2)" : "var(--ss-border)"); border-radius: 12px;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="fw-medium text-white" style="font-size: 13px;">
+                                    User #@uid
+                                    @if (isInternal)
+                                    {
+                                        <span class="status-chip info ms-2" style="font-size: 10px; padding: 2px 8px;">Internal</span>
+                                    }
+                                </span>
+                                <span style="font-size: 11px; color: var(--ss-muted);">
+                                    @DateTime.Parse(createdAt!).ToString("dd MMM, hh:mm tt")
+                                </span>
+                            </div>
+                            <div style="font-size: 14px; color: var(--ss-text);">
+                                @comment
+                            </div>
                         </div>
-                        <div style="font-size:13px;color:var(--ss-muted)">@comment</div>
-                    </div>
-                }
+                    }
+                </div>
             }
 
             <!-- Add Comment Form -->
-            <form method="post" asp-action="AddComment" style="margin-top:16px">
+            <form method="post" asp-action="AddComment" class="mt-4">
                 <input type="hidden" name="complaintId" value="@id" />
-                <div class="mb-2">
-                    <textarea name="comment" rows="2" class="form-control"
-                              style="background:#0f3460;border:1px solid var(--ss-border);
-                    color:var(--ss-text);border-radius:8px;resize:none;font-size:13px"
-                              placeholder="Add a comment..." required></textarea>
+                <div class="mb-3">
+                    <textarea name="comment" rows="2" class="form-control" placeholder="Add a comment..." required style="resize: none;"></textarea>
                 </div>
                 @if (role == "HR" || role == "Admin")
                 {
-                    <div class="form-check mb-2">
-                        <input type="checkbox" name="isInternal" value="true"
-                               class="form-check-input" id="internalCheck" />
-                        <label class="form-check-label"
-                               style="font-size:12px;color:var(--ss-muted)" for="internalCheck">
+                    <div class="form-check mb-3 d-flex align-items-center gap-2">
+                        <input type="checkbox" name="isInternal" value="true" class="form-check-input mt-0" id="internalCheck" />
+                        <label class="form-check-label form-label mb-0" for="internalCheck" style="cursor: pointer;">
                             Internal comment (hidden from employee)
                         </label>
                     </div>
@@ -119,32 +110,23 @@
                 {
                     <input type="hidden" name="isInternal" value="false" />
                 }
-                <button type="submit" class="btn-ss btn"
-                        style="padding:6px 16px;font-size:13px">
-                    <i class="bi bi-send me-1"></i>Add Comment
+                <button type="submit" class="btn-ss py-2 px-4">
+                    <i class="bi bi-send me-2"></i>Add Comment
                 </button>
             </form>
         </div>
 
         <!-- Upload Evidence -->
-        <div class="ss-card">
-            <div style="font-size:14px;font-weight:500;color:var(--ss-text);margin-bottom:14px">
-                📎 Upload Evidence
-            </div>
-            <form method="post" asp-action="UploadFile"
-                  enctype="multipart/form-data">
+        <div class="glass-card">
+            <h5 class="section-title">📎 Upload Evidence</h5>
+            <form method="post" asp-action="UploadFile" enctype="multipart/form-data" class="mt-3">
                 <input type="hidden" name="complaintId" value="@id" />
-                <div class="d-flex gap-2 align-items-center">
-                    <input type="file" name="file" class="form-control"
-                           style="background:#0f3460;border:1px solid var(--ss-border);
-                    color:var(--ss-text);border-radius:8px;font-size:13px" />
-                    <button type="submit" class="btn-ss btn"
-                            style="white-space:nowrap;padding:8px 16px;font-size:13px">
-                        Upload
-                    </button>
+                <div class="d-flex gap-2">
+                    <input type="file" name="file" class="form-control" required />
+                    <button type="submit" class="btn-ss">Upload</button>
                 </div>
-                <div style="font-size:11px;color:var(--ss-muted);margin-top:6px">
-                    Accepted: PDF, images, documents
+                <div class="mt-2" style="font-size: 12px; color: var(--ss-muted);">
+                    Accepted formats: PDF, Images, Documents
                 </div>
             </form>
         </div>
@@ -152,22 +134,15 @@
 
     <!-- Right: Status Update + History -->
     <div class="col-md-5">
-
         <!-- Update Status (HR only) -->
         @if (role == "HR" || role == "Admin")
         {
-            <div class="ss-card mb-4">
-                <div style="font-size:14px;font-weight:500;color:var(--ss-text);margin-bottom:14px">
-                    🔄 Update Status
-                </div>
-                <form method="post" asp-action="UpdateStatus">
+            <div class="glass-card mb-4">
+                <h5 class="section-title">🔄 Update Status</h5>
+                <form method="post" asp-action="UpdateStatus" class="mt-3">
                     <input type="hidden" name="complaintId" value="@id" />
-                    <div class="mb-2">
-                        <select name="status" class="form-select"
-                                style="background:#0f3460;border:1px solid var(--ss-border);
-                            color:var(--ss-text);border-radius:8px;
-                            padding:8px 12px;font-size:13px"
-                                required>
+                    <div class="mb-3">
+                        <select name="status" class="form-select" required>
                             <option value="Submitted">Submitted</option>
                             <option value="Under Review">Under Review</option>
                             <option value="Under Investigation">Under Investigation</option>
@@ -175,15 +150,10 @@
                             <option value="Closed">Closed</option>
                         </select>
                     </div>
-                    <div class="mb-2">
-                        <textarea name="resolutionNotes" rows="2" class="form-control"
-                                  style="background:#0f3460;border:1px solid var(--ss-border);
-                        color:var(--ss-text);border-radius:8px;
-                        resize:none;font-size:13px"
-                                  placeholder="Resolution notes..."></textarea>
+                    <div class="mb-3">
+                        <textarea name="resolutionNotes" rows="2" class="form-control" placeholder="Resolution notes..." style="resize: none;"></textarea>
                     </div>
-                    <button type="submit" class="btn-ss btn w-100"
-                            style="font-size:13px;padding:8px">
+                    <button type="submit" class="btn-ss w-100 py-2">
                         Update Status
                     </button>
                 </form>
@@ -191,45 +161,50 @@
         }
 
         <!-- Status History -->
-        <div class="ss-card">
-            <div style="font-size:14px;font-weight:500;color:var(--ss-text);margin-bottom:14px">
-                🕐 Status History
-            </div>
+        <div class="glass-card">
+            <h5 class="section-title">🕐 Status History</h5>
             @if (!history.EnumerateArray().Any())
             {
-                <div style="font-size:13px;color:var(--ss-muted);text-align:center;padding:16px">
-                    No history yet.
+                <div class="empty-state py-4">
+                    <p class="mb-0">No history yet.</p>
                 </div>
             }
             else
             {
-                @foreach (var h in history.EnumerateArray())
-                {
-                    var oldSt = h.GetProperty("oldStatus").GetString();
-                    var newSt = h.GetProperty("newStatus").GetString();
-                    var remarks = h.GetProperty("remarks").GetString();
-                    var changedAt = h.GetProperty("changedAt").GetString();
+                <div class="mt-3 position-relative" style="padding-left: 10px;">
+                    <div style="position: absolute; left: 14px; top: 10px; bottom: 10px; width: 2px; background: var(--ss-border);"></div>
+                    
+                    @foreach (var h in history.EnumerateArray())
+                    {
+                        var oldSt = h.GetProperty("oldStatus").GetString();
+                        var newSt = h.GetProperty("newStatus").GetString();
+                        var remarks = h.GetProperty("remarks").GetString();
+                        var changedAt = h.GetProperty("changedAt").GetString();
 
-                    <div style="border-left:2px solid var(--ss-accent2);
-                        padding-left:12px;margin-bottom:14px">
-                        <div style="font-size:12px;font-weight:500;color:var(--ss-text)">
-                            @oldSt → @newSt
+                        <div class="position-relative mb-4" style="padding-left: 24px;">
+                            <div style="position: absolute; left: 0; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--ss-accent2); box-shadow: 0 0 8px var(--ss-accent2);"></div>
+                            <div class="fw-medium text-white" style="font-size: 14px;">
+                                @oldSt <i class="bi bi-arrow-right mx-1 text-muted"></i> @newSt
+                            </div>
+                            @if (!string.IsNullOrEmpty(remarks))
+                            {
+                                <div class="mt-1" style="font-size: 13px; color: var(--ss-text);">
+                                    @remarks
+                                </div>
+                            }
+                            <div class="mt-1" style="font-size: 11px; color: var(--ss-muted);">
+                                @DateTime.Parse(changedAt!).ToString("dd MMM yyyy, hh:mm tt")
+                            </div>
                         </div>
-                        <div style="font-size:11px;color:var(--ss-muted);margin-top:3px">
-                            @remarks
-                        </div>
-                        <div style="font-size:11px;color:var(--ss-muted);margin-top:2px">
-                            @DateTime.Parse(changedAt!).ToString("dd MMM yyyy, hh:mm tt")
-                        </div>
-                    </div>
-                }
+                    }
+                </div>
             }
         </div>
     </div>
 </div>
 
-<div style="margin-top:16px">
-    <a asp-action="Index" style="font-size:13px;color:var(--ss-muted);text-decoration:none">
-        ← Back to Complaints
+<div class="mt-4">
+    <a asp-action="Index" class="btn-ss-outline" style="text-decoration: none;">
+        <i class="bi bi-arrow-left me-2"></i>Back to Complaints
     </a>
 </div>

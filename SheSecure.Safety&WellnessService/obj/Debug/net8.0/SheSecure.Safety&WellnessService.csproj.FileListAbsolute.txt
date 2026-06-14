@@ -175,3 +175,4 @@ C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\refint\
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\SheSecure.Safety&WellnessService.pdb
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\SheSecure.Safety&WellnessService.genruntimeconfig.cache
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\ref\SheSecure.Safety&WellnessService.dll
+C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\SheSecure.Safety&WellnessService.sourcelink.json

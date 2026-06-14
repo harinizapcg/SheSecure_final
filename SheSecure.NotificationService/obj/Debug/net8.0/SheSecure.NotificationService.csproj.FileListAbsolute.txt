@@ -156,3 +156,4 @@ C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\refint\She
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\SheSecure.NotificationService.pdb
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\SheSecure.NotificationService.genruntimeconfig.cache
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\ref\SheSecure.NotificationService.dll
+C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\SheSecure.NotificationService.sourcelink.json

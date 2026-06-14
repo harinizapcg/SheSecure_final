@@ -44,3 +44,4 @@ C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\refint\SheSecure.Web.dll
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\SheSecure.Web.pdb
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\SheSecure.Web.genruntimeconfig.cache
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\ref\SheSecure.Web.dll
+C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\SheSecure.Web.sourcelink.json
