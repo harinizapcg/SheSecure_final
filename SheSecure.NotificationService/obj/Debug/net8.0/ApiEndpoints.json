@@ -1,0 +1,76 @@
+[
+  {
+    "ContainingType": "SheSecure.NotificationService.Controllers.NotificationController",
+    "Method": "GetAll",
+    "RelativePath": "api/Notification/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.NotificationService.Controllers.NotificationController",
+    "Method": "GetNotificationsByEmployee",
+    "RelativePath": "api/Notification/by-employee/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.NotificationService.Controllers.NotificationController",
+    "Method": "Create",
+    "RelativePath": "api/Notification/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.NotificationService.DTOs.Requests.CreateNotificationDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.NotificationService.Controllers.NotificationController",
+    "Method": "GetEmployeeNotifications",
+    "RelativePath": "api/Notification/employee/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.NotificationService.Controllers.NotificationController",
+    "Method": "MarkAsRead",
+    "RelativePath": "api/Notification/read/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

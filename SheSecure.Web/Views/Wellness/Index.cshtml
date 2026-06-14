@@ -1,0 +1,257 @@
+﻿@{
+    ViewData["Title"] = "Mood & Wellness";
+
+    var records = (System.Text.Json.JsonElement)ViewBag.Records;
+    var burnout = (System.Text.Json.JsonElement)ViewBag.Burnout;
+    var trend = (System.Text.Json.JsonElement)ViewBag.Trend;
+    var recommendation = (System.Text.Json.JsonElement)ViewBag.Recommendation;
+
+    var hasData = records.EnumerateArray().Any();
+
+    string riskLevel = "", avgMood = "", avgStress = "", recommendationText = "";
+    if (burnout.ValueKind == System.Text.Json.JsonValueKind.Object &&
+        burnout.TryGetProperty("riskLevel", out var rl))
+    {
+        riskLevel = rl.GetString() ?? "";
+        avgMood = burnout.GetProperty("averageMood").GetDouble().ToString("0.0");
+        avgStress = burnout.GetProperty("averageStress").GetDouble().ToString("0.0");
+    }
+    if (recommendation.ValueKind == System.Text.Json.JsonValueKind.Object &&
+        recommendation.TryGetProperty("recommendation", out var rec))
+    {
+        recommendationText = rec.GetString() ?? "";
+    }
+
+    var riskColor = riskLevel == "Low" ? "#34d399"
+                  : riskLevel == "Medium" ? "#fbbf24"
+                  : riskLevel == "High" ? "#e94560"
+                  : "#94a3b8";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="ss-alert alert alert-success mb-4">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="ss-alert alert alert-danger mb-4">
+        <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+    </div>
+}
+
+<div class="row g-4">
+
+    <!-- Left Column -->
+    <div class="col-md-4">
+
+        <!-- Log Mood Form -->
+        <div class="ss-card mb-3">
+            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
+                💜 Log Today's Mood
+            </div>
+            <form method="post" asp-action="Create">
+                <div class="mb-3">
+                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
+                        Mood Level <span style="color:var(--ss-accent2)" id="moodVal">(5)</span>
+                    </label>
+                    <input type="range" name="moodLevel" min="1" max="5" value="5"
+                           class="form-range" id="moodSlider"
+                           oninput="document.getElementById('moodVal').textContent='('+this.value+')'" />
+                    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ss-muted)">
+                        <span>😞 Low</span><span>😐 Okay</span><span>😊 Great</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
+                        Stress Level <span style="color:var(--ss-accent)" id="stressVal">(3)</span>
+                    </label>
+                    <input type="range" name="stressLevel" min="1" max="5" value="3"
+                           class="form-range" id="stressSlider"
+                           oninput="document.getElementById('stressVal').textContent='('+this.value+')'" />
+                    <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ss-muted)">
+                        <span>😌 Calm</span><span>😤 Moderate</span><span>🤯 High</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
+                        Notes (optional)
+                    </label>
+                    <textarea name="remarks" rows="3" class="form-control"
+                              style="background:#0f3460;border:1px solid var(--ss-border);
+                    color:var(--ss-text);border-radius:8px;resize:none"
+                              placeholder="How are you feeling today?"></textarea>
+                </div>
+                <button type="submit" class="btn-ss btn w-100">
+                    <i class="bi bi-heart-pulse me-2"></i>Log Mood
+                </button>
+            </form>
+        </div>
+
+        <!-- Burnout Risk Card -->
+        @if (!string.IsNullOrEmpty(riskLevel))
+        {
+            <div class="ss-card-sm mb-3">
+                <div style="font-size:13px;font-weight:500;color:var(--ss-text);margin-bottom:12px">
+                    🔥 Burnout Risk
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                    <span style="font-size:22px;font-weight:600;color:@riskColor">@riskLevel</span>
+                    <span style="font-size:11px;padding:3px 10px;border-radius:20px;
+                    background:@(riskColor)22;color:@riskColor;
+                    border:1px solid @(riskColor)55">Risk Level</span>
+                </div>
+                <div style="display:flex;gap:16px">
+                    <div>
+                        <div style="font-size:18px;font-weight:600;color:var(--ss-accent2)">@avgMood</div>
+                        <div style="font-size:11px;color:var(--ss-muted)">Avg Mood</div>
+                    </div>
+                    <div>
+                        <div style="font-size:18px;font-weight:600;color:var(--ss-accent)">@avgStress</div>
+                        <div style="font-size:11px;color:var(--ss-muted)">Avg Stress</div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <!-- Recommendation Card -->
+        @if (!string.IsNullOrEmpty(recommendationText))
+        {
+            <div class="ss-card-sm">
+                <div style="font-size:13px;font-weight:500;color:var(--ss-text);margin-bottom:8px">
+                    💡 Recommendation
+                </div>
+                <div style="font-size:12px;color:var(--ss-muted);line-height:1.7">
+                    @recommendationText
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-md-8">
+
+        <!-- Trend Chart -->
+        @if (trend.EnumerateArray().Any())
+        {
+            <div class="ss-card mb-3">
+                <div style="font-size:14px;font-weight:500;color:var(--ss-text);margin-bottom:16px">
+                    📈 Mood & Stress Trend
+                </div>
+                <canvas id="trendChart" height="120"></canvas>
+            </div>
+        }
+
+        <!-- Mood History Table -->
+        <div class="ss-card">
+            <div style="font-size:14px;font-weight:500;color:var(--ss-text);margin-bottom:16px">
+                🗓 Mood History
+            </div>
+            @if (!hasData)
+            {
+                <div style="text-align:center;padding:40px;color:var(--ss-muted)">
+                    <div style="font-size:36px;margin-bottom:10px">💜</div>
+                    No mood logs yet. Log your first mood above!
+                </div>
+            }
+            else
+            {
+                <table class="table" style="color:var(--ss-text);font-size:13px">
+                    <thead>
+                        <tr style="border-color:var(--ss-border);color:var(--ss-muted)">
+                            <th>Date</th>
+                            <th>Mood</th>
+                            <th>Stress</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var r in records.EnumerateArray())
+                        {
+                            var date = r.GetProperty("createdAt").GetString();
+                            var mood = r.GetProperty("moodLevel").GetInt32();
+                            var stress = r.GetProperty("stressLevel").GetInt32();
+                            var remarks = r.TryGetProperty("remarks", out var rem) &&
+                                           rem.ValueKind != System.Text.Json.JsonValueKind.Null
+                                           ? rem.GetString() : "—";
+
+                            var moodEmoji = mood >= 4 ? "😊" : mood >= 3 ? "😐" : "😞";
+                            var stressEmoji = stress >= 4 ? "🤯" : stress >= 3 ? "😤" : "😌";
+
+                            <tr style="border-color:var(--ss-border)">
+                                <td style="color:var(--ss-muted)">
+                                    @DateTime.Parse(date!).ToString("dd MMM yyyy, hh:mm tt")
+                                </td>
+                                <td>
+                                    @moodEmoji
+                                    <span style="font-size:12px;margin-left:4px">@mood / 5</span>
+                                </td>
+                                <td>
+                                    @stressEmoji
+                                    <span style="font-size:12px;margin-left:4px">@stress / 5</span>
+                                </td>
+                                <td style="color:var(--ss-muted);font-size:12px">@remarks</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        @if (trend.EnumerateArray().Any())
+        {
+                var trendDates = trend.EnumerateArray()
+                        .Select(x => DateTime.Parse(x.GetProperty("date").GetString()!).ToString("dd MMM"))
+                        .ToList();
+                var moodData = trend.EnumerateArray()
+                        .Select(x => x.GetProperty("moodLevel").GetInt32()).ToList();
+                var stressData = trend.EnumerateArray()
+                        .Select(x => x.GetProperty("stressLevel").GetInt32()).ToList();
+
+                <text>
+                    new Chart(document.getElementById('trendChart'), {
+                        type: 'line',
+                        data: {
+                            labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(trendDates)),
+                            datasets: [
+                                {
+                                    label: 'Mood',
+                                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(moodData)),
+                                    borderColor: '#a855f7',
+                                    backgroundColor: 'rgba(168,85,247,0.1)',
+                                    tension: 0.4,
+                                    fill: true,
+                                    pointBackgroundColor: '#a855f7'
+                                },
+                                {
+                                    label: 'Stress',
+                                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(stressData)),
+                                    borderColor: '#e94560',
+                                    backgroundColor: 'rgba(233,69,96,0.1)',
+                                    tension: 0.4,
+                                    fill: true,
+                                    pointBackgroundColor: '#e94560'
+                                }
+                            ]
+                        },
+                        options: {
+                            plugins: { legend: { labels: { color: '#94a3b8' } } },
+                            scales: {
+                                x: { ticks: { color: '#94a3b8' }, grid: { color: '#2d3748' } },
+                                y: {
+                                    ticks: { color: '#94a3b8' },
+                                    grid: { color: '#2d3748' },
+                                    min: 0, max: 5
+                                }
+                            }
+                        }
+                    });
+                </text>
+        }
+    </script>
+}

@@ -1,0 +1,114 @@
+@{
+    ViewData["Title"] = "All Emergency Alerts";
+    var alerts = (System.Text.Json.JsonElement)ViewBag.Alerts;
+    var role = Context.Session.GetString("Role") ?? "";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="ss-alert alert alert-success mb-4">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="ss-alert alert alert-danger mb-4">
+        <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+    </div>
+}
+
+<div class="ss-card">
+    <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
+        🚨 All Emergency Alerts
+    </div>
+
+    @if (!alerts.EnumerateArray().Any())
+    {
+        <div style="text-align:center;padding:40px;color:var(--ss-muted)">
+            <div style="font-size:36px;margin-bottom:10px">✅</div>
+            No emergency alerts.
+        </div>
+    }
+    else
+    {
+        <table class="table" style="color:var(--ss-text);font-size:13px">
+            <thead>
+                <tr style="border-color:var(--ss-border);color:var(--ss-muted)">
+                    <th>ID</th>
+                    <th>Employee ID</th>
+                    <th>Location</th>
+                    <th>Description</th>
+                    <th>Severity</th>
+                    <th>Status</th>
+                    <th>Triggered</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var a in alerts.EnumerateArray())
+                {
+                    var id = a.GetProperty("id").GetInt32();
+                    var empId = a.GetProperty("employeeId").GetString();
+                    var location = a.GetProperty("location").GetString();
+                    var description = a.GetProperty("description").GetString();
+                    var severity = a.GetProperty("severity").GetString();
+                    var status = a.GetProperty("status").GetString();
+                    var triggeredAt = a.GetProperty("triggeredAt").GetString();
+
+                    var statusColor = status == "Active" ? "#e94560" : "#34d399";
+                    var severityColor = severity == "Critical" ? "#e94560"
+                                     : severity == "High" ? "#f97316"
+                                     : severity == "Medium" ? "#fbbf24"
+                                     : "#34d399";
+
+                    <tr style="border-color:var(--ss-border)">
+                        <td>@id</td>
+                        <td>@empId</td>
+                        <td style="color:var(--ss-muted)">@location</td>
+                        <td style="color:var(--ss-muted);max-width:160px;
+                            overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                            @description
+                        </td>
+                        <td>
+                            <span style="font-size:11px;padding:2px 8px;border-radius:20px;
+                                background:@(severityColor)22;color:@severityColor;
+                                border:1px solid @(severityColor)55">
+                                @severity
+                            </span>
+                        </td>
+                        <td>
+                            <span style="font-size:11px;padding:2px 8px;border-radius:20px;
+                                background:@(statusColor)22;color:@statusColor;
+                                border:1px solid @(statusColor)55">
+                                @status
+                            </span>
+                        </td>
+                        <td style="color:var(--ss-muted)">
+                            @DateTime.Parse(triggeredAt!).ToString("dd MMM, hh:mm tt")
+                        </td>
+                        <td>
+                            @if (status == "Active" &&
+                                                             (role == "Security" || role == "Admin"))
+                            {
+                                <form method="post" asp-action="Resolve">
+                                    <input type="hidden" name="alertId" value="@id" />
+                                    <button type="submit"
+                                            style="font-size:11px;padding:3px 10px;
+                                        border-radius:6px;border:none;
+                                        background:rgba(29,158,117,0.2);
+                                        color:#34d399;cursor:pointer">
+                                        ✓ Resolve
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span style="font-size:11px;color:var(--ss-muted)">—</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

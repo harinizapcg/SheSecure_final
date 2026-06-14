@@ -1,0 +1,6 @@
+@SheSecure.DashboardService_HostAddress = http://localhost:5248
+
+GET {{SheSecure.DashboardService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

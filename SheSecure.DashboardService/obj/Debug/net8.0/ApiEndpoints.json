@@ -1,0 +1,755 @@
+[
+  {
+    "ContainingType": "SheSecure.AuthService.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "SheSecure.AuthService.DTOs.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.AuthService.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "api/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "SheSecure.AuthService.DTOs.RegisterDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "GetComplaintById",
+    "RelativePath": "api/Complaint/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "GetAllComplaints",
+    "RelativePath": "api/Complaint/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "AssignComplaint",
+    "RelativePath": "api/Complaint/assign",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.ComplaintService.DTOs.Requests.AssignComplaintDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "GetComplaintsByEmployee",
+    "RelativePath": "api/Complaint/by-employee/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "CreateComplaint",
+    "RelativePath": "api/Complaint/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.ComplaintService.DTOs.Requests.CreateComplaintDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/Complaint/status",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.ComplaintService.DTOs.Requests.UpdateComplaintStatusDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintCommentsController",
+    "Method": "GetComments",
+    "RelativePath": "api/ComplaintComments/{complaintId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "complaintId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintCommentsController",
+    "Method": "AddComment",
+    "RelativePath": "api/ComplaintComments/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.ComplaintService.DTOs.Requests.AddComplaintCommentDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintFilesController",
+    "Method": "UploadFile",
+    "RelativePath": "api/ComplaintFiles/upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "complaintId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintStatusHistoryController",
+    "Method": "GetHistory",
+    "RelativePath": "api/ComplaintStatusHistory/{complaintId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "complaintId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintStatusHistoryController",
+    "Method": "AddHistory",
+    "RelativePath": "api/ComplaintStatusHistory/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.ComplaintService.DTOs.Requests.AddComplaintStatusHistoryDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.DashboardService.Controllers.DashboardController",
+    "Method": "GetAdminDashboard",
+    "RelativePath": "api/Dashboard/admin",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.DashboardService.Controllers.DashboardController",
+    "Method": "GetComplaintAnalytics",
+    "RelativePath": "api/Dashboard/complaints",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.DashboardService.Controllers.DashboardController",
+    "Method": "GetEmergencyAnalytics",
+    "RelativePath": "api/Dashboard/emergency",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.DashboardService.Controllers.DashboardController",
+    "Method": "GetEmployeeDashboard",
+    "RelativePath": "api/Dashboard/employee/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.DashboardService.Controllers.DashboardController",
+    "Method": "GetStats",
+    "RelativePath": "api/Dashboard/stats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.DashboardService.Controllers.DashboardController",
+    "Method": "GetWellnessAnalytics",
+    "RelativePath": "api/Dashboard/wellness",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.EmergencyAlertController",
+    "Method": "GetById",
+    "RelativePath": "api/EmergencyAlert/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.EmergencyAlertController",
+    "Method": "GetAll",
+    "RelativePath": "api/EmergencyAlert/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.EmergencyAlertController",
+    "Method": "Create",
+    "RelativePath": "api/EmergencyAlert/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.Safety_WellnessService.DTOs.Requests.CreateEmergencyAlertDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.EmergencyAlertController",
+    "Method": "Resolve",
+    "RelativePath": "api/EmergencyAlert/resolve",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.Safety_WellnessService.DTOs.Requests.ResolveEmergencyAlertDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.MoodController",
+    "Method": "GetAll",
+    "RelativePath": "api/Mood/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.MoodController",
+    "Method": "GetBurnoutRisk",
+    "RelativePath": "api/Mood/burnout-risk/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.MoodController",
+    "Method": "Create",
+    "RelativePath": "api/Mood/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.Safety_WellnessService.DTOs.CreateMoodLogDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.MoodController",
+    "Method": "GetEmployeeLogs",
+    "RelativePath": "api/Mood/employee/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.MoodController",
+    "Method": "GetRecommendation",
+    "RelativePath": "api/Mood/recommendation/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.MoodController",
+    "Method": "GetMoodTrend",
+    "RelativePath": "api/Mood/trend/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.MoodLogController",
+    "Method": "GetLogs",
+    "RelativePath": "api/MoodLog/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.MoodLogController",
+    "Method": "AddLog",
+    "RelativePath": "api/MoodLog/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.Safety_WellnessService.DTOs.CreateMoodLogDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.MoodLogController",
+    "Method": "GetBurnoutScore",
+    "RelativePath": "api/MoodLog/burnout-score/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.NotificationService.Controllers.NotificationController",
+    "Method": "GetAll",
+    "RelativePath": "api/Notification/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.NotificationService.Controllers.NotificationController",
+    "Method": "GetNotificationsByEmployee",
+    "RelativePath": "api/Notification/by-employee/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.NotificationService.Controllers.NotificationController",
+    "Method": "Create",
+    "RelativePath": "api/Notification/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.NotificationService.DTOs.Requests.CreateNotificationDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.NotificationService.Controllers.NotificationController",
+    "Method": "GetEmployeeNotifications",
+    "RelativePath": "api/Notification/employee/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.NotificationService.Controllers.NotificationController",
+    "Method": "MarkAsRead",
+    "RelativePath": "api/Notification/read/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.SafeReachController",
+    "Method": "GetById",
+    "RelativePath": "api/SafeReach/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.SafeReachController",
+    "Method": "Acknowledge",
+    "RelativePath": "api/SafeReach/acknowledge",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.Safety_WellnessService.DTOs.AcknowledgeSafeReachDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.SafeReachController",
+    "Method": "GetAll",
+    "RelativePath": "api/SafeReach/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.SafeReachController",
+    "Method": "GetByEmployee",
+    "RelativePath": "api/SafeReach/by-employee/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.SafeReachController",
+    "Method": "Create",
+    "RelativePath": "api/SafeReach/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.Safety_WellnessService.DTOs.CreateSafeReachDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.SafeReachController",
+    "Method": "Escalate",
+    "RelativePath": "api/SafeReach/escalate/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.AuthService.Controllers.TestController",
+    "Method": "HrOnly",
+    "RelativePath": "api/Test/hr-only",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.AuthService.Controllers.TestController",
+    "Method": "Protected",
+    "RelativePath": "api/Test/protected",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.AuthService.Controllers.TestController",
+    "Method": "Public",
+    "RelativePath": "api/Test/public",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.WellnessSafetyService.Controllers.WellnessRequestController",
+    "Method": "GetById",
+    "RelativePath": "api/WellnessRequest/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.WellnessSafetyService.Controllers.WellnessRequestController",
+    "Method": "GetAllRequests",
+    "RelativePath": "api/WellnessRequest/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.WellnessSafetyService.Controllers.WellnessRequestController",
+    "Method": "GetByEmployee",
+    "RelativePath": "api/WellnessRequest/by-employee/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.WellnessSafetyService.Controllers.WellnessRequestController",
+    "Method": "CreateRequest",
+    "RelativePath": "api/WellnessRequest/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.WellnessSafetyService.DTOs.Requests.CreateWellnessRequestDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.WellnessSafetyService.Controllers.WellnessRequestController",
+    "Method": "GetMyRequests",
+    "RelativePath": "api/WellnessRequest/my",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.WellnessSafetyService.Controllers.WellnessRequestController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/WellnessRequest/status",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.WellnessSafetyService.DTOs.Requests.UpdateWellnessRequestStatusDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

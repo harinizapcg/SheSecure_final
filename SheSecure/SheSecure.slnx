@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="../SheSecure.ComplaintService/SheSecure.ComplaintService.csproj" Id="f135a4d2-c2e5-462b-b273-747bad4cdb41" />
+  <Project Path="../SheSecure.DashboardService/SheSecure.DashboardService.csproj" Id="f8255b0d-90f0-4700-bb9c-dbc3da435313" />
+  <Project Path="../SheSecure.NotificationService/SheSecure.NotificationService.csproj" Id="fd6eec8f-2e02-4599-9267-4cc1aa1a11c4" />
+  <Project Path="../SheSecure.Safety&amp;WellnessService/SheSecure.Safety&amp;WellnessService.csproj" Id="20beaf9a-9e0b-42b7-b8a0-909bdd591289" />
+  <Project Path="../SheSecure.Web/SheSecure.Web.csproj" Id="a3076265-d78f-4e12-9c6b-89d89e566b55" />
+  <Project Path="SheSecure.AuthService.csproj" />
+</Solution>

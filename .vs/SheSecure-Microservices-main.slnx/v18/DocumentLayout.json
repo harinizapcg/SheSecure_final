@@ -1,0 +1,353 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\SheSecure-Microservices-main\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.NotificationService\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.NotificationService\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Services\\NotificationService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.NotificationService\\Services\\NotificationService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Repositories\\NotificationRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.NotificationService\\Repositories\\NotificationRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Interfaces\\INotificationService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.NotificationService\\Interfaces\\INotificationService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Interfaces\\INotificationRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.NotificationService\\Interfaces\\INotificationRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Entities\\Notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.NotificationService\\Entities\\Notification.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\DTOs\\Responses\\NotificationResponseDTO.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.NotificationService\\DTOs\\Responses\\NotificationResponseDTO.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\DTOs\\Requests\\CreateNotificationDTO.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.NotificationService\\DTOs\\Requests\\CreateNotificationDTO.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Controllers\\NotificationController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.NotificationService\\Controllers\\NotificationController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.ComplaintService\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Services\\ComplaintService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.ComplaintService\\Services\\ComplaintService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Interfaces\\IComplaintService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.ComplaintService\\Interfaces\\IComplaintService.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Repositories\\ComplaintRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.ComplaintService\\Repositories\\ComplaintRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Interfaces\\IComplaintRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.ComplaintService\\Interfaces\\IComplaintRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Entities\\Complaint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.ComplaintService\\Entities\\Complaint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Entities\\ComplaintFile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.ComplaintService\\Entities\\ComplaintFile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\DTOs\\Responses\\ComplaintResponseDTO.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.ComplaintService\\DTOs\\Responses\\ComplaintResponseDTO.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\DTOs\\Requests\\CreateComplaintDTO.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.ComplaintService\\DTOs\\Requests\\CreateComplaintDTO.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Controllers\\ComplaintController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:SheSecure.ComplaintService\\Controllers\\ComplaintController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c64b9c2-e352-428e-a56d-0ace190b99a6}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Program.cs",
+              "RelativeDocumentMoniker": "SheSecure.NotificationService\\Program.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Program.cs",
+              "RelativeToolTip": "SheSecure.NotificationService\\Program.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAYwAYAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T01:59:26.049Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\appsettings.json",
+              "RelativeDocumentMoniker": "SheSecure.NotificationService\\appsettings.json",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\appsettings.json",
+              "RelativeToolTip": "SheSecure.NotificationService\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-06-13T01:59:10.113Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "NotificationService.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Services\\NotificationService.cs",
+              "RelativeDocumentMoniker": "SheSecure.NotificationService\\Services\\NotificationService.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Services\\NotificationService.cs",
+              "RelativeToolTip": "SheSecure.NotificationService\\Services\\NotificationService.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAYwGYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T01:58:53.636Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "NotificationRepository.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Repositories\\NotificationRepository.cs",
+              "RelativeDocumentMoniker": "SheSecure.NotificationService\\Repositories\\NotificationRepository.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Repositories\\NotificationRepository.cs",
+              "RelativeToolTip": "SheSecure.NotificationService\\Repositories\\NotificationRepository.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAYwD8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T01:58:27.09Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "INotificationService.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Interfaces\\INotificationService.cs",
+              "RelativeDocumentMoniker": "SheSecure.NotificationService\\Interfaces\\INotificationService.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Interfaces\\INotificationService.cs",
+              "RelativeToolTip": "SheSecure.NotificationService\\Interfaces\\INotificationService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T01:57:59.35Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "INotificationRepository.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Interfaces\\INotificationRepository.cs",
+              "RelativeDocumentMoniker": "SheSecure.NotificationService\\Interfaces\\INotificationRepository.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Interfaces\\INotificationRepository.cs",
+              "RelativeToolTip": "SheSecure.NotificationService\\Interfaces\\INotificationRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T01:57:28.472Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Notification.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Entities\\Notification.cs",
+              "RelativeDocumentMoniker": "SheSecure.NotificationService\\Entities\\Notification.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Entities\\Notification.cs",
+              "RelativeToolTip": "SheSecure.NotificationService\\Entities\\Notification.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T01:52:20.161Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "NotificationResponseDTO.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\DTOs\\Responses\\NotificationResponseDTO.cs",
+              "RelativeDocumentMoniker": "SheSecure.NotificationService\\DTOs\\Responses\\NotificationResponseDTO.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\DTOs\\Responses\\NotificationResponseDTO.cs",
+              "RelativeToolTip": "SheSecure.NotificationService\\DTOs\\Responses\\NotificationResponseDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T01:51:40.451Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "CreateNotificationDTO.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\DTOs\\Requests\\CreateNotificationDTO.cs",
+              "RelativeDocumentMoniker": "SheSecure.NotificationService\\DTOs\\Requests\\CreateNotificationDTO.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\DTOs\\Requests\\CreateNotificationDTO.cs",
+              "RelativeToolTip": "SheSecure.NotificationService\\DTOs\\Requests\\CreateNotificationDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T01:51:21.312Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "NotificationController.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Controllers\\NotificationController.cs",
+              "RelativeDocumentMoniker": "SheSecure.NotificationService\\Controllers\\NotificationController.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.NotificationService\\Controllers\\NotificationController.cs",
+              "RelativeToolTip": "SheSecure.NotificationService\\Controllers\\NotificationController.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAYwCQAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-13T01:50:28.504Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Program.cs",
+              "RelativeDocumentMoniker": "SheSecure.ComplaintService\\Program.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Program.cs",
+              "RelativeToolTip": "SheSecure.ComplaintService\\Program.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAYwEoAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-12T16:32:16.49Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "IComplaintService.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Interfaces\\IComplaintService.cs",
+              "RelativeDocumentMoniker": "SheSecure.ComplaintService\\Interfaces\\IComplaintService.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Interfaces\\IComplaintService.cs",
+              "RelativeToolTip": "SheSecure.ComplaintService\\Interfaces\\IComplaintService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-12T16:30:42.318Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IComplaintRepository.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Interfaces\\IComplaintRepository.cs",
+              "RelativeDocumentMoniker": "SheSecure.ComplaintService\\Interfaces\\IComplaintRepository.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Interfaces\\IComplaintRepository.cs",
+              "RelativeToolTip": "SheSecure.ComplaintService\\Interfaces\\IComplaintRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-12T16:30:22.728Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Complaint.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Entities\\Complaint.cs",
+              "RelativeDocumentMoniker": "SheSecure.ComplaintService\\Entities\\Complaint.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Entities\\Complaint.cs",
+              "RelativeToolTip": "SheSecure.ComplaintService\\Entities\\Complaint.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAYwCgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-12T16:29:52.349Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ComplaintRepository.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Repositories\\ComplaintRepository.cs",
+              "RelativeDocumentMoniker": "SheSecure.ComplaintService\\Repositories\\ComplaintRepository.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Repositories\\ComplaintRepository.cs",
+              "RelativeToolTip": "SheSecure.ComplaintService\\Repositories\\ComplaintRepository.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAYwCsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-12T16:31:01.723Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ComplaintService.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Services\\ComplaintService.cs",
+              "RelativeDocumentMoniker": "SheSecure.ComplaintService\\Services\\ComplaintService.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Services\\ComplaintService.cs",
+              "RelativeToolTip": "SheSecure.ComplaintService\\Services\\ComplaintService.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAYwG4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-12T16:31:55.709Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "ComplaintFile.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Entities\\ComplaintFile.cs",
+              "RelativeDocumentMoniker": "SheSecure.ComplaintService\\Entities\\ComplaintFile.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Entities\\ComplaintFile.cs",
+              "RelativeToolTip": "SheSecure.ComplaintService\\Entities\\ComplaintFile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-12T16:29:30.637Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ComplaintResponseDTO.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\DTOs\\Responses\\ComplaintResponseDTO.cs",
+              "RelativeDocumentMoniker": "SheSecure.ComplaintService\\DTOs\\Responses\\ComplaintResponseDTO.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\DTOs\\Responses\\ComplaintResponseDTO.cs",
+              "RelativeToolTip": "SheSecure.ComplaintService\\DTOs\\Responses\\ComplaintResponseDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-12T16:28:51.539Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "CreateComplaintDTO.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\DTOs\\Requests\\CreateComplaintDTO.cs",
+              "RelativeDocumentMoniker": "SheSecure.ComplaintService\\DTOs\\Requests\\CreateComplaintDTO.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\DTOs\\Requests\\CreateComplaintDTO.cs",
+              "RelativeToolTip": "SheSecure.ComplaintService\\DTOs\\Requests\\CreateComplaintDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-12T16:27:35.317Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "ComplaintController.cs",
+              "DocumentMoniker": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Controllers\\ComplaintController.cs",
+              "RelativeDocumentMoniker": "SheSecure.ComplaintService\\Controllers\\ComplaintController.cs",
+              "ToolTip": "D:\\SheSecure-Microservices-main\\SheSecure.ComplaintService\\Controllers\\ComplaintController.cs",
+              "RelativeToolTip": "SheSecure.ComplaintService\\Controllers\\ComplaintController.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAUwEYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-12T16:27:09.314Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

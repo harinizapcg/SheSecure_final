@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "All Complaints";
+    var complaints = (System.Text.Json.JsonElement)ViewBag.Complaints;
+}
+
+<div class="ss-card">
+    <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
+        📂 All Complaints (POSH)
+    </div>
+
+    @if (!complaints.EnumerateArray().Any())
+    {
+        <div style="text-align:center;padding:40px;color:var(--ss-muted)">
+            <div style="font-size:36px;margin-bottom:10px">📂</div>
+            No complaints found.
+        </div>
+    }
+    else
+    {
+        <div style="overflow-x:auto">
+            <table class="table" style="color:var(--ss-text);font-size:13px">
+                <thead>
+                    <tr style="border-color:var(--ss-border);color:var(--ss-muted)">
+                        <th>Ref No.</th>
+                        <th>Subject</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in complaints.EnumerateArray())
+                    {
+                        var id = c.GetProperty("id").GetInt32();
+                        var cmpNum = c.GetProperty("complaintNumber").GetString();
+                        var subject = c.GetProperty("subject").GetString();
+                        var status = c.GetProperty("status").GetString();
+                        var createdAt = c.GetProperty("createdAt").GetString();
+
+                        var statusColor = status == "Resolved" ? "#34d399"
+                                       : status == "Under Investigation" ? "#a855f7"
+                                       : status == "Under Review" ? "#38bdf8"
+                                       : status == "Closed" ? "#94a3b8"
+                                       : "#fbbf24";
+
+                        <tr style="border-color:var(--ss-border)">
+                            <td style="font-size:11px;color:var(--ss-muted);font-family:monospace">
+                                @cmpNum?.Substring(0, Math.Min(16, cmpNum.Length))...
+                            </td>
+                            <td>@subject</td>
+                            <td>
+                                <span style="font-size:11px;padding:3px 10px;border-radius:20px;
+                                    background:@(statusColor)22;color:@statusColor;
+                                    border:1px solid @(statusColor)55">
+                                    @status
+                                </span>
+                            </td>
+                            <td style="color:var(--ss-muted)">
+                                @DateTime.Parse(createdAt!).ToString("dd MMM yyyy")
+                            </td>
+                            <td>
+                                <a asp-controller="Complaint" asp-action="Detail"
+                                       asp-route-id="@id"
+                                       style="font-size:12px;color:var(--ss-accent2);
+                                    text-decoration:none">
+                                    View →
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

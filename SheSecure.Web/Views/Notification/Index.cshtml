@@ -1,0 +1,122 @@
+﻿@{
+    ViewData["Title"] = "Notifications";
+    var notifications = (System.Text.Json.JsonElement)ViewBag.Notifications;
+    var list = notifications.EnumerateArray().ToList();
+    var unreadCount = list.Count(n => !n.GetProperty("isRead").GetBoolean());
+}
+
+<div class="row g-4">
+    <div class="col-md-8 mx-auto">
+
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+                <span style="font-size:15px;font-weight:500;color:var(--ss-text)">
+                    🔔 Notifications
+                </span>
+                @if (unreadCount > 0)
+                {
+                    <span style="font-size:11px;padding:2px 10px;border-radius:20px;
+                        background:rgba(233,69,96,0.15);color:var(--ss-accent);
+                        border:1px solid rgba(233,69,96,0.3);margin-left:8px">
+                        @unreadCount unread
+                    </span>
+                }
+            </div>
+        </div>
+
+        @if (!list.Any())
+        {
+            <div class="ss-card" style="text-align:center;padding:60px">
+                <div style="font-size:48px;margin-bottom:12px">🔔</div>
+                <div style="color:var(--ss-muted);font-size:14px">
+                    No notifications yet.
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var n in list)
+            {
+                var id = n.GetProperty("id").GetInt32();
+                var title = n.GetProperty("title").GetString();
+                var message = n.GetProperty("message").GetString();
+                var type = n.GetProperty("type").GetString();
+                var isRead = n.GetProperty("isRead").GetBoolean();
+                var createdAt = n.GetProperty("createdAt").GetString();
+
+                var typeIcon = type == "Complaint" ? "📋"
+                             : type == "Safety" ? "🛡"
+                             : type == "Wellness" ? "💜"
+                             : type == "Emergency" ? "🚨"
+                             : "🔔";
+
+                var typeColor = type == "Complaint" ? "#fbbf24"
+                              : type == "Safety" ? "#34d399"
+                              : type == "Wellness" ? "#a855f7"
+                              : type == "Emergency" ? "#e94560"
+                              : "#38bdf8";
+
+                <div style="background:@(isRead ? "var(--ss-sidebar)" : "var(--ss-card)");
+                    border:1px solid @(isRead ? "var(--ss-border)" : typeColor + "44");
+                    border-radius:12px;padding:16px 18px;margin-bottom:10px;
+                    display:flex;align-items:flex-start;gap:14px;
+                    transition:all 0.2s;">
+
+                    
+                    <div style="width:42px;height:42px;border-radius:10px;flex-shrink:0;
+                        background:@(typeColor)22;display:flex;align-items:center;
+                        justify-content:center;font-size:20px">
+                        @typeIcon
+                    </div>
+
+                    <div style="flex:1">
+                        <div style="display:flex;align-items:center;
+                            justify-content:space-between;gap:8px;flex-wrap:wrap">
+                            <div style="font-size:14px;font-weight:@(isRead ? "400" : "500");
+                                color:var(--ss-text)">
+                                @title
+                                @if (!isRead)
+                                {
+                                    <span style="width:8px;height:8px;background:var(--ss-accent);
+                                    border-radius:50%;display:inline-block;
+                                    margin-left:6px;vertical-align:middle"></span>
+                                }
+                            </div>
+                            <span style="font-size:11px;color:var(--ss-muted);white-space:nowrap">
+                                @DateTime.Parse(createdAt!).ToString("dd MMM, hh:mm tt")
+                            </span>
+                        </div>
+                        <div style="font-size:13px;color:var(--ss-muted);margin-top:4px">
+                            @message
+                        </div>
+                        <div style="display:flex;align-items:center;
+                            justify-content:space-between;margin-top:8px">
+                            <span style="font-size:11px;padding:2px 8px;border-radius:20px;
+                                background:@(typeColor)22;color:@typeColor;
+                                border:1px solid @(typeColor)44">
+                                @type
+                            </span>
+                            @if (!isRead)
+                            {
+                                <form method="post" asp-action="MarkRead" style="margin:0">
+                                    <input type="hidden" name="id" value="@id" />
+                                    <button type="submit"
+                                            style="font-size:11px;padding:3px 10px;
+                                        border-radius:6px;border:none;
+                                        background:rgba(29,158,117,0.2);
+                                        color:#34d399;cursor:pointer">
+                                        ✓ Mark as read
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span style="font-size:11px;color:var(--ss-muted)">✓ Read</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

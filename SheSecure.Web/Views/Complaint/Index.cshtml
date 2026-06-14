@@ -1,0 +1,165 @@
+﻿@{
+    ViewData["Title"] = "My Complaints";
+    var complaints = (System.Text.Json.JsonElement)ViewBag.Complaints;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="ss-alert alert alert-success mb-4">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="ss-alert alert alert-danger mb-4">
+        <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+    </div>
+}
+
+<div class="row g-4">
+
+    <!-- Raise Complaint Form -->
+    <div class="col-md-4">
+        <div class="ss-card">
+            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
+                📋 Raise a Complaint
+            </div>
+            <form method="post" asp-action="Create">
+                <div class="mb-3">
+                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">Category</label>
+                    <select name="category" class="form-select"
+                            style="background:#0f3460;border:1px solid var(--ss-border);
+                        color:var(--ss-text);border-radius:8px;padding:10px 14px"
+                            required>
+                        <option value="" disabled selected>Select category</option>
+                        <option value="Workplace Harassment">Workplace Harassment</option>
+                        <option value="Bullying">Bullying</option>
+                        <option value="Discrimination">Discrimination</option>
+                        <option value="Sexual Harassment">Sexual Harassment</option>
+                        <option value="Unsafe Work Environment">Unsafe Work Environment</option>
+                        <option value="Maternity Support">Maternity Support</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">Subject</label>
+                    <input type="text" name="subject" class="form-control"
+                           style="background:#0f3460;border:1px solid var(--ss-border);
+                    color:var(--ss-text);border-radius:8px"
+                           placeholder="Brief subject of your complaint" required />
+                </div>
+                <div class="mb-3">
+                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">Priority</label>
+                    <select name="priority" class="form-select"
+                            style="background:#0f3460;border:1px solid var(--ss-border);
+                        color:var(--ss-text);border-radius:8px;padding:10px 14px"
+                            required>
+                        <option value="Low">Low</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">Description</label>
+                    <textarea name="description" rows="4" class="form-control"
+                              style="background:#0f3460;border:1px solid var(--ss-border);
+                    color:var(--ss-text);border-radius:8px;resize:none"
+                              placeholder="Describe the incident in detail..." required></textarea>
+                </div>
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input type="checkbox" name="isAnonymous" value="true"
+                               class="form-check-input" id="anonCheck" />
+                        <label class="form-check-label"
+                               style="font-size:13px;color:var(--ss-muted)" for="anonCheck">
+                            Submit anonymously
+                        </label>
+                    </div>
+                    <div style="font-size:11px;color:var(--ss-muted);margin-top:4px">
+                        <i class="bi bi-shield-lock"></i>
+                        Your identity will be hidden from the respondent.
+                    </div>
+                </div>
+                <button type="submit" class="btn-ss btn w-100">
+                    <i class="bi bi-send me-2"></i>Submit Complaint
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Complaints List -->
+    <div class="col-md-8">
+        <div class="ss-card">
+            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
+                📂 My Complaints
+            </div>
+
+            @if (!complaints.EnumerateArray().Any())
+            {
+                <div style="text-align:center;padding:40px;color:var(--ss-muted)">
+                    <div style="font-size:36px;margin-bottom:10px">📋</div>
+                    No complaints raised yet.
+                </div>
+            }
+            else
+            {
+                <div style="overflow-x:auto">
+                    <table class="table" style="color:var(--ss-text);font-size:13px">
+                        <thead>
+                            <tr style="border-color:var(--ss-border);color:var(--ss-muted)">
+                                <th>Ref No.</th>
+                                <th>Subject</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var c in complaints.EnumerateArray())
+                            {
+                                var id = c.GetProperty("id").GetInt32();
+                                var cmpNum = c.GetProperty("complaintNumber").GetString();
+                                var subject = c.GetProperty("subject").GetString();
+                                var status = c.GetProperty("status").GetString();
+                                var createdAt = c.GetProperty("createdAt").GetString();
+
+                                var statusColor = status == "Resolved" ? "#34d399"
+                                               : status == "Under Investigation" ? "#a855f7"
+                                               : status == "Under Review" ? "#38bdf8"
+                                               : status == "Closed" ? "#94a3b8"
+                                               : "#fbbf24";
+
+                                <tr style="border-color:var(--ss-border)">
+                                    <td style="font-size:11px;color:var(--ss-muted);
+                                        font-family:monospace">
+                                        @cmpNum?.Substring(0, Math.Min(16, cmpNum.Length))...
+                                    </td>
+                                    <td>@subject</td>
+                                    <td>
+                                        <span style="font-size:11px;padding:3px 10px;
+                                            border-radius:20px;
+                                            background:@(statusColor)22;
+                                            color:@statusColor;
+                                            border:1px solid @(statusColor)55">
+                                            @status
+                                        </span>
+                                    </td>
+                                    <td style="color:var(--ss-muted)">
+                                        @DateTime.Parse(createdAt!).ToString("dd MMM yyyy")
+                                    </td>
+                                    <td>
+                                        <a asp-action="Detail" asp-route-id="@id"
+                                               style="font-size:12px;color:var(--ss-accent2);
+                                            text-decoration:none">
+                                            View →
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

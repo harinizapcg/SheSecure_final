@@ -1,0 +1,162 @@
+@{
+    ViewData["Title"] = "Safe Check-In";
+    var records = (System.Text.Json.JsonElement)ViewBag.Records;
+    var role = Context.Session.GetString("Role") ?? "";
+}
+
+<!-- Alerts -->
+@if (TempData["Success"] != null)
+{
+    <div class="ss-alert alert alert-success mb-4">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="ss-alert alert alert-danger mb-4">
+        <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+    </div>
+}
+
+<div class="row g-4">
+
+    <!-- Create Check-In Form -->
+    <div class="col-md-4">
+        <div class="ss-card">
+            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
+                🛡 New Safe Check-In
+            </div>
+            <form method="post" asp-action="Create">
+                <div class="mb-3">
+                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
+                        Expected Arrival Time
+                    </label>
+                    <input type="datetime-local" name="expectedArrivalTime"
+                           class="form-control"
+                           style="background:#0f3460;border:1px solid var(--ss-border);
+                    color:var(--ss-text);border-radius:8px;padding:10px 14px"
+                           required />
+                </div>
+                <button type="submit" class="btn-ss btn w-100">
+                    <i class="bi bi-shield-check me-2"></i>Submit Check-In
+                </button>
+            </form>
+        </div>
+
+        <!-- Info Card -->
+        <div class="ss-card-sm mt-3">
+            <div style="font-size:13px;font-weight:500;color:var(--ss-text);margin-bottom:10px">
+                ℹ How it works
+            </div>
+            <div style="font-size:12px;color:var(--ss-muted);line-height:1.8">
+                1. Submit your expected arrival time<br />
+                2. Acknowledge when you arrive safely<br />
+                3. If missed, manager gets notified automatically
+            </div>
+        </div>
+    </div>
+
+    <!-- Records Table -->
+    <div class="col-md-8">
+        <div class="ss-card">
+            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
+                📋 Check-In Records
+            </div>
+
+            @if (!records.EnumerateArray().Any())
+            {
+                <div style="text-align:center;padding:40px;color:var(--ss-muted)">
+                    <div style="font-size:36px;margin-bottom:10px">🛡</div>
+                    No check-in records yet.
+                </div>
+            }
+            else
+            {
+                <div style="overflow-x:auto">
+                    <table class="table" style="color:var(--ss-text);font-size:13px">
+                        <thead>
+                            <tr style="border-color:var(--ss-border);color:var(--ss-muted)">
+                                <th>ID</th>
+                                <th>Employee ID</th>
+                                <th>Expected Arrival</th>
+                                <th>Status</th>
+                                <th>Acknowledged At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in records.EnumerateArray())
+                            {
+                                var id = r.GetProperty("id").GetInt32();
+                                var empId = r.GetProperty("employeeId").GetString();
+                                var expectedTime = r.GetProperty("expectedArrivalTime").GetString();
+                                var status = r.GetProperty("status").GetString();
+                                var isAcknowledged = r.GetProperty("isAcknowledged").GetBoolean();
+                                var acknowledgedAt = r.TryGetProperty("acknowledgedAt", out var ackProp)
+                                                     && ackProp.ValueKind != System.Text.Json.JsonValueKind.Null
+                                                     ? ackProp.GetString() : null;
+
+                                var statusColor = status == "Reached Safely" ? "#34d399"
+                                               : status == "Pending" ? "#fbbf24"
+                                               : "#e94560";
+
+                                <tr style="border-color:var(--ss-border)">
+                                    <td>@id</td>
+                                    <td>@empId</td>
+                                    <td>@DateTime.Parse(expectedTime!).ToString("dd MMM yyyy, hh:mm tt")</td>
+                                    <td>
+                                        <span style="font-size:11px;padding:3px 10px;border-radius:20px;
+                                            background:@(statusColor)22;color:@statusColor;
+                                            border:1px solid @(statusColor)55">
+                                            @status
+                                        </span>
+                                    </td>
+                                    <td style="color:var(--ss-muted)">
+                                        @(acknowledgedAt != null
+                                            ? DateTime.Parse(acknowledgedAt).ToString("dd MMM, hh:mm tt")
+                                            : "—")
+                                    </td>
+                                    <td>
+                                        @if (!isAcknowledged)
+                                        {
+                                            <form method="post" asp-action="Acknowledge"
+                                                  style="display:inline">
+                                                <input type="hidden" name="safeReachId" value="@id" />
+                                                <button type="submit"
+                                                        style="font-size:11px;padding:3px 10px;
+                                                    border-radius:6px;border:none;
+                                                    background:rgba(29,158,117,0.2);
+                                                    color:#34d399;cursor:pointer">
+                                                    ✓ Acknowledge
+                                                </button>
+                                            </form>
+
+                                            @if (role == "Manager" || role == "Security" || role == "Admin")
+                                            {
+                                                <form method="post" asp-action="Escalate"
+                                                      style="display:inline;margin-left:6px">
+                                                    <input type="hidden" name="id" value="@id" />
+                                                    <button type="submit"
+                                                            style="font-size:11px;padding:3px 10px;
+                                                        border-radius:6px;border:none;
+                                                        background:rgba(233,69,96,0.2);
+                                                        color:#e94560;cursor:pointer">
+                                                        ⚠ Escalate
+                                                    </button>
+                                                </form>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span style="font-size:11px;color:#34d399">✓ Done</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

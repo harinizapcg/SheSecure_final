@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — SheSecure</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <style>
+            :root {
+                --ss-bg:        #1a1a2e;
+                --ss-sidebar:   #16213e;
+                --ss-card:      #0f3460;
+                --ss-accent:    #e94560;
+                --ss-accent2:   #a855f7;
+                --ss-text:      #e2e8f0;
+                --ss-muted:     #94a3b8;
+                --ss-border:    #2d3748;
+            }
+
+            body {
+                background: var(--ss-bg);
+                color: var(--ss-text);
+                font-family: 'Segoe UI', sans-serif;
+                min-height: 100vh;
+            }
+
+            /* ── Sidebar ── */
+            #sidebar {
+                width: 240px;
+                min-height: 100vh;
+                background: var(--ss-sidebar);
+                border-right: 1px solid var(--ss-border);
+                position: fixed;
+                top: 0; left: 0;
+                display: flex;
+                flex-direction: column;
+                z-index: 100;
+                transition: width 0.2s;
+            }
+
+            .sidebar-brand {
+                padding: 20px 20px 16px;
+                border-bottom: 1px solid var(--ss-border);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .sidebar-brand .logo-icon {
+                width: 36px; height: 36px;
+                background: linear-gradient(135deg, var(--ss-accent), var(--ss-accent2));
+                border-radius: 10px;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 18px;
+            }
+
+            .sidebar-brand span {
+                font-size: 18px;
+                font-weight: 700;
+                background: linear-gradient(135deg, var(--ss-accent), var(--ss-accent2));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            .nav-section {
+                padding: 12px 12px 4px;
+                font-size: 10px;
+                letter-spacing: 0.1em;
+                color: var(--ss-muted);
+                text-transform: uppercase;
+            }
+
+            .sidebar-nav a {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 9px 16px;
+                color: var(--ss-muted);
+                text-decoration: none;
+                border-radius: 8px;
+                margin: 2px 8px;
+                font-size: 14px;
+                transition: all 0.15s;
+            }
+
+            .sidebar-nav a:hover,
+            .sidebar-nav a.active {
+                background: rgba(233, 69, 96, 0.12);
+                color: var(--ss-text);
+            }
+
+            .sidebar-nav a.active {
+                color: var(--ss-accent);
+                border-left: 3px solid var(--ss-accent);
+                padding-left: 13px;
+            }
+
+            .sidebar-nav a i { font-size: 16px; width: 20px; text-align: center; }
+
+            .sidebar-footer {
+                margin-top: auto;
+                padding: 16px;
+                border-top: 1px solid var(--ss-border);
+                font-size: 13px;
+                color: var(--ss-muted);
+            }
+
+            /* ── Main content ── */
+            #main-content {
+                margin-left: 240px;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* ── Topbar ── */
+            #topbar {
+                background: var(--ss-sidebar);
+                border-bottom: 1px solid var(--ss-border);
+                padding: 12px 24px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                position: sticky;
+                top: 0;
+                z-index: 99;
+            }
+
+            .topbar-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--ss-text);
+            }
+
+            .topbar-right { display: flex; align-items: center; gap: 14px; }
+
+            .notif-btn {
+                position: relative;
+                background: none;
+                border: none;
+                color: var(--ss-muted);
+                font-size: 20px;
+                cursor: pointer;
+                padding: 4px;
+            }
+
+            .notif-badge {
+                position: absolute;
+                top: 0; right: 0;
+                background: var(--ss-accent);
+                color: white;
+                font-size: 9px;
+                width: 16px; height: 16px;
+                border-radius: 50%;
+                display: flex; align-items: center; justify-content: center;
+            }
+
+            .user-pill {
+                display: flex; align-items: center; gap: 8px;
+                background: var(--ss-card);
+                border-radius: 20px;
+                padding: 5px 12px 5px 5px;
+                font-size: 13px;
+                color: var(--ss-text);
+            }
+
+            .user-avatar {
+                width: 28px; height: 28px;
+                background: linear-gradient(135deg, var(--ss-accent), var(--ss-accent2));
+                border-radius: 50%;
+                display: flex; align-items: center; justify-content: center;
+                font-size: 12px; font-weight: 600; color: white;
+            }
+
+            .role-badge {
+                font-size: 10px;
+                padding: 2px 8px;
+                border-radius: 20px;
+                background: rgba(168, 85, 247, 0.15);
+                color: var(--ss-accent2);
+                border: 1px solid rgba(168, 85, 247, 0.3);
+            }
+
+            /* ── Page body ── */
+            .page-body { padding: 24px; flex: 1; }
+
+            /* ── Cards ── */
+            .ss-card {
+                background: var(--ss-card);
+                border: 1px solid var(--ss-border);
+                border-radius: 12px;
+                padding: 20px;
+            }
+
+            .ss-card-sm {
+                background: var(--ss-sidebar);
+                border: 1px solid var(--ss-border);
+                border-radius: 10px;
+                padding: 16px;
+            }
+
+            /* ── Buttons ── */
+            .btn-ss {
+                background: linear-gradient(135deg, var(--ss-accent), var(--ss-accent2));
+                border: none;
+                color: white;
+                border-radius: 8px;
+                padding: 8px 18px;
+                font-size: 13px;
+                font-weight: 500;
+            }
+
+            .btn-ss:hover { opacity: 0.9; color: white; }
+
+            /* ── SOS button ── */
+            .sos-btn {
+                background: var(--ss-accent);
+                border: none;
+                color: white;
+                border-radius: 50%;
+                width: 42px; height: 42px;
+                font-size: 13px;
+                font-weight: 700;
+                display: flex; align-items: center; justify-content: center;
+                cursor: pointer;
+                box-shadow: 0 0 12px rgba(233, 69, 96, 0.5);
+                transition: box-shadow 0.2s;
+            }
+
+            .sos-btn:hover { box-shadow: 0 0 20px rgba(233, 69, 96, 0.8); }
+
+            /* ── Alerts ── */
+            .ss-alert {
+                border-radius: 10px;
+                border: none;
+                font-size: 13px;
+            }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+
+    @{
+        var role = Context.Session.GetString("Role") ?? "";
+        var userName = Context.Session.GetString("UserName") ?? "User";
+        var initials = userName.Length > 0 ? userName[0].ToString().ToUpper() : "U";
+        var isLoggedIn = Context.Session.GetString("Token") != null;
+    }
+
+    @if (isLoggedIn)
+    {
+        <!-- Sidebar -->
+        <nav id="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo-icon">🛡️</div>
+                <span>SheSecure</span>
+            </div>
+
+            <div class="sidebar-nav mt-2">
+
+                <!-- All roles -->
+                <div class="nav-section">Main</div>
+                <a asp-controller="Dashboard" asp-action="Index"
+                       class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
+
+                <!-- Employee & above -->
+                @if (role == "Employee" || role == "Manager" || role == "HR" || role == "Admin")
+                {
+                    <div class="nav-section">Safety</div>
+                    <a asp-controller="SafeReach" asp-action="Index"
+                           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "SafeReach" ? "active" : "")">
+                        <i class="bi bi-shield-check"></i> Safe Check-In
+                    </a>
+                    <a asp-controller="Emergency" asp-action="Index"
+                           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" ? "active" : "")">
+                        <i class="bi bi-exclamation-octagon"></i> SOS / Emergency
+                    </a>
+
+                    <div class="nav-section">Wellness</div>
+                    <a asp-controller="Wellness" asp-action="Index"
+                           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Wellness" ? "active" : "")">
+                        <i class="bi bi-heart-pulse"></i> Mood & Wellness
+                    </a>
+                    <a asp-controller="WFH" asp-action="Index"
+                           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "WFH" ? "active" : "")">
+                        <i class="bi bi-house-door"></i> WFH Requests
+                    </a>
+
+                    <div class="nav-section">Complaints</div>
+                    <a asp-controller="Complaint" asp-action="Index"
+                           class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Complaint" ? "active" : "")">
+                        <i class="bi bi-file-earmark-text"></i> My Complaints
+                    </a>
+                }
+
+                <!-- HR / POSH -->
+                @if (role == "HR" || role == "Admin")
+                {
+                    <div class="nav-section">HR / POSH</div>
+                    <a asp-controller="Complaint" asp-action="All"
+                           class="@(ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
+                        <i class="bi bi-folder2-open"></i> All Complaints
+                    </a>
+                }
+
+                <!-- Manager -->
+                @if (role == "Manager" || role == "Admin")
+                {
+                    <div class="nav-section">Manager</div>
+                    <a asp-controller="WFH" asp-action="Approvals"
+                           class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Approvals" ? "active" : "")">
+                        <i class="bi bi-check2-square"></i> WFH Approvals
+                    </a>
+                }
+
+                <!-- Security -->
+                @if (role == "Security" || role == "Admin")
+                {
+                    <div class="nav-section">Security</div>
+                    <a asp-controller="Emergency" asp-action="All"
+                           class="@(ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
+                        <i class="bi bi-bell-fill"></i> All Alerts
+                    </a>
+                }
+
+                <!-- Notifications — all roles -->
+                <div class="nav-section">Account</div>
+                <a asp-controller="Notification" asp-action="Index"
+                       class="@(ViewContext.RouteData.Values["controller"]?.ToString() == "Notification" ? "active" : "")">
+                    <i class="bi bi-bell"></i> Notifications
+                </a>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <div class="user-avatar">@initials</div>
+                    <div>
+                        <div style="font-size:13px;color:var(--ss-text)">@userName</div>
+                        <div style="font-size:11px">@role</div>
+                    </div>
+                </div>
+                <a asp-controller="Auth" asp-action="Logout"
+                       class="btn btn-sm w-100"
+                       style="background:rgba(233,69,96,0.15);color:var(--ss-accent);border:1px solid rgba(233,69,96,0.3);border-radius:8px">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main -->
+        <div id="main-content">
+            <div id="topbar">
+                <div class="topbar-title">@ViewData["Title"]</div>
+                <div class="topbar-right">
+                    <button class="sos-btn" onclick="triggerSOS()" title="Emergency SOS">SOS</button>
+                    <a asp-controller="Notification" asp-action="Index" style="text-decoration:none">
+                        <button class="notif-btn">
+                            <i class="bi bi-bell"></i>
+                            <span class="notif-badge" id="notifCount" style="display:none">0</span>
+                        </button>
+                    </a>
+                    <div class="user-pill">
+                        <div class="user-avatar">@initials</div>
+                        @userName
+                        <span class="role-badge">@role</span>
+                    </div>
+                </div>
+            </div>
+            <div class="page-body">
+                @RenderBody()
+            </div>
+        </div>
+    }
+    else
+    {
+        @RenderBody()
+    }
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        function triggerSOS() {
+            if (confirm('🚨 Trigger Emergency SOS Alert?')) {
+                fetch('/Emergency/SOS', { method: 'POST' })
+                .then(() => alert('SOS alert sent. Help is on the way.'))
+                .catch(() => alert('Could not send SOS. Please call security directly.'));
+            }
+        }
+
+        function fetchNotifCount() {
+            fetch('/Notification/UnreadCount')
+                .then(r => r.json())
+                .then(data => {
+                    const badge = document.getElementById('notifCount');
+                    if (badge) {
+                        if (data.count > 0) {
+                            badge.textContent = data.count;
+                            badge.style.display = '';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    }
+                })
+                .catch(() => {});
+        }
+
+        // Run on load and poll every 15 seconds
+        document.addEventListener("DOMContentLoaded", function () {
+            if (document.getElementById('notifCount')) {
+                fetchNotifCount();
+                setInterval(fetchNotifCount, 15000);
+            }
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

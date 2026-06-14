@@ -1,0 +1,242 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    var role = Context.Session.GetString("Role") ?? "";
+    var userName = Context.Session.GetString("UserName") ?? "";
+
+    var stats = (System.Text.Json.JsonElement)ViewBag.Stats;
+    var complaints = (System.Text.Json.JsonElement)ViewBag.Complaints;
+    var wellness = (System.Text.Json.JsonElement)ViewBag.Wellness;
+    var emergency = (System.Text.Json.JsonElement)ViewBag.Emergency;
+
+    var totalComplaints = stats.GetProperty("totalComplaints").GetInt32();
+    var openComplaints = stats.GetProperty("openComplaints").GetInt32();
+    var resolvedComplaints = stats.GetProperty("resolvedComplaints").GetInt32();
+    var wellnessRequests = stats.GetProperty("wellnessRequests").GetInt32();
+    var activeAlerts = stats.GetProperty("activeEmergencyAlerts").GetInt32();
+    var notificationsSent = stats.GetProperty("notificationsSent").GetInt32();
+}
+
+<!-- KPI Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4 col-sm-6">
+        <div class="ss-card-sm d-flex align-items-center gap-3">
+            <div style="width:46px;height:46px;border-radius:12px;background:rgba(233,69,96,0.15);display:flex;align-items:center;justify-content:center;font-size:22px">
+                📋
+            </div>
+            <div>
+                <div style="font-size:24px;font-weight:600;color:var(--ss-text)">@totalComplaints</div>
+                <div style="font-size:12px;color:var(--ss-muted)">Total Complaints</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="ss-card-sm d-flex align-items-center gap-3">
+            <div style="width:46px;height:46px;border-radius:12px;background:rgba(234,179,8,0.15);display:flex;align-items:center;justify-content:center;font-size:22px">
+                ⚠️
+            </div>
+            <div>
+                <div style="font-size:24px;font-weight:600;color:#fbbf24">@openComplaints</div>
+                <div style="font-size:12px;color:var(--ss-muted)">Open Complaints</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="ss-card-sm d-flex align-items-center gap-3">
+            <div style="width:46px;height:46px;border-radius:12px;background:rgba(29,158,117,0.15);display:flex;align-items:center;justify-content:center;font-size:22px">
+                ✅
+            </div>
+            <div>
+                <div style="font-size:24px;font-weight:600;color:#34d399">@resolvedComplaints</div>
+                <div style="font-size:12px;color:var(--ss-muted)">Resolved Complaints</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="ss-card-sm d-flex align-items-center gap-3">
+            <div style="width:46px;height:46px;border-radius:12px;background:rgba(168,85,247,0.15);display:flex;align-items:center;justify-content:center;font-size:22px">
+                💜
+            </div>
+            <div>
+                <div style="font-size:24px;font-weight:600;color:var(--ss-accent2)">@wellnessRequests</div>
+                <div style="font-size:12px;color:var(--ss-muted)">Wellness Requests</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="ss-card-sm d-flex align-items-center gap-3">
+            <div style="width:46px;height:46px;border-radius:12px;background:rgba(233,69,96,0.15);display:flex;align-items:center;justify-content:center;font-size:22px">
+                🚨
+            </div>
+            <div>
+                <div style="font-size:24px;font-weight:600;color:var(--ss-accent)">@activeAlerts</div>
+                <div style="font-size:12px;color:var(--ss-muted)">Active SOS Alerts</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-6">
+        <div class="ss-card-sm d-flex align-items-center gap-3">
+            <div style="width:46px;height:46px;border-radius:12px;background:rgba(56,189,248,0.15);display:flex;align-items:center;justify-content:center;font-size:22px">
+                🔔
+            </div>
+            <div>
+                <div style="font-size:24px;font-weight:600;color:#38bdf8">@notificationsSent</div>
+                <div style="font-size:12px;color:var(--ss-muted)">Notifications Sent</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-3 mb-4">
+    <!-- Complaints by Category -->
+    <div class="col-md-4">
+        <div class="ss-card h-100">
+            <div style="font-size:14px;font-weight:500;color:var(--ss-text);margin-bottom:16px">
+                🗂 Complaints by Category
+            </div>
+            <canvas id="complaintsChart" height="220"></canvas>
+        </div>
+    </div>
+
+    <!-- Wellness Requests -->
+    <div class="col-md-4">
+        <div class="ss-card h-100">
+            <div style="font-size:14px;font-weight:500;color:var(--ss-text);margin-bottom:16px">
+                💜 Wellness Requests
+            </div>
+            <canvas id="wellnessChart" height="220"></canvas>
+        </div>
+    </div>
+
+    <!-- Emergency Alerts -->
+    <div class="col-md-4">
+        <div class="ss-card h-100">
+            <div style="font-size:14px;font-weight:500;color:var(--ss-text);margin-bottom:16px">
+                🚨 Emergency Alert Status
+            </div>
+            <canvas id="emergencyChart" height="220"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions — role aware -->
+<div class="ss-card">
+    <div style="font-size:14px;font-weight:500;color:var(--ss-text);margin-bottom:16px">
+        ⚡ Quick Actions
+    </div>
+    <div class="d-flex flex-wrap gap-3">
+        @if (role == "Employee" || role == "Manager" || role == "HR" || role == "Admin")
+        {
+            <a asp-controller="SafeReach" asp-action="Index" class="btn-ss btn">
+                🛡 Safe Check-In
+            </a>
+            <a asp-controller="Wellness" asp-action="Index" class="btn-ss btn">
+                💜 Log Mood
+            </a>
+            <a asp-controller="Complaint" asp-action="Index" class="btn-ss btn">
+                📋 Raise Complaint
+            </a>
+            <a asp-controller="WFH" asp-action="Index" class="btn-ss btn">
+                🏠 WFH Request
+            </a>
+        }
+        @if (role == "HR" || role == "Admin")
+        {
+            <a asp-controller="Complaint" asp-action="All" class="btn-ss btn">
+                📂 All Complaints
+            </a>
+        }
+        @if (role == "Manager" || role == "Admin")
+        {
+            <a asp-controller="WFH" asp-action="Approvals" class="btn-ss btn">
+                ✅ WFH Approvals
+            </a>
+        }
+        @if (role == "Security" || role == "Admin")
+        {
+            <a asp-controller="Emergency" asp-action="All" class="btn-ss btn">
+                🚨 View All Alerts
+            </a>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Build chart data from server
+        const complaintLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                    complaints.EnumerateArray().Select(x => x.GetProperty("category").GetString()).ToList()
+            ));
+        const complaintData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                    complaints.EnumerateArray().Select(x => x.GetProperty("count").GetInt32()).ToList()
+            ));
+
+        const wellnessLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                    wellness.EnumerateArray().Select(x => x.GetProperty("requestType").GetString()).ToList()
+            ));
+        const wellnessData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                    wellness.EnumerateArray().Select(x => x.GetProperty("count").GetInt32()).ToList()
+            ));
+
+        const emergencyLabels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                    emergency.EnumerateArray().Select(x => x.GetProperty("status").GetString()).ToList()
+            ));
+        const emergencyData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                    emergency.EnumerateArray().Select(x => x.GetProperty("count").GetInt32()).ToList()
+            ));
+
+        const chartDefaults = {
+            plugins: { legend: { labels: { color: '#94a3b8', font: { size: 12 } } } }
+        };
+
+        // Complaints Doughnut
+        new Chart(document.getElementById('complaintsChart'), {
+            type: 'doughnut',
+            data: {
+                labels: complaintLabels,
+                datasets: [{
+                    data: complaintData,
+                    backgroundColor: ['#e94560','#a855f7','#38bdf8'],
+                    borderWidth: 0
+                }]
+            },
+            options: { ...chartDefaults, cutout: '65%' }
+        });
+
+        // Wellness Bar
+        new Chart(document.getElementById('wellnessChart'), {
+            type: 'bar',
+            data: {
+                labels: wellnessLabels,
+                datasets: [{
+                    label: 'Requests',
+                    data: wellnessData,
+                    backgroundColor: ['#a855f7','#e94560'],
+                    borderRadius: 6,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                ...chartDefaults,
+                scales: {
+                    x: { ticks: { color: '#94a3b8' }, grid: { color: '#2d3748' } },
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: '#2d3748' } }
+                }
+            }
+        });
+
+        // Emergency Pie
+        new Chart(document.getElementById('emergencyChart'), {
+            type: 'pie',
+            data: {
+                labels: emergencyLabels,
+                datasets: [{
+                    data: emergencyData,
+                    backgroundColor: ['#e94560','#34d399'],
+                    borderWidth: 0
+                }]
+            },
+            options: { ...chartDefaults }
+        });
+    </script>
+}

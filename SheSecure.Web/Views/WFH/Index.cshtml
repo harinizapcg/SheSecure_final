@@ -1,0 +1,158 @@
+﻿@{
+    ViewData["Title"] = "WFH Requests";
+    var requests = (System.Text.Json.JsonElement)ViewBag.Requests;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="ss-alert alert alert-success mb-4">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="ss-alert alert alert-danger mb-4">
+        <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+    </div>
+}
+<div style="color:yellow;font-size:12px">
+    DEBUG — Filtering by EmployeeId: @ViewBag.DebugEmployeeId
+</div>
+<div class="row g-4">
+
+    <!-- Request Form -->
+    <div class="col-md-4">
+        <div class="ss-card">
+            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
+                🏠 New WFH Request
+            </div>
+            <form method="post" asp-action="Create">
+                <div class="mb-3">
+                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
+                        Request Type
+                    </label>
+                    <select name="requestType" class="form-select"
+                            style="background:#0f3460;border:1px solid var(--ss-border);
+                        color:var(--ss-text);border-radius:8px;padding:10px 14px"
+                            required>
+                        <option value="" disabled selected>Select type</option>
+                        <option value="WFH">Work From Home</option>
+                        <option value="Counselling">Counselling</option>
+                        <option value="MentalHealthLeave">Mental Health Leave</option>
+                        <option value="FlexiHours">Flexi Hours</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
+                        Priority
+                    </label>
+                    <select name="priority" class="form-select"
+                            style="background:#0f3460;border:1px solid var(--ss-border);
+                        color:var(--ss-text);border-radius:8px;padding:10px 14px"
+                            required>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label style="font-size:13px;color:var(--ss-muted)" class="mb-1">
+                        Description
+                    </label>
+                    <textarea name="description" rows="4" class="form-control"
+                              style="background:#0f3460;border:1px solid var(--ss-border);
+                    color:var(--ss-text);border-radius:8px;resize:none"
+                              placeholder="Briefly describe your reason..."
+                              required></textarea>
+                    <div style="font-size:11px;color:var(--ss-muted);margin-top:5px">
+                        <i class="bi bi-shield-lock"></i>
+                        Your reason is privacy-protected and visible only to your manager.
+                    </div>
+                </div>
+                <button type="submit" class="btn-ss btn w-100">
+                    <i class="bi bi-house-door me-2"></i>Submit Request
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- My Requests Table -->
+    <div class="col-md-8">
+        <div class="ss-card">
+            <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
+                📋 My WFH Requests
+            </div>
+
+            @if (!requests.EnumerateArray().Any())
+            {
+                <div style="text-align:center;padding:40px;color:var(--ss-muted)">
+                    <div style="font-size:36px;margin-bottom:10px">🏠</div>
+                    No WFH requests yet. Submit one above!
+                </div>
+            }
+            else
+            {
+                <div style="overflow-x:auto">
+                    <table class="table" style="color:var(--ss-text);font-size:13px">
+                        <thead>
+                            <tr style="border-color:var(--ss-border);color:var(--ss-muted)">
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Priority</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in requests.EnumerateArray())
+                            {
+                                var id = r.GetProperty("id").GetInt32();
+                                var reqType = r.GetProperty("requestType").GetString();
+                                var desc = r.GetProperty("description").GetString();
+                                var priority = r.GetProperty("priority").GetString();
+                                var status = r.GetProperty("status").GetString();
+                                var createdAt = r.GetProperty("createdAt").GetString();
+
+                                var statusColor = status == "Approved" ? "#34d399"
+                                               : status == "Rejected" ? "#e94560"
+                                               : status == "Pending" ? "#fbbf24"
+                                               : "#94a3b8";
+
+                                var priorityColor = priority == "High" ? "#e94560"
+                                                 : priority == "Medium" ? "#fbbf24"
+                                                 : "#34d399";
+
+                                <tr style="border-color:var(--ss-border)">
+                                    <td>@id</td>
+                                    <td>@reqType</td>
+                                    <td>
+                                        <span style="font-size:11px;padding:2px 8px;border-radius:20px;
+                                            background:@(priorityColor)22;color:@priorityColor;
+                                            border:1px solid @(priorityColor)55">
+                                            @priority
+                                        </span>
+                                    </td>
+                                    <td style="color:var(--ss-muted);max-width:200px;
+                                        overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                                        @desc
+                                    </td>
+                                    <td>
+                                        <span style="font-size:11px;padding:3px 10px;border-radius:20px;
+                                            background:@(statusColor)22;color:@statusColor;
+                                            border:1px solid @(statusColor)55">
+                                            @status
+                                        </span>
+                                    </td>
+                                    <td style="color:var(--ss-muted)">
+                                        @DateTime.Parse(createdAt!).ToString("dd MMM yyyy")
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,177 @@
+[
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "GetComplaintById",
+    "RelativePath": "api/Complaint/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "GetAllComplaints",
+    "RelativePath": "api/Complaint/all",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "AssignComplaint",
+    "RelativePath": "api/Complaint/assign",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.ComplaintService.DTOs.Requests.AssignComplaintDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "GetComplaintsByEmployee",
+    "RelativePath": "api/Complaint/by-employee/{employeeId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "employeeId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "CreateComplaint",
+    "RelativePath": "api/Complaint/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.ComplaintService.DTOs.Requests.CreateComplaintDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/Complaint/status",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.ComplaintService.DTOs.Requests.UpdateComplaintStatusDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintCommentsController",
+    "Method": "GetComments",
+    "RelativePath": "api/ComplaintComments/{complaintId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "complaintId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintCommentsController",
+    "Method": "AddComment",
+    "RelativePath": "api/ComplaintComments/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.ComplaintService.DTOs.Requests.AddComplaintCommentDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintFilesController",
+    "Method": "UploadFile",
+    "RelativePath": "api/ComplaintFiles/upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "complaintId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintStatusHistoryController",
+    "Method": "GetHistory",
+    "RelativePath": "api/ComplaintStatusHistory/{complaintId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "complaintId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintStatusHistoryController",
+    "Method": "AddHistory",
+    "RelativePath": "api/ComplaintStatusHistory/add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "SheSecure.ComplaintService.DTOs.Requests.AddComplaintStatusHistoryDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

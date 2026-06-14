@@ -1,0 +1,6 @@
+@SheSecure.Safety_WellnessService_HostAddress = http://localhost:5274
+
+GET {{SheSecure.Safety_WellnessService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

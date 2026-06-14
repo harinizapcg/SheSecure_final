@@ -1,0 +1,6 @@
+@SheSecure.ComplaintService_HostAddress = http://localhost:5072
+
+GET {{SheSecure.ComplaintService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

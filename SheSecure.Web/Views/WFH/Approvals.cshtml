@@ -1,0 +1,116 @@
+@{
+    ViewData["Title"] = "WFH Approvals";
+    var requests = (System.Text.Json.JsonElement)ViewBag.Requests;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="ss-alert alert alert-success mb-4">
+        <i class="bi bi-check-circle me-2"></i>@TempData["Success"]
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="ss-alert alert alert-danger mb-4">
+        <i class="bi bi-exclamation-circle me-2"></i>@TempData["Error"]
+    </div>
+}
+
+<div class="ss-card">
+    <div style="font-size:15px;font-weight:500;color:var(--ss-text);margin-bottom:18px">
+        ✅ Pending WFH Approvals
+    </div>
+
+    @if (!requests.EnumerateArray().Any())
+    {
+        <div style="text-align:center;padding:40px;color:var(--ss-muted)">
+            <div style="font-size:36px;margin-bottom:10px">✅</div>
+            No pending requests.
+        </div>
+    }
+    else
+    {
+        <div style="overflow-x:auto">
+            <table class="table" style="color:var(--ss-text);font-size:13px">
+                <thead>
+                    <tr style="border-color:var(--ss-border);color:var(--ss-muted)">
+                        <th>ID</th>
+                        <th>Employee ID</th>
+                        <th>Type</th>
+                        <th>Priority</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var r in requests.EnumerateArray())
+                    {
+                        var id = r.GetProperty("id").GetInt32();
+                        var empId = r.GetProperty("employeeId").GetString();
+                        var reqType = r.GetProperty("requestType").GetString();
+                        var desc = r.GetProperty("description").GetString();
+                        var priority = r.GetProperty("priority").GetString();
+                        var status = r.GetProperty("status").GetString();
+                        var createdAt = r.GetProperty("createdAt").GetString();
+
+                        var statusColor = status == "Approved" ? "#34d399"
+                                       : status == "Rejected" ? "#e94560"
+                                       : "#fbbf24";
+
+                        <tr style="border-color:var(--ss-border)">
+                            <td>@id</td>
+                            <td>@empId</td>
+                            <td>@reqType</td>
+                            <td>@priority</td>
+                            <td style="color:var(--ss-muted);max-width:180px;
+                                overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                                @desc
+                            </td>
+                            <td>
+                                <span style="font-size:11px;padding:3px 10px;border-radius:20px;
+                                    background:@(statusColor)22;color:@statusColor;
+                                    border:1px solid @(statusColor)55">
+                                    @status
+                                </span>
+                            </td>
+                            <td style="color:var(--ss-muted)">
+                                @DateTime.Parse(createdAt!).ToString("dd MMM yyyy")
+                            </td>
+                            <td>
+                                @if (status == "Pending")
+                                {
+                                    <form method="post" asp-action="UpdateStatus" style="display:inline">
+                                        <input type="hidden" name="requestId" value="@id" />
+                                        <input type="hidden" name="status" value="Approved" />
+                                        <button type="submit"
+                                                style="font-size:11px;padding:3px 10px;border-radius:6px;
+                                            border:none;background:rgba(29,158,117,0.2);
+                                            color:#34d399;cursor:pointer;margin-right:4px">
+                                            ✓ Approve
+                                        </button>
+                                    </form>
+                                    <form method="post" asp-action="UpdateStatus" style="display:inline">
+                                        <input type="hidden" name="requestId" value="@id" />
+                                        <input type="hidden" name="status" value="Rejected" />
+                                        <button type="submit"
+                                                style="font-size:11px;padding:3px 10px;border-radius:6px;
+                                            border:none;background:rgba(233,69,96,0.2);
+                                            color:#e94560;cursor:pointer">
+                                            ✗ Reject
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span style="font-size:11px;color:var(--ss-muted)">—</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
