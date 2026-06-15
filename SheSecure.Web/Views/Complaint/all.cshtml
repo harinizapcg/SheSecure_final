@@ -124,7 +124,7 @@
                 var status = c.GetProperty("status").GetString() ?? "Submitted";
                 var category = c.TryGetProperty("category", out var catProp) ? catProp.GetString() ?? "General" : "General";
                 var createdAtStr = c.GetProperty("createdAt").GetString();
-                var createdAt = createdAtStr != null ? DateTime.Parse(createdAtStr) : DateTime.Now;
+                var createdAt = createdAtStr != null ? TimeHelper.ToIST(createdAtStr) : DateTime.UtcNow.AddHours(5).AddMinutes(30);
 
                 int level = (status == "Resolved" || status == "Closed") ? 4 :
                             (status == "Assigned" || status == "Under Investigation") ? 3 :
@@ -182,3 +182,4 @@
         </div>
     }
 </div>
+

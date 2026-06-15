@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Complaint Detail";
     var complaint = (System.Text.Json.JsonElement)ViewBag.Complaint;
     var comments = (System.Text.Json.JsonElement)ViewBag.Comments;
@@ -52,7 +52,7 @@
     <div class="col-md-7">
         <!-- Comments -->
         <div class="glass-card mb-4 fade-in-up delay-100">
-            <h5 class="section-title">💬 Comments</h5>
+            <h5 class="section-title">?? Comments</h5>
 
             @if (!comments.EnumerateArray().Any())
             {
@@ -80,7 +80,7 @@
                                     }
                                 </span>
                                 <span style="font-size: 11px; color: var(--ss-muted);">
-                                    @DateTime.Parse(createdAt!).ToString("dd MMM, hh:mm tt")
+                                    @TimeHelper.ToIST(createdAt!).ToString("dd MMM, hh:mm tt")
                                 </span>
                             </div>
                             <div style="font-size: 14px; color: var(--ss-text);">
@@ -118,7 +118,7 @@
 
         <!-- Upload Evidence -->
         <div class="glass-card fade-in-up delay-200">
-            <h5 class="section-title">📎 Upload Evidence</h5>
+            <h5 class="section-title">?? Upload Evidence</h5>
             <form method="post" asp-action="UploadFile" enctype="multipart/form-data" class="mt-3">
                 <input type="hidden" name="complaintId" value="@id" />
                 <div class="d-flex gap-2">
@@ -138,7 +138,7 @@
         @if (role == "HR" || role == "Admin")
         {
             <div class="glass-card mb-4 fade-in-up delay-100">
-                <h5 class="section-title">🔄 Update Status</h5>
+                <h5 class="section-title">?? Update Status</h5>
                 <form method="post" asp-action="UpdateStatus" class="mt-3">
                     <input type="hidden" name="complaintId" value="@id" />
                     <div class="mb-3">
@@ -162,7 +162,7 @@
 
         <!-- Status History Timeline -->
         <div class="glass-card fade-in-up delay-200 h-100">
-            <h5 class="section-title">🕐 Status History</h5>
+            <h5 class="section-title">?? Status History</h5>
             @if (!history.EnumerateArray().Any())
             {
                 <div class="empty-state py-4">
@@ -197,7 +197,7 @@
                                     </div>
                                 }
                                 <div class="mt-2 fw-medium" style="font-size: 11px; color: var(--ss-muted);">
-                                    @DateTime.Parse(changedAt!).ToString("dd MMM yyyy, hh:mm tt")
+                                    @TimeHelper.ToIST(changedAt!).ToString("dd MMM yyyy, hh:mm tt")
                                 </div>
                             </div>
                         }
@@ -213,3 +213,4 @@
         <i class="bi bi-arrow-left me-2"></i>Back to Complaints
     </a>
 </div>
+

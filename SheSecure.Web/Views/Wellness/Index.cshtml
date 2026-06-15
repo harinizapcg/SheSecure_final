@@ -203,7 +203,7 @@
                             <div class="flex-grow-1">
                                 <div class="d-flex align-items-center gap-2 mb-1">
                                     <i class="bi bi-calendar-event text-muted" style="font-size: 12px;"></i>
-                                    <span class="text-white fw-medium" style="font-size: 13px;">@DateTime.Parse(date!).ToString("dd MMM yyyy, hh:mm tt")</span>
+                                    <span class="text-white fw-medium" style="font-size: 13px;">@TimeHelper.ToIST(date!).ToString("dd MMM yyyy, hh:mm tt")</span>
                                 </div>
                                 <div style="font-size: 13px; color: var(--ss-muted); line-height: 1.4;">
                                     @if(remarks == "No notes provided") {
@@ -235,7 +235,7 @@
         @if (trend.EnumerateArray().Any())
         {
                 var trendDates = trend.EnumerateArray()
-                        .Select(x => DateTime.Parse(x.GetProperty("date").GetString()!).ToString("dd MMM"))
+                        .Select(x => TimeHelper.ToIST(x.GetProperty("date").GetString()!).ToString("dd MMM"))
                         .ToList();
                 var moodData = trend.EnumerateArray()
                         .Select(x => x.GetProperty("moodLevel").GetInt32()).ToList();
@@ -284,3 +284,4 @@
         }
     </script>
 }
+

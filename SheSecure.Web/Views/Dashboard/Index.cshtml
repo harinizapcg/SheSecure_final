@@ -27,7 +27,7 @@
         <!-- Top row: Date & System Status -->
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
             <div style="font-size: 13px; font-weight: 500; color: var(--ss-muted); text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; background: rgba(255,255,255,0.05); padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
-                <i class="bi bi-calendar3 me-2" style="color: var(--ss-accent);"></i>@DateTime.Now.ToString("dddd, MMMM dd, yyyy")
+                <i class="bi bi-calendar3 me-2" style="color: var(--ss-accent);"></i>@DateTime.UtcNow.AddHours(5).AddMinutes(30).ToString("dddd, MMMM dd, yyyy")
             </div>
             <div class="d-flex align-items-center px-3 py-1 hover-lift" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; cursor: default;">
                 <div style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; margin-right: 8px; box-shadow: 0 0 8px #10b981; animation: pulse-ring 2s infinite;"></div>
@@ -409,3 +409,4 @@
         });
     </script>
 }
+

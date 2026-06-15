@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Activity Feed";
     var notifications = (JsonElement)ViewBag.Notifications;
-    var list = notifications.EnumerateArray().OrderByDescending(n => DateTime.Parse(n.GetProperty("createdAt").GetString()!)).ToList();
+    var list = notifications.EnumerateArray().OrderByDescending(n => TimeHelper.ToIST(n.GetProperty("createdAt").GetString()!)).ToList();
     var unreadCount = list.Count(n => !n.GetProperty("isRead").GetBoolean());
 
     var todayList = new List<JsonElement>();
@@ -13,7 +13,7 @@
 
     foreach (var n in list)
     {
-        var dt = DateTime.Parse(n.GetProperty("createdAt").GetString()!);
+        var dt = TimeHelper.ToIST(n.GetProperty("createdAt").GetString()!);
         if (dt.Date == today) todayList.Add(n);
         else if (dt.Date == today.AddDays(-1)) yesterdayList.Add(n);
         else earlierList.Add(n);
@@ -197,7 +197,7 @@
 
                             var isRead = n.GetProperty("isRead").GetBoolean();
                             var createdAtStr = n.GetProperty("createdAt").GetString();
-                            var createdAt = createdAtStr != null ? DateTime.Parse(createdAtStr) : DateTime.Now;
+                            var createdAt = createdAtStr != null ? TimeHelper.ToIST(createdAtStr) : DateTime.UtcNow.AddHours(5).AddMinutes(30);
 
                             var typeIcon = type == "Complaint" ? "bi-clipboard-data"
                                          : type == "Safety" ? "bi-shield-check"
@@ -309,3 +309,4 @@
         }
     </script>
 }
+

@@ -44,8 +44,8 @@
                 
                 <div class="text-center mb-5 mt-3 position-relative">
                     <div style="font-size: 11px; color: var(--ss-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Expected Arrival</div>
-                    <div class="fw-bold text-white" style="font-size: 2.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">@DateTime.Parse(expectedTime!).ToString("hh:mm tt")</div>
-                    <div style="font-size: 12px; color: var(--ss-warning); font-weight: 600;">@DateTime.Parse(expectedTime!).ToString("dd MMM yyyy")</div>
+                    <div class="fw-bold text-white" style="font-size: 2.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">@TimeHelper.ToIST(expectedTime!).ToString("hh:mm tt")</div>
+                    <div style="font-size: 12px; color: var(--ss-warning); font-weight: 600;">@TimeHelper.ToIST(expectedTime!).ToString("dd MMM yyyy")</div>
                 </div>
 
                 <!-- Progress Flow Visual -->
@@ -219,7 +219,7 @@
                                     <div class="safe-card-time">
                                         <div class="safe-card-time-block">
                                             <span class="safe-card-time-label">Expected Arrival</span>
-                                            <span class="safe-card-time-value"><i class="bi bi-geo-alt me-1 text-muted"></i>@DateTime.Parse(expectedTime!).ToString("dd MMM, hh:mm tt")</span>
+                                            <span class="safe-card-time-value"><i class="bi bi-geo-alt me-1 text-muted"></i>@TimeHelper.ToIST(expectedTime!).ToString("dd MMM, hh:mm tt")</span>
                                         </div>
                                         
                                         <i class="bi bi-arrow-right" style="color: rgba(255,255,255,0.2);"></i>
@@ -228,7 +228,7 @@
                                             <span class="safe-card-time-label">Actual Arrival</span>
                                             <span class="safe-card-time-value" style="color: @(isAcknowledged ? "#10b981" : "var(--ss-muted)")">
                                                 @if(isAcknowledged && acknowledgedAt != null) {
-                                                    <i class="bi bi-check2-circle me-1"></i>@DateTime.Parse(acknowledgedAt).ToString("dd MMM, hh:mm tt")
+                                                    <i class="bi bi-check2-circle me-1"></i>@TimeHelper.ToIST(acknowledgedAt).ToString("dd MMM, hh:mm tt")
                                                 } else {
                                                     <span>—</span>
                                                 }
@@ -259,3 +259,4 @@
         </div>
     </div>
 </div>
+

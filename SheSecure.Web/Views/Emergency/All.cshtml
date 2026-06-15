@@ -132,7 +132,7 @@
                             </div>
                             <h5 class="text-white fw-bold mb-1"><i class="bi bi-geo-alt text-danger me-1"></i>@location</h5>
                             <div style="font-size: 12px; color: var(--ss-muted);">
-                                <i class="bi bi-clock me-1"></i> Triggered @DateTime.Parse(triggeredAt!).ToString("dd MMM yyyy, hh:mm tt")
+                                <i class="bi bi-clock me-1"></i> Triggered @TimeHelper.ToIST(triggeredAt!).ToString("dd MMM yyyy, hh:mm tt")
                             </div>
                         </div>
                         <div class="d-flex flex-column align-items-end gap-2">
@@ -175,3 +175,4 @@
         </div>
     }
 </div>
+

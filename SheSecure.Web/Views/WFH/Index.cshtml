@@ -137,7 +137,7 @@
                             
                             <div class="d-flex align-items-center text-muted" style="font-size: 12px;">
                                 <i class="bi bi-calendar-event me-2"></i>
-                                Submitted on @DateTime.Parse(createdAt!).ToString("dd MMM yyyy, hh:mm tt")
+                                Submitted on @TimeHelper.ToIST(createdAt!).ToString("dd MMM yyyy, hh:mm tt")
                             </div>
                         </div>
                     }
@@ -146,3 +146,4 @@
         </div>
     </div>
 </div>
+

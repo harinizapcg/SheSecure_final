@@ -89,7 +89,7 @@
                             </h6>
                             <div class="text-muted mt-1" style="font-size: 12px;">
                                 <i class="bi bi-calendar-event me-1"></i>
-                                Submitted on @DateTime.Parse(createdAt!).ToString("dd MMM yyyy")
+                                Submitted on @TimeHelper.ToIST(createdAt!).ToString("dd MMM yyyy")
                             </div>
                         </div>
                         
@@ -127,3 +127,4 @@
         </div>
     }
 </div>
+
