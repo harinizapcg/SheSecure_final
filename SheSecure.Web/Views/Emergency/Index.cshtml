@@ -46,6 +46,9 @@
             <button type="button" onclick="triggerFakeCall()" class="btn btn-outline-secondary btn-sm mt-4 position-relative" style="z-index: 2; border-radius: 20px; font-size: 12px; letter-spacing: 0.5px; border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.8);">
                 <i class="bi bi-telephone-inbound me-1"></i> Dummy Incoming Call
             </button>
+            <button type="button" onclick="toggleVoiceSOS()" id="voiceSosBtn" class="btn btn-outline-info btn-sm mt-4 position-relative" style="z-index: 2; border-radius: 20px; font-size: 12px; letter-spacing: 0.5px; margin-left: 8px; border-color: rgba(14, 165, 233, 0.5);">
+                <i class="bi bi-mic-fill me-1"></i> Voice SOS
+            </button>
         </div>
 
         <!-- SOS Form -->
@@ -54,7 +57,7 @@
                 <span class="d-inline-block me-2" style="width: 12px; height: 12px; background: var(--ss-danger); border-radius: 50%; box-shadow: 0 0 10px var(--ss-danger); animation: pulse-sos 2s infinite;"></span>
                 Provide Details
             </h5>
-            <form method="post" asp-action="SOS" class="mt-4">
+            <form method="post" asp-action="SOS" class="mt-4" id="sosFormElement">
                 <div class="mb-3">
                     <label class="form-label text-muted text-uppercase" style="font-size:11px; letter-spacing:1px;">Your Location</label>
                     <div class="input-group">
@@ -209,8 +212,8 @@
 
     document.addEventListener("DOMContentLoaded", function() {
         if (document.getElementById('sosMap')) {
-            // Initialize map with a default location (Fallback)
-            globalMap = L.map('sosMap', { zoomControl: false }).setView([12.9716, 77.5946], 15);
+            // Initialize map with a default location (Hyderabad Fallback)
+            globalMap = L.map('sosMap', { zoomControl: false }).setView([17.3850, 78.4867], 15);
 
             L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; OpenStreetMap',
@@ -225,7 +228,7 @@
                 iconAnchor: [12, 12]
             });
 
-            globalMarker = L.marker([12.9716, 77.5946], {icon: pulsingIcon}).addTo(globalMap);
+            globalMarker = L.marker([17.3850, 78.4867], {icon: pulsingIcon}).addTo(globalMap);
             globalMarker.bindPopup('<b style="color:#0f172a; font-size:14px;">SOS Tracking</b><br><span style="color:#64748b; font-size:12px;">Live location monitoring.</span>').openPopup();
 
             // Attempt to get real location immediately on load to center the map accurately
@@ -428,6 +431,86 @@
                 maximumAge: 0
             }
         );
+    }
+
+    // --- Voice Distress Detection Logic ---
+    let voiceRecognition;
+    let isVoiceSOSActive = false;
+
+    function toggleVoiceSOS() {
+        const btn = document.getElementById('voiceSosBtn');
+        
+        if (isVoiceSOSActive) {
+            if (voiceRecognition) voiceRecognition.stop();
+            isVoiceSOSActive = false;
+            btn.innerHTML = '<i class="bi bi-mic-fill me-1"></i> Voice SOS';
+            btn.classList.remove('btn-info', 'text-white');
+            btn.classList.add('btn-outline-info');
+            return;
+        }
+
+        if (!('webkitSpeechRecognition' in window)) {
+            alert("Your browser does not support Voice Recognition.");
+            return;
+        }
+
+        voiceRecognition = new webkitSpeechRecognition();
+        voiceRecognition.continuous = true;
+        voiceRecognition.interimResults = true;
+        voiceRecognition.lang = 'en-US';
+
+        voiceRecognition.onstart = function() {
+            isVoiceSOSActive = true;
+            btn.innerHTML = '<i class="bi bi-mic-fill me-1" style="animation: pulse-sos 1s infinite;"></i> Listening...';
+            btn.classList.remove('btn-outline-info');
+            btn.classList.add('btn-info', 'text-white');
+        };
+
+        voiceRecognition.onresult = function(event) {
+            let final_transcript = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                final_transcript += event.results[i][0].transcript;
+            }
+            
+            let text = final_transcript.toLowerCase();
+            if (text.includes('help') || text.includes('emergency') || text.includes('save me')) {
+                voiceRecognition.stop();
+                isVoiceSOSActive = false;
+                executeVoiceSOS();
+            }
+        };
+
+        voiceRecognition.onend = function() {
+            // Auto restart to keep listening in background if not manually toggled off
+            if (isVoiceSOSActive) {
+                voiceRecognition.start();
+            }
+        };
+
+        voiceRecognition.start();
+    }
+
+    function executeVoiceSOS() {
+        // Play visual/audio cue to user
+        let btn = document.getElementById('voiceSosBtn');
+        btn.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i> DISTRESS DETECTED';
+        btn.classList.replace('btn-info', 'btn-danger');
+
+        // Force form data to bypass validation
+        let locInput = document.getElementById('locationInput');
+        if (!locInput.value) {
+            locInput.value = "Voice SOS Auto-Capture [Lat:17.38500, Lng:78.48670]"; // Fallback to base
+        }
+        
+        let descInput = document.querySelector('textarea[name="description"]');
+        if (!descInput.value) {
+            descInput.value = "VOICE ACTIVATION TRIGGERED: Microphone detected distress keywords ('Help/Emergency'). Immediate assistance required.";
+        }
+        
+        // Programmatic Form Submit
+        setTimeout(() => {
+            document.getElementById('sosFormElement').submit();
+        }, 1500);
     }
 </script>                <div class="mt-4">
                     @foreach (var a in alerts.EnumerateArray())

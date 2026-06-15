@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SheSecure.ComplaintService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+52a31b9890370d1570f34f3b8b201eed1a1dff50")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+df5e74b3b94ea0929758791a264b92714dad36de")]
 [assembly: System.Reflection.AssemblyProductAttribute("SheSecure.ComplaintService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SheSecure.ComplaintService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

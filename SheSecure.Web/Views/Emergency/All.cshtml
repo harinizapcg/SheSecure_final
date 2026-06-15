@@ -228,7 +228,10 @@
                                 <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--ss-muted); font-family: monospace;"><i class="bi bi-person me-1"></i>Emp: @empId</span>
                                 <span class="status-chip @severityClass px-2 py-0" style="font-size: 10px;">@severity Severity</span>
                             </div>
-                            <h5 class="text-white fw-bold mb-1"><i class="bi bi-geo-alt text-danger me-1"></i>@location</h5>
+                            @{
+                                var displayLocation = System.Text.RegularExpressions.Regex.Replace(location ?? "", @"\[Lat:.*\]", "").Trim();
+                            }
+                            <h5 class="text-white fw-bold mb-1"><i class="bi bi-geo-alt text-danger me-1"></i>@displayLocation</h5>
                             <div style="font-size: 12px; color: var(--ss-muted);">
                                 <i class="bi bi-clock me-1"></i> Triggered @TimeHelper.ToIST(triggeredAt!).ToString("dd MMM yyyy, hh:mm tt")
                             </div>
