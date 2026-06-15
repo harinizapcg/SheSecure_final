@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Safe Check-In";
     var records = (System.Text.Json.JsonElement)ViewBag.Records;
     var role = Context.Session.GetString("Role") ?? "";
@@ -33,69 +33,80 @@
             var pendingId = pendingRecord.GetProperty("id").GetInt32();
             var expectedTime = pendingRecord.GetProperty("expectedArrivalTime").GetString();
             
-            <div class="glass-card mb-4 fade-in-up" style="border: 1px solid rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.05);">
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <span style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 10px #f59e0b; animation: pulse-sos 2s infinite;"></span>
-                    <h5 class="section-title text-warning m-0">Active Check-In</h5>
+            <div class="glass-card mb-4 fade-in-up" style="border: 1px solid rgba(245, 158, 11, 0.4); background: radial-gradient(circle at top right, rgba(245, 158, 11, 0.15), rgba(30, 41, 59, 0.4));">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex align-items-center gap-2">
+                        <span style="width: 12px; height: 12px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 15px #f59e0b; animation: pulse-sos 2s infinite;"></span>
+                        <h6 class="text-warning fw-bold m-0 text-uppercase" style="letter-spacing: 1px;">Active Journey</h6>
+                    </div>
+                    <span class="badge bg-warning text-dark px-2 py-1 rounded-3 fw-bold" style="font-size:10px;">IN TRANSIT</span>
                 </div>
                 
-                <div class="text-center mb-4">
-                    <div style="font-size: 13px; color: var(--ss-muted);">Expected Arrival</div>
-                    <div class="fw-bold text-white fs-5">@DateTime.Parse(expectedTime!).ToString("hh:mm tt")</div>
-                    <div style="font-size: 11px; color: var(--ss-muted);">Today</div>
+                <div class="text-center mb-5 mt-3 position-relative">
+                    <div style="font-size: 11px; color: var(--ss-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Expected Arrival</div>
+                    <div class="fw-bold text-white" style="font-size: 2.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">@DateTime.Parse(expectedTime!).ToString("hh:mm tt")</div>
+                    <div style="font-size: 12px; color: var(--ss-warning); font-weight: 600;">@DateTime.Parse(expectedTime!).ToString("dd MMM yyyy")</div>
                 </div>
 
                 <!-- Progress Flow Visual -->
-                <div class="progress-flow mt-2 mb-4 px-2">
+                <div class="progress-flow mt-2 mb-5 px-3">
                     <div class="progress-step completed">
-                        <div class="progress-icon"><i class="bi bi-geo-alt"></i></div>
-                        <span style="font-size: 10px; color: var(--ss-success);">Started</span>
+                        <div class="progress-icon" style="background: rgba(16,185,129,0.2); border-color:#10b981; color:#10b981; box-shadow: 0 0 10px rgba(16,185,129,0.3);"><i class="bi bi-geo-alt-fill"></i></div>
+                        <span style="font-size: 11px; color: rgba(255,255,255,0.9); font-weight: 600; margin-top: 8px;">Started</span>
                     </div>
                     <div class="progress-step active">
-                        <div class="progress-icon"><i class="bi bi-clock-history"></i></div>
-                        <span style="font-size: 10px; color: var(--ss-accent);">Traveling</span>
+                        <div class="progress-icon" style="background: rgba(245,158,11,0.2); border-color:#f59e0b; color:#f59e0b; box-shadow: 0 0 15px rgba(245,158,11,0.4); animation: pulse-sos 2s infinite;"><i class="bi bi-car-front-fill"></i></div>
+                        <span style="font-size: 11px; color: var(--ss-warning); font-weight: 600; margin-top: 8px;">Traveling</span>
                     </div>
                     <div class="progress-step">
-                        <div class="progress-icon" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1);"><i class="bi bi-check2"></i></div>
-                        <span style="font-size: 10px; color: var(--ss-muted);">Reached</span>
+                        <div class="progress-icon" style="background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1);"><i class="bi bi-geo-fill"></i></div>
+                        <span style="font-size: 11px; color: var(--ss-muted); margin-top: 8px;">Reached</span>
                     </div>
                 </div>
 
                 <form method="post" asp-action="Acknowledge" class="mt-4">
                     <input type="hidden" name="safeReachId" value="@pendingId" />
-                    <button type="submit" class="btn-ss w-100 py-3 ripple" style="background: linear-gradient(135deg, #10b981, #059669); border: none; box-shadow: 0 4px 15px rgba(16,185,129,0.3);">
-                        <i class="bi bi-check-circle-fill me-2"></i>I Reached Safely
+                    <button type="submit" class="btn w-100 py-3 fw-bold ripple text-white" style="border-radius: 12px; background: linear-gradient(135deg, #10b981, #059669); border: none; box-shadow: 0 4px 20px rgba(16,185,129,0.4); text-transform: uppercase; letter-spacing: 1px; font-size: 14px; transition: all 0.3s ease;">
+                        <i class="bi bi-shield-check me-2 fs-5"></i> I Reached Safely
                     </button>
                 </form>
             </div>
         }
         else
         {
-            <div class="glass-card mb-4 fade-in-up hover-lift">
-                <h5 class="section-title">🛡 New Safe Check-In</h5>
-                <form method="post" asp-action="Create" class="mt-4">
-                    <div class="mb-4">
-                        <label class="form-label">Expected Arrival Time</label>
-                        <input type="datetime-local" name="expectedArrivalTime" class="form-control" required />
+            <div class="glass-card mb-4 fade-in-up hover-lift" style="border: 1px solid rgba(14, 165, 233, 0.3); background: radial-gradient(circle at top right, rgba(14, 165, 233, 0.1), rgba(30, 41, 59, 0.4));">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div style="width: 40px; height: 40px; border-radius: 10px; background: rgba(14, 165, 233, 0.2); display:flex; align-items:center; justify-content:center; color: #0ea5e9; font-size: 20px;">
+                        <i class="bi bi-shield-plus"></i>
                     </div>
-                    <button type="submit" class="btn-ss w-100 py-2 ripple" style="background: linear-gradient(135deg, var(--ss-safety), #0284c7);">
-                        <i class="bi bi-shield-check me-2"></i>Start Check-In
+                    <h5 class="section-title m-0 text-white">Start Safe Check-In</h5>
+                </div>
+                
+                <p style="font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 24px;">Traveling late or heading to a remote area? Set an expected arrival time to ensure your safety is monitored.</p>
+
+                <form method="post" asp-action="Create">
+                    <div class="mb-4">
+                        <label class="form-label text-muted text-uppercase fw-bold" style="font-size: 11px; letter-spacing: 1px;">Expected Arrival Time</label>
+                        <input type="datetime-local" name="expectedArrivalTime" class="form-control bg-dark border-secondary text-white py-2 px-3" style="border-radius: 8px;" required />
+                    </div>
+                    <button type="submit" class="btn w-100 py-3 fw-bold ripple text-white" style="border-radius: 12px; background: linear-gradient(135deg, #0ea5e9, #0284c7); border: none; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3); text-transform: uppercase; letter-spacing: 1px; font-size: 14px;">
+                        <i class="bi bi-play-circle me-2 fs-5"></i> Start Journey
                     </button>
                 </form>
             </div>
         }
 
         <!-- Info Card -->
-        <div class="glass-card-sm border-start border-4 border-info fade-in-up delay-100 hover-lift" style="border-radius: 8px;">
-            <div class="d-flex align-items-center gap-2 mb-2">
-                <i class="bi bi-info-circle text-info"></i>
-                <span class="fw-medium text-white" style="font-size: 14px;">How it works</span>
+        <div class="glass-card-sm border-start border-4 border-info fade-in-up delay-100 hover-lift" style="border-radius: 12px; background: rgba(14, 165, 233, 0.05);">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <i class="bi bi-info-circle-fill text-info fs-5"></i>
+                <span class="fw-bold text-white" style="font-size: 14px; letter-spacing: 0.5px;">How it works</span>
             </div>
-            <div style="font-size: 13px; color: var(--ss-muted); line-height: 1.6;">
-                <ol class="ps-3 mb-0">
-                    <li class="mb-1">Submit your expected arrival time</li>
-                    <li class="mb-1">Acknowledge when you arrive safely</li>
-                    <li>If missed, manager gets notified automatically</li>
+            <div style="font-size: 13px; color: var(--ss-muted); line-height: 1.7;">
+                <ol class="ps-3 mb-0" style="color: rgba(255,255,255,0.8);">
+                    <li class="mb-2"><strong>Set a timer:</strong> Submit your expected arrival time.</li>
+                    <li class="mb-2"><strong>Check in:</strong> Acknowledge when you arrive safely to stop the timer.</li>
+                    <li><strong>Escalation:</strong> If missed, your manager or security team is notified automatically.</li>
                 </ol>
             </div>
         </div>
@@ -108,79 +119,141 @@
 
             @if (!records.EnumerateArray().Any())
             {
-                <div class="empty-state">
-                    <div class="empty-state-icon" style="animation: float 4s ease-in-out infinite;">🛡</div>
-                    <h5 class="text-white">No check-ins yet</h5>
-                    <p>Start a safe check-in when traveling late or to remote areas.</p>
+                <div class="empty-state py-5">
+                    <div class="empty-state-icon" style="font-size: 64px; margin-bottom: 24px; opacity: 0.5;">🛡️</div>
+                    <h5 class="text-white fw-bold">No check-ins yet</h5>
+                    <p class="text-muted" style="max-width: 300px; margin: 0 auto;">Start a safe check-in when traveling late or to remote areas to keep your team informed.</p>
                 </div>
             }
             else
             {
-                <div class="table-responsive mt-3">
-                    <table class="table-glass table border-0">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Employee ID</th>
-                                <th>Expected Arrival</th>
-                                <th>Status</th>
-                                <th>Completed</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var r in records.EnumerateArray())
-                            {
-                                var id = r.GetProperty("id").GetInt32();
-                                var empId = r.GetProperty("employeeId").GetString();
-                                var expectedTime = r.GetProperty("expectedArrivalTime").GetString();
-                                var status = r.GetProperty("status").GetString();
-                                var isAcknowledged = r.GetProperty("isAcknowledged").GetBoolean();
-                                var acknowledgedAt = r.TryGetProperty("acknowledgedAt", out var ackProp)
-                                                     && ackProp.ValueKind != System.Text.Json.JsonValueKind.Null
-                                                     ? ackProp.GetString() : null;
+                <style>
+                    .safe-card {
+                        background: rgba(30, 41, 59, 0.4);
+                        border: 1px solid rgba(255,255,255,0.05);
+                        border-left: 4px solid var(--ss-muted);
+                        border-radius: 12px;
+                        padding: 20px 24px;
+                        margin-bottom: 16px;
+                        transition: all 0.3s ease;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                    }
+                    .safe-card:hover {
+                        background: rgba(30, 41, 59, 0.7);
+                        transform: translateY(-2px);
+                        border-color: rgba(255,255,255,0.1);
+                        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+                    }
+                    .safe-card.pending {
+                        border-left-color: #f59e0b;
+                    }
+                    .safe-card.reached {
+                        border-left-color: #10b981;
+                    }
+                    .safe-card.escalated {
+                        border-left-color: #ef4444;
+                    }
+                    
+                    .safe-card-time {
+                        display: flex;
+                        align-items: center;
+                        gap: 16px;
+                    }
+                    .safe-card-time-block {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .safe-card-time-label {
+                        font-size: 10px;
+                        color: var(--ss-muted);
+                        text-transform: uppercase;
+                        letter-spacing: 1px;
+                        margin-bottom: 4px;
+                        font-weight: 600;
+                    }
+                    .safe-card-time-value {
+                        font-size: 14px;
+                        color: rgba(255,255,255,0.9);
+                        font-weight: 500;
+                    }
+                </style>
 
-                                var statusClass = status == "Reached Safely" ? "success"
-                                               : status == "Pending" ? "warning"
-                                               : "error";
+                <div class="mt-4">
+                    @foreach (var r in records.EnumerateArray())
+                    {
+                        var id = r.GetProperty("id").GetInt32();
+                        var empId = r.GetProperty("employeeId").GetString();
+                        var expectedTime = r.GetProperty("expectedArrivalTime").GetString();
+                        var status = r.GetProperty("status").GetString();
+                        var isAcknowledged = r.GetProperty("isAcknowledged").GetBoolean();
+                        var acknowledgedAt = r.TryGetProperty("acknowledgedAt", out var ackProp)
+                                             && ackProp.ValueKind != System.Text.Json.JsonValueKind.Null
+                                             ? ackProp.GetString() : null;
 
-                                <tr class="hover-lift">
-                                    <td class="text-muted">#@id</td>
-                                    <td class="fw-medium text-white">@empId</td>
-                                    <td style="font-size: 13px; color: var(--ss-text);">@DateTime.Parse(expectedTime!).ToString("dd MMM yyyy, hh:mm tt")</td>
-                                    <td>
-                                        <span class="status-chip @statusClass">
+                        var statusClass = status == "Reached Safely" ? "success"
+                                       : status == "Pending" ? "warning"
+                                       : "error";
+                                       
+                        var cardClass = status == "Reached Safely" ? "reached"
+                                       : status == "Pending" ? "pending"
+                                       : "escalated";
+
+                        <div class="safe-card @cardClass fade-in-up">
+                            <div class="d-flex align-items-center gap-4">
+                                <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; font-size: 20px; color: rgba(255,255,255,0.7);">
+                                    <i class="bi @(isAcknowledged ? "bi-check-circle-fill text-success" : status == "Pending" ? "bi-clock-history text-warning" : "bi-exclamation-triangle-fill text-danger")"></i>
+                                </div>
+                                
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 mb-2">
+                                        <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--ss-muted); font-family: monospace;">#@id</span>
+                                        <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--ss-muted); font-family: monospace;"><i class="bi bi-person me-1"></i>Emp: @empId</span>
+                                        <span class="status-chip @statusClass px-2 py-0 d-flex align-items-center gap-1" style="font-size: 10px;">
                                             @if(status == "Pending") { <span style="width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block;animation:pulse-sos 1s infinite;"></span> }
                                             @status
                                         </span>
-                                    </td>
-                                    <td style="color: var(--ss-muted); font-size: 13px;">
-                                        @(acknowledgedAt != null
-                                            ? DateTime.Parse(acknowledgedAt).ToString("dd MMM, hh:mm tt")
-                                            : "—")
-                                    </td>
-                                    <td>
-                                        @if (!isAcknowledged)
-                                        {
-                                            @if (role == "Manager" || role == "Security" || role == "Admin")
-                                            {
-                                                <form method="post" asp-action="Escalate" class="m-0">
-                                                    <input type="hidden" name="id" value="@id" />
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger border-0 ripple" style="background: rgba(239,68,68,0.1); border-radius: 6px;">
-                                                        <i class="bi bi-exclamation-triangle me-1"></i>Escalate
-                                                    </button>
-                                                </form>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <span style="font-size: 13px; color: #34d399;"><i class="bi bi-check2-circle"></i> Done</span>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                                    </div>
+                                    
+                                    <div class="safe-card-time">
+                                        <div class="safe-card-time-block">
+                                            <span class="safe-card-time-label">Expected Arrival</span>
+                                            <span class="safe-card-time-value"><i class="bi bi-geo-alt me-1 text-muted"></i>@DateTime.Parse(expectedTime!).ToString("dd MMM, hh:mm tt")</span>
+                                        </div>
+                                        
+                                        <i class="bi bi-arrow-right" style="color: rgba(255,255,255,0.2);"></i>
+                                        
+                                        <div class="safe-card-time-block">
+                                            <span class="safe-card-time-label">Actual Arrival</span>
+                                            <span class="safe-card-time-value" style="color: @(isAcknowledged ? "#10b981" : "var(--ss-muted)")">
+                                                @if(isAcknowledged && acknowledgedAt != null) {
+                                                    <i class="bi bi-check2-circle me-1"></i>@DateTime.Parse(acknowledgedAt).ToString("dd MMM, hh:mm tt")
+                                                } else {
+                                                    <span>—</span>
+                                                }
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                @if (!isAcknowledged)
+                                {
+                                    @if (role == "Manager" || role == "Security" || role == "Admin")
+                                    {
+                                        <form method="post" asp-action="Escalate" class="m-0">
+                                            <input type="hidden" name="id" value="@id" />
+                                            <button type="submit" class="btn btn-sm ripple text-danger" style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 8px; padding: 8px 16px; font-weight: 600;">
+                                                <i class="bi bi-exclamation-triangle-fill me-1"></i>Escalate
+                                            </button>
+                                        </form>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
                 </div>
             }
         </div>

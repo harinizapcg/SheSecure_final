@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "All Emergency Alerts";
     var alerts = (System.Text.Json.JsonElement)ViewBag.Alerts;
     var role = Context.Session.GetString("Role") ?? "";
@@ -24,80 +24,154 @@
 
     @if (!alerts.EnumerateArray().Any())
     {
-        <div class="empty-state">
-            <div class="empty-state-icon">✅</div>
-            <h5>All clear</h5>
-            <p>There are no emergency alerts at this time.</p>
+        <div class="empty-state py-5">
+            <div class="empty-state-icon" style="font-size: 64px; margin-bottom: 24px; animation: float 6s ease-in-out infinite;">✅</div>
+            <h5 class="text-white">All clear</h5>
+            <p class="text-muted">There are no emergency alerts at this time.</p>
         </div>
     }
     else
     {
-        <div class="table-responsive mt-3">
-            <table class="table-glass table border-0">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Employee ID</th>
-                        <th>Location</th>
-                        <th>Description</th>
-                        <th>Severity</th>
-                        <th>Status</th>
-                        <th>Triggered</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var a in alerts.EnumerateArray())
-                    {
-                        var id = a.GetProperty("id").GetInt32();
-                        var empId = a.GetProperty("employeeId").GetString();
-                        var location = a.GetProperty("location").GetString();
-                        var description = a.GetProperty("description").GetString();
-                        var severity = a.GetProperty("severity").GetString();
-                        var status = a.GetProperty("status").GetString();
-                        var triggeredAt = a.GetProperty("triggeredAt").GetString();
+        <style>
+            .sos-card {
+                background: rgba(15, 23, 42, 0.6);
+                border: 1px solid rgba(255,255,255,0.05);
+                border-left: 4px solid var(--ss-alert);
+                border-radius: 12px;
+                padding: 24px;
+                margin-bottom: 20px;
+                transition: all 0.3s ease;
+            }
+            .sos-card.resolved {
+                border-left-color: #10b981;
+            }
+            .sos-timeline {
+                display: flex;
+                justify-content: space-between;
+                position: relative;
+                margin-top: 24px;
+                padding-top: 24px;
+                border-top: 1px dashed rgba(255,255,255,0.1);
+            }
+            .sos-step {
+                text-align: center;
+                position: relative;
+                flex: 1;
+            }
+            .sos-step::after {
+                content: '';
+                position: absolute;
+                top: 12px;
+                left: 50%;
+                width: 100%;
+                height: 2px;
+                background: rgba(255,255,255,0.1);
+                z-index: 1;
+            }
+            .sos-step:last-child::after { display: none; }
+            
+            .sos-icon {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                background: var(--ss-bg);
+                border: 2px solid rgba(255,255,255,0.2);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 10px;
+                color: transparent;
+                position: relative;
+                z-index: 2;
+                margin-bottom: 8px;
+            }
+            .sos-step.completed .sos-icon {
+                background: rgba(16, 185, 129, 0.2);
+                border-color: #10b981;
+                color: #10b981;
+                box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+            }
+            .sos-step.active .sos-icon {
+                background: rgba(239, 68, 68, 0.2);
+                border-color: var(--ss-alert);
+                color: var(--ss-alert);
+                box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+                animation: pulse-sos 2s infinite;
+            }
+            .sos-label {
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--ss-muted);
+                text-transform: uppercase;
+            }
+            .sos-step.completed .sos-label { color: rgba(255,255,255,0.8); }
+            .sos-step.active .sos-label { color: var(--ss-alert); }
+        </style>
 
-                        var statusClass = status == "Active" ? "error" : "success";
-                        var severityClass = severity == "Critical" ? "error"
-                                         : severity == "High" ? "warning"
-                                         : severity == "Medium" ? "info"
-                                         : "success";
+        <div class="mt-4">
+            @foreach (var a in alerts.EnumerateArray())
+            {
+                var id = a.GetProperty("id").GetInt32();
+                var empId = a.GetProperty("employeeId").GetString();
+                var location = a.GetProperty("location").GetString();
+                var description = a.GetProperty("description").GetString();
+                var severity = a.GetProperty("severity").GetString();
+                var status = a.GetProperty("status").GetString() ?? "Active";
+                var triggeredAt = a.GetProperty("triggeredAt").GetString();
 
-                        <tr>
-                            <td class="text-muted">#@id</td>
-                            <td class="fw-medium text-white">@empId</td>
-                            <td>@location</td>
-                            <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color: var(--ss-muted);">
-                                @description
-                            </td>
-                            <td>
-                                <span class="status-chip @severityClass">@severity</span>
-                            </td>
-                            <td>
-                                <span class="status-chip @statusClass">@status</span>
-                            </td>
-                            <td style="color: var(--ss-muted); font-size: 13px;">
-                                @DateTime.Parse(triggeredAt!).ToString("dd MMM, hh:mm tt")
-                            </td>
-                            <td>
-                                @if (status == "Active" && (role == "Security" || role == "Admin"))
-                                {
-                                    <form method="post" asp-action="Resolve" class="m-0">
-                                        <input type="hidden" name="alertId" value="@id" />
-                                        <button type="submit" class="btn btn-sm btn-outline-success border-0" style="background: rgba(16,185,129,0.1); border-radius: 8px;">
-                                            <i class="bi bi-check2-all me-1"></i>Resolve
-                                        </button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <span class="text-muted">—</span>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                var isResolved = status == "Resolved";
+                var severityClass = severity == "Critical" ? "error" : severity == "High" ? "warning" : "info";
+
+                <div class="sos-card @(isResolved ? "resolved" : "") fade-in-up">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--ss-muted); font-family: monospace;">#@id</span>
+                                <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--ss-muted); font-family: monospace;"><i class="bi bi-person me-1"></i>Emp: @empId</span>
+                                <span class="status-chip @severityClass px-2 py-0" style="font-size: 10px;">@severity Severity</span>
+                            </div>
+                            <h5 class="text-white fw-bold mb-1"><i class="bi bi-geo-alt text-danger me-1"></i>@location</h5>
+                            <div style="font-size: 12px; color: var(--ss-muted);">
+                                <i class="bi bi-clock me-1"></i> Triggered @DateTime.Parse(triggeredAt!).ToString("dd MMM yyyy, hh:mm tt")
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-end gap-2">
+                            <span class="status-chip @(isResolved ? "success" : "error") px-3 py-1 fw-bold d-flex align-items-center gap-2" style="border-radius: 8px;">
+                                @if(!isResolved) { <span style="width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block;animation:pulse-sos 1s infinite;"></span> }
+                                @status
+                            </span>
+                            @if (status == "Active" && (role == "Security" || role == "Admin"))
+                            {
+                                <form method="post" asp-action="Resolve" class="m-0">
+                                    <input type="hidden" name="alertId" value="@id" />
+                                    <button type="submit" class="btn-ss-outline" style="padding: 4px 12px; font-size: 12px; border-color: #10b981; color: #10b981;">
+                                        <i class="bi bi-check2-all me-1"></i>Mark Resolved
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                    
+                    <p class="mb-0 text-white opacity-75" style="font-size: 14px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+                        @description
+                    </p>
+
+                    <div class="sos-timeline">
+                        <div class="sos-step completed">
+                            <div class="sos-icon"><i class="bi bi-broadcast"></i></div>
+                            <div class="sos-label">Alert Triggered</div>
+                        </div>
+                        <div class="sos-step @(isResolved ? "completed" : "active")">
+                            <div class="sos-icon"><i class="bi @(isResolved ? "bi-check-lg" : "bi-shield-exclamation")"></i></div>
+                            <div class="sos-label">Security Dispatched</div>
+                        </div>
+                        <div class="sos-step @(isResolved ? "completed" : "")">
+                            <div class="sos-icon"><i class="bi bi-shield-check"></i></div>
+                            <div class="sos-label">Incident Resolved</div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     }
 </div>

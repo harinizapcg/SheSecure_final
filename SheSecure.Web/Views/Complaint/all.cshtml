@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "All Complaints";
     var complaints = (System.Text.Json.JsonElement)ViewBag.Complaints;
 }
@@ -8,62 +8,177 @@
 
     @if (!complaints.EnumerateArray().Any())
     {
-        <div class="empty-state">
-            <div class="empty-state-icon">📂</div>
-            <h5>No complaints found</h5>
-            <p>There are currently no complaints in the system.</p>
+        <div class="empty-state py-5">
+            <div class="empty-state-icon" style="font-size: 48px; margin-bottom: 20px; opacity: 0.5;">📂</div>
+            <h5 class="text-white">No complaints found</h5>
+            <p class="text-muted">There are currently no complaints in the system.</p>
         </div>
     }
     else
     {
-        <div class="table-responsive mt-3">
-            <table class="table-glass table border-0">
-                <thead>
-                    <tr>
-                        <th>Ref No.</th>
-                        <th>Subject</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var c in complaints.EnumerateArray())
-                    {
-                        var id = c.GetProperty("id").GetInt32();
-                        var cmpNum = c.GetProperty("complaintNumber").GetString();
-                        var subject = c.GetProperty("subject").GetString();
-                        var status = c.GetProperty("status").GetString();
-                        var createdAt = c.GetProperty("createdAt").GetString();
+        <style>
+            .complaint-card {
+                background: rgba(30, 41, 59, 0.4);
+                border: 1px solid rgba(255,255,255,0.05);
+                border-radius: 16px;
+                padding: 24px;
+                margin-bottom: 20px;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+            .complaint-card:hover {
+                background: rgba(30, 41, 59, 0.7);
+                border-color: rgba(255,255,255,0.1);
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            }
+            .complaint-timeline {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                position: relative;
+                margin: 32px 0 16px 0;
+                padding: 0 10px;
+            }
+            .complaint-timeline::before {
+                content: '';
+                position: absolute;
+                top: 12px;
+                left: 10%;
+                right: 10%;
+                height: 2px;
+                background: rgba(255,255,255,0.05);
+                z-index: 1;
+            }
+            .timeline-step {
+                position: relative;
+                z-index: 2;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                flex: 1;
+            }
+            .timeline-dot {
+                width: 26px;
+                height: 26px;
+                border-radius: 50%;
+                background: var(--ss-card);
+                border: 3px solid rgba(255,255,255,0.1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                font-size: 10px;
+                color: transparent;
+            }
+            .timeline-step.completed .timeline-dot {
+                background: rgba(16, 185, 129, 0.1);
+                border-color: #10b981;
+                color: #10b981;
+                box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+            }
+            .timeline-step.active .timeline-dot {
+                background: rgba(233, 69, 96, 0.1);
+                border-color: var(--ss-accent);
+                color: var(--ss-accent);
+                box-shadow: 0 0 15px rgba(233, 69, 96, 0.4);
+                animation: pulse-ring 2s infinite;
+            }
+            .timeline-label {
+                font-size: 11px;
+                font-weight: 600;
+                color: var(--ss-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                text-align: center;
+                transition: all 0.3s ease;
+            }
+            .timeline-step.completed .timeline-label { color: rgba(255,255,255,0.85); }
+            .timeline-step.active .timeline-label { color: var(--ss-accent); font-weight: 700; }
+            
+            .complaint-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 12px;
+            }
+            .complaint-ref {
+                font-family: 'JetBrains Mono', monospace;
+                font-size: 12px;
+                color: var(--ss-muted);
+                background: rgba(255,255,255,0.05);
+                padding: 4px 8px;
+                border-radius: 6px;
+                letter-spacing: 0.5px;
+            }
+        </style>
 
-                        var chipClass = status == "Resolved" ? "success"
-                                       : status == "Under Investigation" ? "info"
-                                       : status == "Under Review" ? "warning"
-                                       : status == "Closed" ? "neutral"
-                                       : "warning";
+        <div class="mt-4">
+            @foreach (var c in complaints.EnumerateArray())
+            {
+                var id = c.GetProperty("id").GetInt32();
+                var cmpNum = c.GetProperty("complaintNumber").GetString() ?? "";
+                var subject = c.GetProperty("subject").GetString();
+                var status = c.GetProperty("status").GetString() ?? "Submitted";
+                var category = c.TryGetProperty("category", out var catProp) ? catProp.GetString() ?? "General" : "General";
+                var createdAtStr = c.GetProperty("createdAt").GetString();
+                var createdAt = createdAtStr != null ? DateTime.Parse(createdAtStr) : DateTime.Now;
 
-                        <tr>
-                            <td style="font-family: monospace; color: var(--ss-muted);">
-                                @cmpNum?.Substring(0, Math.Min(12, cmpNum.Length))...
-                            </td>
-                            <td class="fw-medium">@subject</td>
-                            <td>
-                                <span class="status-chip @chipClass">
-                                    @status
-                                </span>
-                            </td>
-                            <td style="color: var(--ss-muted);">
-                                @DateTime.Parse(createdAt!).ToString("dd MMM yyyy")
-                            </td>
-                            <td>
-                                <a asp-controller="Complaint" asp-action="Detail" asp-route-id="@id" class="btn-ss-outline" style="padding: 4px 12px; font-size: 12px;">
-                                    View
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                int level = (status == "Resolved" || status == "Closed") ? 4 :
+                            (status == "Assigned" || status == "Under Investigation") ? 3 :
+                            (status == "Under Review") ? 2 : 1;
+
+                var chipClass = status == "Resolved" ? "success"
+                               : status == "Under Investigation" ? "info"
+                               : status == "Under Review" ? "warning"
+                               : status == "Closed" ? "neutral"
+                               : "warning";
+
+                <div class="complaint-card fade-in-up">
+                    <div class="complaint-header">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="complaint-ref">@(cmpNum.Length > 12 ? cmpNum.Substring(0, 12) + "..." : cmpNum)</span>
+                                <span class="badge" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--ss-muted); font-size: 11px;">@category</span>
+                            </div>
+                            <h5 class="text-white fw-bold mb-1">@subject</h5>
+                            <div style="font-size: 12px; color: var(--ss-muted);">
+                                <i class="bi bi-clock me-1"></i> Submitted on @createdAt.ToString("MMM dd, yyyy 'at' hh:mm tt")
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-end gap-2">
+                            <span class="status-chip @chipClass d-inline-flex align-items-center gap-2 px-3 py-1">
+                                <span style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></span>
+                                @status
+                            </span>
+                            <a asp-controller="Complaint" asp-action="Detail" asp-route-id="@id" class="btn-ss-outline" style="padding: 6px 16px; font-size: 12px; border-radius: 8px;">
+                                View Details <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="complaint-timeline">
+                        <div class="timeline-step @(level >= 1 ? "completed" : "")">
+                            <div class="timeline-dot"><i class="bi bi-check-lg"></i></div>
+                            <div class="timeline-label">Submitted</div>
+                        </div>
+                        <div class="timeline-step @(level >= 2 ? (level == 2 ? "active" : "completed") : "")">
+                            <div class="timeline-dot"><i class="bi @(level > 2 ? "bi-check-lg" : "bi-search")"></i></div>
+                            <div class="timeline-label">Under Review</div>
+                        </div>
+                        <div class="timeline-step @(level >= 3 ? (level == 3 ? "active" : "completed") : "")">
+                            <div class="timeline-dot"><i class="bi @(level > 3 ? "bi-check-lg" : "bi-person-badge")"></i></div>
+                            <div class="timeline-label">Assigned</div>
+                        </div>
+                        <div class="timeline-step @(level >= 4 ? "completed active" : "")">
+                            <div class="timeline-dot"><i class="bi bi-shield-check"></i></div>
+                            <div class="timeline-label">Resolved</div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     }
 </div>

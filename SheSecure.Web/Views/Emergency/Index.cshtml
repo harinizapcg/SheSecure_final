@@ -24,14 +24,14 @@
     <!-- SOS Trigger Form -->
     <div class="col-md-4">
         <!-- Big SOS Button -->
-        <div class="glass-card mb-4 text-center py-5 fade-in-up position-relative overflow-hidden" style="border: 2px solid rgba(239, 68, 68, 0.3);">
-            <div class="floating-shape" style="background: var(--ss-alert); width: 150px; height: 150px; filter: blur(50px); opacity: 0.2; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: none;"></div>
-            <h6 class="mb-4 text-white position-relative" style="z-index: 2;">Press in case of emergency</h6>
+        <div class="glass-card mb-4 text-center py-5 fade-in-up position-relative overflow-hidden" style="border: 1px solid rgba(239, 68, 68, 0.4); background: radial-gradient(circle at center, rgba(239, 68, 68, 0.15) 0%, rgba(30, 41, 59, 0.4) 100%);">
+            <div class="floating-shape" style="background: var(--ss-alert); width: 200px; height: 200px; filter: blur(60px); opacity: 0.3; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: pulse-sos 2s infinite;"></div>
+            <h5 class="mb-5 text-white position-relative fw-bold" style="z-index: 2; letter-spacing: 1px;">EMERGENCY ASSISTANCE</h5>
             
-            <div class="position-relative d-inline-block" style="z-index: 2;">
+            <div class="position-relative d-inline-block" style="z-index: 2; margin-bottom: 20px;">
                 <!-- Pulsing background rings -->
-                <div style="position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; border: 2px solid var(--ss-alert); animation: pulse-ring 1.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1);"></div>
-                <div style="position: absolute; top: -20px; left: -20px; right: -20px; bottom: -20px; border-radius: 50%; border: 1px solid var(--ss-alert); animation: pulse-ring 1.5s infinite 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);"></div>
+                <div style="position: absolute; top: -15px; left: -15px; right: -15px; bottom: -15px; border-radius: 50%; border: 2px solid rgba(239, 68, 68, 0.6); animation: dramatic-pulse 1.5s infinite cubic-bezier(0.215, 0.61, 0.355, 1);"></div>
+                <div style="position: absolute; top: -30px; left: -30px; right: -30px; bottom: -30px; border-radius: 50%; border: 1px solid rgba(239, 68, 68, 0.3); animation: dramatic-pulse 1.5s infinite 0.4s cubic-bezier(0.215, 0.61, 0.355, 1);"></div>
                 
                 <button onclick="document.getElementById('sosForm').scrollIntoView({behavior:'smooth'})"
                         class="btn-sos shadow-lg position-relative" style="z-index: 3;">
@@ -39,35 +39,37 @@
                 </button>
             </div>
             
-            <p class="mt-5 mb-0" style="font-size: 13px; color: var(--ss-muted); z-index: 2; position: relative;">Security will be notified immediately</p>
+            <p class="mt-4 mb-0 position-relative" style="font-size: 14px; color: rgba(255,255,255,0.8); z-index: 2;">
+                <i class="bi bi-shield-lock-fill me-1 text-danger"></i> Security team will be dispatched immediately
+            </p>
         </div>
 
         <!-- SOS Form -->
         <div class="glass-card fade-in-up delay-100" id="sosForm">
             <h5 class="section-title text-danger d-flex align-items-center">
                 <span class="d-inline-block me-2" style="width: 12px; height: 12px; background: var(--ss-danger); border-radius: 50%; box-shadow: 0 0 10px var(--ss-danger); animation: pulse-sos 2s infinite;"></span>
-                Trigger SOS Alert
+                Provide Details
             </h5>
             <form method="post" asp-action="SOS" class="mt-4">
                 <div class="mb-3">
-                    <label class="form-label">Your Location</label>
-                    <input type="text" name="location" class="form-control" placeholder="e.g. Block A - Parking Area" required />
+                    <label class="form-label text-muted text-uppercase" style="font-size:11px; letter-spacing:1px;">Your Location</label>
+                    <input type="text" name="location" class="form-control bg-dark border-secondary text-white" placeholder="e.g. Block A - Parking Area" required />
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Severity</label>
-                    <select name="severity" class="form-select" required>
-                        <option value="Low">Low</option>
-                        <option value="Medium">Medium</option>
-                        <option value="High" selected>High</option>
-                        <option value="Critical">Critical</option>
+                    <label class="form-label text-muted text-uppercase" style="font-size:11px; letter-spacing:1px;">Severity</label>
+                    <select name="severity" class="form-select bg-dark border-secondary text-white" required>
+                        <option value="High" selected>High - Immediate Response</option>
+                        <option value="Critical">Critical - Life Threatening</option>
+                        <option value="Medium">Medium - Disturbance</option>
+                        <option value="Low">Low - Assistance Needed</option>
                     </select>
                 </div>
                 <div class="mb-4">
-                    <label class="form-label">Description</label>
-                    <textarea name="description" rows="3" class="form-control" placeholder="Briefly describe the situation..." required style="resize: none;"></textarea>
+                    <label class="form-label text-muted text-uppercase" style="font-size:11px; letter-spacing:1px;">Description</label>
+                    <textarea name="description" rows="3" class="form-control bg-dark border-secondary text-white" placeholder="Briefly describe the situation..." required style="resize: none;"></textarea>
                 </div>
-                <button type="submit" class="btn btn-danger w-100 py-3 fw-bold ripple" style="border-radius: 12px; background: linear-gradient(135deg, #e94560, #b91c1c); border: none; box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4); text-transform: uppercase; letter-spacing: 1px;">
-                    🚨 Send SOS Alert
+                <button type="submit" class="btn w-100 py-3 fw-bold ripple text-white" style="border-radius: 12px; background: linear-gradient(135deg, #e94560, #991b1b); border: none; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4); text-transform: uppercase; letter-spacing: 1px; font-size: 15px;">
+                    <i class="bi bi-broadcast"></i> Transmit Alert
                 </button>
             </form>
         </div>
@@ -77,75 +79,155 @@
     <div class="col-md-8">
         @if (activeCount > 0)
         {
-            <div class="alert-glass error mb-4 fade-in-up">
-                <i class="bi bi-exclamation-triangle-fill fs-5 text-danger" style="animation: pulse-sos 2s infinite;"></i>
-                <span>You have <strong>@activeCount active</strong> SOS alert(s). Security has been notified.</span>
+            <div class="alert-glass error mb-4 fade-in-up d-flex align-items-center p-4" style="border: 1px solid rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.1);">
+                <i class="bi bi-exclamation-triangle-fill text-danger me-3" style="font-size: 2rem; animation: pulse-sos 1s infinite;"></i>
+                <div>
+                    <h5 class="text-danger mb-1 fw-bold">Active Emergency Response</h5>
+                    <span class="text-white opacity-75">You have <strong>@activeCount active</strong> SOS alert(s). Security personnel have been dispatched to your location.</span>
+                </div>
             </div>
         }
 
         <div class="glass-card h-100 fade-in-up delay-200">
-            <h5 class="section-title">📋 My Alert History</h5>
+            <h5 class="section-title">📋 Incident History</h5>
 
             @if (!alerts.EnumerateArray().Any())
             {
-                <div class="empty-state">
-                    <div class="empty-state-icon" style="font-size: 64px; margin-bottom: 24px; animation: float 6s ease-in-out infinite;">🛡</div>
+                <div class="empty-state py-5">
+                    <div class="empty-state-icon" style="font-size: 64px; margin-bottom: 24px; animation: float 6s ease-in-out infinite;">🛡️</div>
                     <h5 class="text-white">No emergencies reported</h5>
-                    <p>You have not triggered any SOS alerts.</p>
+                    <p class="text-muted">You have safely not triggered any SOS alerts.</p>
                 </div>
             }
             else
             {
-                <div class="table-responsive mt-3">
-                    <table class="table-glass table border-0">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Location</th>
-                                <th>Description</th>
-                                <th>Severity</th>
-                                <th>Status</th>
-                                <th>Triggered</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var a in alerts.EnumerateArray())
-                            {
-                                var id = a.GetProperty("id").GetInt32();
-                                var location = a.GetProperty("location").GetString();
-                                var description = a.GetProperty("description").GetString();
-                                var severity = a.GetProperty("severity").GetString();
-                                var status = a.GetProperty("status").GetString();
-                                var triggeredAt = a.GetProperty("triggeredAt").GetString();
+                <style>
+                    .sos-card {
+                        background: rgba(15, 23, 42, 0.6);
+                        border: 1px solid rgba(255,255,255,0.05);
+                        border-left: 4px solid var(--ss-alert);
+                        border-radius: 12px;
+                        padding: 24px;
+                        margin-bottom: 20px;
+                        transition: all 0.3s ease;
+                    }
+                    .sos-card.resolved {
+                        border-left-color: #10b981;
+                    }
+                    .sos-timeline {
+                        display: flex;
+                        justify-content: space-between;
+                        position: relative;
+                        margin-top: 24px;
+                        padding-top: 24px;
+                        border-top: 1px dashed rgba(255,255,255,0.1);
+                    }
+                    .sos-step {
+                        text-align: center;
+                        position: relative;
+                        flex: 1;
+                    }
+                    .sos-step::after {
+                        content: '';
+                        position: absolute;
+                        top: 12px;
+                        left: 50%;
+                        width: 100%;
+                        height: 2px;
+                        background: rgba(255,255,255,0.1);
+                        z-index: 1;
+                    }
+                    .sos-step:last-child::after { display: none; }
+                    
+                    .sos-icon {
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 50%;
+                        background: var(--ss-bg);
+                        border: 2px solid rgba(255,255,255,0.2);
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 10px;
+                        color: transparent;
+                        position: relative;
+                        z-index: 2;
+                        margin-bottom: 8px;
+                    }
+                    .sos-step.completed .sos-icon {
+                        background: rgba(16, 185, 129, 0.2);
+                        border-color: #10b981;
+                        color: #10b981;
+                        box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+                    }
+                    .sos-step.active .sos-icon {
+                        background: rgba(239, 68, 68, 0.2);
+                        border-color: var(--ss-alert);
+                        color: var(--ss-alert);
+                        box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+                        animation: dramatic-pulse 2s infinite;
+                    }
+                    .sos-label {
+                        font-size: 11px;
+                        font-weight: 600;
+                        color: var(--ss-muted);
+                        text-transform: uppercase;
+                    }
+                    .sos-step.completed .sos-label { color: rgba(255,255,255,0.8); }
+                    .sos-step.active .sos-label { color: var(--ss-alert); }
+                </style>
 
-                                var statusClass = status == "Active" ? "error" : "success";
-                                var severityClass = severity == "Critical" ? "error"
-                                                 : severity == "High" ? "warning"
-                                                 : severity == "Medium" ? "info"
-                                                 : "success";
+                <div class="mt-4">
+                    @foreach (var a in alerts.EnumerateArray())
+                    {
+                        var id = a.GetProperty("id").GetInt32();
+                        var location = a.GetProperty("location").GetString();
+                        var description = a.GetProperty("description").GetString();
+                        var severity = a.GetProperty("severity").GetString();
+                        var status = a.GetProperty("status").GetString() ?? "Active";
+                        var triggeredAt = a.GetProperty("triggeredAt").GetString();
 
-                                <tr class="hover-lift">
-                                    <td class="text-muted">#@id</td>
-                                    <td class="fw-medium text-white">@location</td>
-                                    <td style="max-width:200px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color: var(--ss-muted);">
-                                        @description
-                                    </td>
-                                    <td>
-                                        <span class="status-chip @severityClass">@severity</span>
-                                    </td>
-                                    <td>
-                                        <span class="status-chip @statusClass">
-                                            @if(status == "Active") { <span style="width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block;animation:pulse-sos 1s infinite;"></span> }
-                                            @status
-                                        </span>
-                                    </td>
-                                    <td style="color: var(--ss-muted); font-size: 13px;">
-                                        @DateTime.Parse(triggeredAt!).ToString("dd MMM, hh:mm tt")
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                        var isResolved = status == "Resolved";
+                        var severityClass = severity == "Critical" ? "error" : severity == "High" ? "warning" : "info";
+
+                        <div class="sos-card @(isResolved ? "resolved" : "")">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--ss-muted); font-family: monospace;">#@id</span>
+                                        <span class="status-chip @severityClass px-2 py-0" style="font-size: 10px;">@severity Severity</span>
+                                    </div>
+                                    <h5 class="text-white fw-bold mb-1"><i class="bi bi-geo-alt text-danger me-1"></i>@location</h5>
+                                    <div style="font-size: 12px; color: var(--ss-muted);">
+                                        <i class="bi bi-clock me-1"></i> Triggered @DateTime.Parse(triggeredAt!).ToString("dd MMM yyyy, hh:mm tt")
+                                    </div>
+                                </div>
+                                <span class="status-chip @(isResolved ? "success" : "error") px-3 py-1 fw-bold d-flex align-items-center gap-2" style="border-radius: 8px;">
+                                    @if(!isResolved) { <span style="width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block;animation:pulse-sos 1s infinite;"></span> }
+                                    @status
+                                </span>
+                            </div>
+                            
+                            <p class="mb-0 text-white opacity-75" style="font-size: 14px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+                                @description
+                            </p>
+
+                            <div class="sos-timeline">
+                                <div class="sos-step completed">
+                                    <div class="sos-icon"><i class="bi bi-broadcast"></i></div>
+                                    <div class="sos-label">Alert Triggered</div>
+                                </div>
+                                <div class="sos-step @(isResolved ? "completed" : "active")">
+                                    <div class="sos-icon"><i class="bi @(isResolved ? "bi-check-lg" : "bi-shield-exclamation")"></i></div>
+                                    <div class="sos-label">Security Dispatched</div>
+                                </div>
+                                <div class="sos-step @(isResolved ? "completed" : "")">
+                                    <div class="sos-icon"><i class="bi bi-shield-check"></i></div>
+                                    <div class="sos-label">Incident Resolved</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             }
         </div>
@@ -153,34 +235,35 @@
 </div>
 
 <style>
-    @@keyframes pulse-ring {
-        0% { transform: scale(0.8); opacity: 0.8; }
-        100% { transform: scale(1.5); opacity: 0; }
+    @@keyframes dramatic-pulse {
+        0% { transform: scale(0.8); opacity: 0.8; border-width: 4px; }
+        100% { transform: scale(1.6); opacity: 0; border-width: 1px; }
     }
     .btn-sos {
-        width: 120px;
-        height: 120px;
+        width: 140px;
+        height: 140px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--ss-alert), #991b1b);
-        border: 4px solid var(--ss-bg);
+        background: linear-gradient(135deg, var(--ss-alert), #7f1d1d);
+        border: 4px solid #1e293b;
         color: white;
-        font-size: 28px;
-        font-weight: 800;
+        font-size: 32px;
+        font-weight: 900;
         cursor: pointer;
-        box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 40px rgba(239, 68, 68, 0.5), inset 0 0 20px rgba(0,0,0,0.4);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        letter-spacing: 2px;
     }
     .btn-sos:hover {
         transform: scale(1.05);
-        box-shadow: 0 0 50px rgba(239, 68, 68, 0.6);
-        background: linear-gradient(135deg, #f87171, #dc2626);
+        box-shadow: 0 0 60px rgba(239, 68, 68, 0.8), inset 0 0 10px rgba(0,0,0,0.2);
+        background: linear-gradient(135deg, #ef4444, #b91c1c);
     }
     .btn-sos:active {
         transform: scale(0.95);
-        box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.9);
     }
 </style>
