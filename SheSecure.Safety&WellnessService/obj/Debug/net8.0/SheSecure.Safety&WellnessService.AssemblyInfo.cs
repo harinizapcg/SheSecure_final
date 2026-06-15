@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SheSecure.Safety&WellnessService")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f9b9d84ba12c356c9b7b4ed328472d2ef5865ab4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+52a31b9890370d1570f34f3b8b201eed1a1dff50")]
 [assembly: System.Reflection.AssemblyProductAttribute("SheSecure.Safety&WellnessService")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SheSecure.Safety&WellnessService")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

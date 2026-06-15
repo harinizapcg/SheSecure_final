@@ -42,6 +42,10 @@
             <p class="mt-4 mb-0 position-relative" style="font-size: 14px; color: rgba(255,255,255,0.8); z-index: 2;">
                 <i class="bi bi-shield-lock-fill me-1 text-danger"></i> Security team will be dispatched immediately
             </p>
+            
+            <button type="button" onclick="triggerFakeCall()" class="btn btn-outline-secondary btn-sm mt-4 position-relative" style="z-index: 2; border-radius: 20px; font-size: 12px; letter-spacing: 0.5px; border-color: rgba(255,255,255,0.2); color: rgba(255,255,255,0.8);">
+                <i class="bi bi-telephone-inbound me-1"></i> Dummy Incoming Call
+            </button>
         </div>
 
         <!-- SOS Form -->
@@ -53,7 +57,13 @@
             <form method="post" asp-action="SOS" class="mt-4">
                 <div class="mb-3">
                     <label class="form-label text-muted text-uppercase" style="font-size:11px; letter-spacing:1px;">Your Location</label>
-                    <input type="text" name="location" class="form-control bg-dark border-secondary text-white" placeholder="e.g. Block A - Parking Area" required />
+                    <div class="input-group">
+                        <input type="text" id="locationInput" name="location" class="form-control bg-dark border-secondary text-white" placeholder="e.g. Block A - Parking Area" required />
+                        <button class="btn btn-outline-danger" type="button" onclick="getRealLocation()" id="gpsBtn">
+                            <i class="bi bi-geo-fill"></i> Use GPS
+                        </button>
+                    </div>
+                    <div id="gpsStatus" class="mt-1" style="font-size: 11px; color: var(--ss-muted);"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label text-muted text-uppercase" style="font-size:11px; letter-spacing:1px;">Severity</label>
@@ -87,6 +97,18 @@
                 </div>
             </div>
         }
+
+        <!-- Live Map Tracking -->
+        <div class="glass-card mb-4 fade-in-up delay-100" style="padding: 0; overflow: hidden; height: 320px; position: relative; border: 1px solid rgba(239, 68, 68, 0.3);">
+            <div id="sosMap" style="height: 100%; width: 100%; z-index: 1;"></div>
+            <div style="position: absolute; top: 15px; left: 15px; z-index: 400; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); padding: 10px 16px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.4); box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+                <i class="bi bi-broadcast text-danger me-2 d-inline-block" style="animation: pulse-sos 1.5s infinite;"></i>
+                <span class="text-white fw-bold" style="font-size: 12px; letter-spacing: 1px;">LIVE GPS TRACKING ACTIVE</span>
+            </div>
+            <div style="position: absolute; bottom: 15px; right: 15px; z-index: 400;">
+                <span class="badge bg-danger text-white px-3 py-2" style="font-size: 11px; letter-spacing: 1px; box-shadow: 0 2px 10px rgba(239,68,68,0.5);">SECURE CONNECTION</span>
+            </div>
+        </div>
 
         <div class="glass-card h-100 fade-in-up delay-200">
             <h5 class="section-title">📋 Incident History</h5>
@@ -177,7 +199,237 @@
                     .sos-step.active .sos-label { color: var(--ss-alert); }
                 </style>
 
-                <div class="mt-4">
+<!-- Leaflet Map Integration & Real GPS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    var globalMarker = null;
+    var globalMap = null;
+    var globalAccuracyCircle = null;
+
+    document.addEventListener("DOMContentLoaded", function() {
+        if (document.getElementById('sosMap')) {
+            // Initialize map with a default location (Fallback)
+            globalMap = L.map('sosMap', { zoomControl: false }).setView([12.9716, 77.5946], 15);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(globalMap);
+
+            var pulsingIcon = L.divIcon({
+                className: 'custom-pulsing-icon',
+                html: '<div style="width: 24px; height: 24px; background: #ef4444; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 20px #ef4444; animation: pulse-sos 1.5s infinite;"></div>',
+                iconSize: [24, 24],
+                iconAnchor: [12, 12]
+            });
+
+            globalMarker = L.marker([12.9716, 77.5946], {icon: pulsingIcon}).addTo(globalMap);
+            globalMarker.bindPopup('<b style="color:#0f172a; font-size:14px;">SOS Tracking</b><br><span style="color:#64748b; font-size:12px;">Live location monitoring.</span>').openPopup();
+
+            // Attempt to get real location immediately on load to center the map accurately
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    updateMapLocation(position.coords.latitude, position.coords.longitude, position.coords.accuracy);
+                }, function() {
+                    // Silent fail if denied, keep default dummy location for visual presentation
+                });
+            }
+            setInterval(() => {
+                var currentPos = globalMarker.getLatLng();
+                var newLat = currentPos.lat + (Math.random() - 0.5) * 0.00005;
+                var newLng = currentPos.lng + (Math.random() - 0.5) * 0.00005;
+                globalMarker.setLatLng([newLat, newLng]);
+            }, 3000);
+        }
+    });
+
+    // --- Fake Phone Call Escape Hatch Logic ---
+    let ringContext, ringOsc1, ringOsc2, ringGain;
+    let ringInterval;
+    let callDurationInterval;
+    let callSeconds = 0;
+
+    function startRingingSound() {
+        try {
+            ringContext = new (window.AudioContext || window.webkitAudioContext)();
+            ringGain = ringContext.createGain();
+            ringGain.connect(ringContext.destination);
+            
+            ringOsc1 = ringContext.createOscillator();
+            ringOsc1.type = 'sine';
+            ringOsc1.frequency.value = 600; // Modern higher pitch
+            
+            ringOsc2 = ringContext.createOscillator();
+            ringOsc2.type = 'sine';
+            ringOsc2.frequency.value = 800;
+            
+            ringOsc1.connect(ringGain);
+            ringOsc2.connect(ringGain);
+            
+            ringOsc1.start();
+            ringOsc2.start();
+            
+            // Modern digital phone cadence: Rapid "Beep-Beep... Beep-Beep"
+            let step = 0;
+            ringGain.gain.setValueAtTime(0.5, ringContext.currentTime);
+            
+            ringInterval = setInterval(() => {
+                if (step === 0 || step === 1 || step === 3 || step === 4) {
+                    ringGain.gain.setValueAtTime(0.5, ringContext.currentTime); // Sound ON
+                } else {
+                    ringGain.gain.setValueAtTime(0, ringContext.currentTime);   // Sound OFF
+                }
+                step = (step + 1) % 20; // 2-second loop
+            }, 100);
+        } catch (e) {
+            console.warn("Web Audio API not supported");
+        }
+    }
+
+    function stopRingingSound() {
+        if (ringInterval) clearInterval(ringInterval);
+        if (ringGain && ringContext) ringGain.gain.setValueAtTime(0, ringContext.currentTime);
+        if (ringOsc1) { ringOsc1.stop(); ringOsc1.disconnect(); }
+        if (ringOsc2) { ringOsc2.stop(); ringOsc2.disconnect(); }
+        if (ringContext && ringContext.state !== 'closed') ringContext.close();
+    }
+
+    function triggerFakeCall() {
+        let btn = document.querySelector('button[onclick="triggerFakeCall()"]');
+        let oldText = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-hourglass-split"></i> Connecting...';
+        
+        setTimeout(() => {
+            btn.innerHTML = oldText;
+            document.getElementById('fakeCallOverlay').style.display = 'flex';
+            document.documentElement.requestFullscreen().catch((e) => console.log("Fullscreen blocked"));
+            startRingingSound();
+        }, 1000);
+    }
+
+    function acceptFakeCall() {
+        stopRingingSound();
+        document.getElementById('callActionButtons').style.display = 'none';
+        document.getElementById('endCallButton').style.display = 'flex';
+        document.getElementById('callTimer').style.display = 'block';
+        
+        callSeconds = 0;
+        document.getElementById('callTimer').innerText = "00:00";
+        callDurationInterval = setInterval(() => {
+            callSeconds++;
+            let m = Math.floor(callSeconds / 60).toString().padStart(2, '0');
+            let s = (callSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('callTimer').innerText = `${m}:${s}`;
+        }, 1000);
+    }
+
+    function declineFakeCall() {
+        stopRingingSound();
+        closeFakeCallScreen();
+    }
+
+    function endFakeCall() {
+        if (callDurationInterval) clearInterval(callDurationInterval);
+        closeFakeCallScreen();
+    }
+    
+    function closeFakeCallScreen() {
+        document.getElementById('fakeCallOverlay').style.display = 'none';
+        document.getElementById('callActionButtons').style.display = 'flex';
+        document.getElementById('endCallButton').style.display = 'none';
+        document.getElementById('callTimer').style.display = 'none';
+        if (document.fullscreenElement) {
+            document.exitFullscreen().catch((e) => console.log(e));
+        }
+    }
+
+    function updateMapLocation(lat, lng, accuracy) {
+        if (!globalMap || !globalMarker) return;
+        
+        var newLatLng = new L.LatLng(lat, lng);
+        globalMap.setView(newLatLng, 16);
+        globalMarker.setLatLng(newLatLng);
+        
+        if (globalAccuracyCircle) {
+            globalMap.removeLayer(globalAccuracyCircle);
+        }
+        
+        globalAccuracyCircle = L.circle(newLatLng, {
+            color: '#ef4444',
+            fillColor: '#ef4444',
+            fillOpacity: 0.15,
+            radius: accuracy || 50,
+            weight: 1
+        }).addTo(globalMap);
+    }
+
+    function getRealLocation() {
+        const statusEl = document.getElementById('gpsStatus');
+        const inputEl = document.getElementById('locationInput');
+        const btnEl = document.getElementById('gpsBtn');
+
+        if (!navigator.geolocation) {
+            statusEl.innerHTML = '<span class="text-danger"><i class="bi bi-x-circle"></i> Geolocation is not supported by your browser.</span>';
+            return;
+        }
+
+        statusEl.innerHTML = '<span class="text-warning"><span class="spinner-border spinner-border-sm" role="status"></span> Acquiring secure satellite lock...</span>';
+        btnEl.disabled = true;
+
+        navigator.geolocation.getCurrentPosition(
+            async function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                const accuracy = position.coords.accuracy;
+
+                // 1. Update the live map visually
+                updateMapLocation(lat, lon, accuracy);
+
+                // 2. Reverse Geocode to get a readable street address (Free OSM Nominatim API)
+                try {
+                    statusEl.innerHTML = '<span class="text-info"><span class="spinner-border spinner-border-sm" role="status"></span> Resolving physical address...</span>';
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`, {
+                        headers: { 'Accept-Language': 'en-US' }
+                    });
+                    const data = await response.json();
+                    
+                    if (data && data.display_name) {
+                        // Extract a concise address (e.g. building name, road, city)
+                        let conciseAddress = data.display_name.split(',').slice(0, 3).join(',');
+                        inputEl.value = `${conciseAddress.trim()} [Lat:${lat.toFixed(5)}, Lng:${lon.toFixed(5)}]`;
+                        statusEl.innerHTML = '<span class="text-success fw-bold"><i class="bi bi-check-circle-fill"></i> Location lock established automatically.</span>';
+                    } else {
+                        inputEl.value = `Unknown Address [Lat:${lat.toFixed(5)}, Lng:${lon.toFixed(5)}]`;
+                        statusEl.innerHTML = '<span class="text-success fw-bold"><i class="bi bi-check-circle-fill"></i> Coordinates captured.</span>';
+                    }
+                } catch (e) {
+                    inputEl.value = `Location Unknown [Lat:${lat.toFixed(5)}, Lng:${lon.toFixed(5)}]`;
+                    statusEl.innerHTML = '<span class="text-success fw-bold"><i class="bi bi-check-circle-fill"></i> Coordinates captured (Address resolution failed).</span>';
+                }
+                
+                btnEl.disabled = false;
+                
+                // Form validation highlight effect
+                inputEl.style.boxShadow = '0 0 10px rgba(16, 185, 129, 0.5)';
+                inputEl.style.borderColor = '#10b981';
+                setTimeout(() => { inputEl.style.boxShadow = 'none'; }, 2000);
+            },
+            function(error) {
+                btnEl.disabled = false;
+                let errorMsg = "Unable to retrieve your location.";
+                if (error.code === error.PERMISSION_DENIED) errorMsg = "Permission denied. Please allow location access in your browser.";
+                statusEl.innerHTML = `<span class="text-danger"><i class="bi bi-exclamation-triangle-fill"></i> ${errorMsg}</span>`;
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    }
+</script>                <div class="mt-4">
                     @foreach (var a in alerts.EnumerateArray())
                     {
                         var id = a.GetProperty("id").GetInt32();
@@ -268,3 +520,27 @@
     }
 </style>
 
+
+<!-- Fake Phone Call Escape Hatch Overlay -->
+<div id="fakeCallOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999; background: #0f172a; flex-direction: column; align-items: center; justify-content: space-between; padding: 60px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+    <div class="text-center" style="margin-top: 80px;">
+        <div style="font-size: 24px; color: #94a3b8; font-weight: 300; margin-bottom: 10px;">Incoming call...</div>
+        <div style="font-size: 40px; color: white; font-weight: 400; letter-spacing: 1px;">HR Department</div>
+        <div id="callTimer" style="font-size: 20px; color: #10b981; font-weight: 400; margin-top: 15px; display: none;">00:00</div>
+    </div>
+    
+    <div style="display: flex; justify-content: space-around; width: 100%; max-width: 350px; margin-bottom: 80px;" id="callActionButtons">
+        <button onclick="declineFakeCall()" style="width: 80px; height: 80px; border-radius: 50%; background: #ef4444; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.5); transition: transform 0.2s;">
+            <i class="bi bi-telephone-x-fill text-white" style="font-size: 32px;"></i>
+        </button>
+        <button onclick="acceptFakeCall()" style="width: 80px; height: 80px; border-radius: 50%; background: #10b981; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(16, 185, 129, 0.5); animation: pulse-sos 1.5s infinite;">
+            <i class="bi bi-telephone-fill text-white" style="font-size: 32px;"></i>
+        </button>
+    </div>
+    
+    <div style="display: none; justify-content: center; width: 100%; margin-bottom: 80px;" id="endCallButton">
+        <button onclick="endFakeCall()" style="width: 80px; height: 80px; border-radius: 50%; background: #ef4444; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.5);">
+            <i class="bi bi-telephone-x-fill text-white" style="font-size: 32px; transform: rotate(135deg);"></i>
+        </button>
+    </div>
+</div>
