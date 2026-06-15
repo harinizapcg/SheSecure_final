@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
 namespace SheSecure.Web.Controllers
@@ -36,6 +36,15 @@ namespace SheSecure.Web.Controllers
             ViewBag.Emergency = JsonDocument.Parse(emergencyTask.Result).RootElement;
 
             ViewData["Title"] = "Dashboard";
+            return View();
+        }
+
+        public IActionResult LearningHub()
+        {
+            if (HttpContext.Session.GetString("Token") == null)
+                return RedirectToAction("Login", "Auth");
+            
+            ViewData["Title"] = "Learning & Awareness Hub";
             return View();
         }
     }

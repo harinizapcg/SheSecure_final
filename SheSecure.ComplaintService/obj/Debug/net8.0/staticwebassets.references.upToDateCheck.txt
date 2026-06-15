@@ -43,3 +43,7 @@ C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.build.json
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.build.json
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.build.json
 C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.build.json
+C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.build.json
+C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.build.json
+C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.build.json
+C:\POC\SheSecureH-main\SheSecure.Web\obj\Debug\net8.0\staticwebassets.build.json

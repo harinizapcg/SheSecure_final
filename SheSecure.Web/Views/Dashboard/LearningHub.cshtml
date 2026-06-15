@@ -1,0 +1,85 @@
+@{
+    ViewData["Title"] = "Learning Hub";
+}
+
+<div class="row g-4 fade-in-up">
+    <div class="col-12 mb-2">
+        <h3 class="text-white fw-bold" style="letter-spacing: 1px;">
+            <i class="bi bi-mortarboard-fill text-primary me-2"></i>Learning & Awareness Hub
+        </h3>
+        <p class="text-muted">Empowering you with knowledge of your legal rights and personal safety techniques.</p>
+    </div>
+
+    <!-- Legal Awareness Section -->
+    <div class="col-md-6">
+        <h5 class="section-title text-info"><i class="bi bi-book-half me-2"></i>Legal Rights & Awareness</h5>
+        
+        <div class="glass-card mb-4 hover-lift" style="border-left: 4px solid var(--ss-info); transition: transform 0.2s; background: rgba(15, 23, 42, 0.6);">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-info bg-opacity-10 p-2 rounded me-3">
+                    <i class="bi bi-briefcase-fill text-info fs-5"></i>
+                </div>
+                <h6 class="text-white fw-bold mb-0" style="font-size: 16px;">POSH Act (2013) Guidelines</h6>
+            </div>
+            <p class="mb-0" style="color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.6;">The Prevention of Sexual Harassment (POSH) Act mandates a safe workplace. You have the right to file a formal complaint to the Internal Complaints Committee (ICC) within 3 months of an incident. Our portal allows you to file these securely.</p>
+        </div>
+
+        <div class="glass-card mb-4 hover-lift" style="border-left: 4px solid var(--ss-primary); transition: transform 0.2s; background: rgba(15, 23, 42, 0.6);">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
+                    <i class="bi bi-file-earmark-text-fill text-primary fs-5"></i>
+                </div>
+                <h6 class="text-white fw-bold mb-0" style="font-size: 16px;">The "Zero FIR" Concept</h6>
+            </div>
+            <p class="mb-0" style="color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.6;">A Zero FIR can be filed at <strong>any police station</strong>, irrespective of where the incident occurred. The police station is legally required to register it immediately and then transfer it to the competent jurisdiction. Never let jurisdiction delay justice.</p>
+        </div>
+
+        <div class="glass-card mb-4 hover-lift" style="border-left: 4px solid var(--ss-success); transition: transform 0.2s; background: rgba(15, 23, 42, 0.6);">
+            <div class="d-flex align-items-center mb-3">
+                <div class="bg-success bg-opacity-10 p-2 rounded me-3">
+                    <i class="bi bi-shield-lock-fill text-success fs-5"></i>
+                </div>
+                <h6 class="text-white fw-bold mb-0" style="font-size: 16px;">Right to Privacy & Confidentiality</h6>
+            </div>
+            <p mb-0" style="color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.6; margin-bottom: 0;">As per Indian law, the identity, address, and details of the aggrieved woman, respondent, and witnesses cannot be published, communicated, or made known to the public or media.</p>
+        </div>
+    </div>
+
+    <!-- Self Defense Videos -->
+    <div class="col-md-6">
+        <h5 class="section-title text-warning"><i class="bi bi-shield-check me-2"></i>Self-Defense & Situational Awareness</h5>
+        
+        <div class="glass-card mb-4 p-0 overflow-hidden hover-lift" style="border: 1px solid rgba(245, 158, 11, 0.3); transition: transform 0.2s;">
+            <div class="ratio ratio-16x9" style="background: #000;">
+                <iframe src="https://www.youtube.com/embed/KVpxP3ZZtAc?rel=0" title="Self Defense Techniques" allowfullscreen style="border: none;"></iframe>
+            </div>
+            <div class="p-3 bg-dark bg-opacity-50">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="text-white mb-0 fw-bold" style="font-size: 15px;">5 Essential Escapes Every Woman Should Know</h6>
+                    <span class="badge bg-warning text-dark px-2 py-1" style="font-size: 10px;">TACTICAL</span>
+                </div>
+                <small class="mt-2 d-block" style="color: rgba(255,255,255,0.7);">Learn how to break holds, create distance, and escape common grabs effectively without needing immense physical strength.</small>
+            </div>
+        </div>
+
+        <div class="glass-card p-0 overflow-hidden hover-lift" style="border: 1px solid rgba(245, 158, 11, 0.3); transition: transform 0.2s;">
+            <div class="ratio ratio-16x9" style="background: #000;">
+                <iframe src="https://www.youtube.com/embed/Z7dLU6fk9QY?rel=0" title="The Psychology of Awareness" allowfullscreen style="border: none;"></iframe>
+            </div>
+            <div class="p-3 bg-dark bg-opacity-50">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="text-white mb-0 fw-bold" style="font-size: 15px;">The Psychology of Awareness</h6>
+                    <span class="badge bg-info text-dark px-2 py-1" style="font-size: 10px;">PSYCHOLOGY</span>
+                </div>
+                <small class="mt-2 d-block" style="color: rgba(255,255,255,0.7);">Understanding the human mind during a crisis. Learn how to overcome the "freeze" response and train your brain to react swiftly in emergencies.</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+</style>

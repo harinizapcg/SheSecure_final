@@ -46,6 +46,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/Dashboard/LearningHub.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXExlYXJuaW5nSHViLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/POC/SheSecureH-main/SheSecure.Web/Views/Emergency/All.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1lcmdlbmN5XEFsbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
