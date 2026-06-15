@@ -1,112 +1,247 @@
-﻿@{
-    ViewData["Title"] = "Notifications";
-    var notifications = (System.Text.Json.JsonElement)ViewBag.Notifications;
-    var list = notifications.EnumerateArray().ToList();
+@using System.Text.Json
+@{
+    ViewData["Title"] = "Activity Feed";
+    var notifications = (JsonElement)ViewBag.Notifications;
+    var list = notifications.EnumerateArray().OrderByDescending(n => DateTime.Parse(n.GetProperty("createdAt").GetString()!)).ToList();
     var unreadCount = list.Count(n => !n.GetProperty("isRead").GetBoolean());
+
+    var todayList = new List<JsonElement>();
+    var yesterdayList = new List<JsonElement>();
+    var earlierList = new List<JsonElement>();
+
+    var today = DateTime.Today;
+
+    foreach (var n in list)
+    {
+        var dt = DateTime.Parse(n.GetProperty("createdAt").GetString()!);
+        if (dt.Date == today) todayList.Add(n);
+        else if (dt.Date == today.AddDays(-1)) yesterdayList.Add(n);
+        else earlierList.Add(n);
+    }
 }
 
+<style>
+    /* Activity Feed Styles */
+    .activity-feed {
+        position: relative;
+        padding-left: 35px;
+        margin-top: 10px;
+    }
+    .activity-feed::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 17px;
+        width: 2px;
+        background: linear-gradient(180deg, var(--ss-accent) 0%, rgba(255,255,255,0.05) 100%);
+        border-radius: 2px;
+    }
+    .feed-group-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--ss-text);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 32px 0 16px -25px;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(30, 41, 59, 0.9);
+        padding: 6px 14px;
+        border-radius: 20px;
+        border: 1px solid rgba(255,255,255,0.1);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        z-index: 2;
+        backdrop-filter: blur(10px);
+    }
+    .feed-group-label:first-child { margin-top: 0; }
+    
+    .feed-item {
+        position: relative;
+        margin-bottom: 20px;
+    }
+    .feed-icon-wrapper {
+        position: absolute;
+        left: -18px; /* align with line */
+        top: 24px;
+        transform: translateX(-50%);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        background: var(--ss-sidebar);
+        border: 2px solid var(--ss-border);
+        z-index: 2;
+        transition: all 0.3s ease;
+    }
+    .feed-card {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 16px;
+        padding: 20px 24px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .feed-card:hover {
+        background: rgba(30, 41, 59, 0.8);
+        border-color: rgba(255,255,255,0.1);
+        transform: translateX(4px);
+    }
+    .feed-card.unread {
+        background: linear-gradient(90deg, rgba(30, 41, 59, 0.9) 0%, rgba(30, 41, 59, 0.5) 100%);
+        border-left: 3px solid var(--ss-accent);
+    }
+    .feed-card.unread::after {
+        content: '';
+        position: absolute;
+        top: 0; right: 0; width: 100px; height: 100px;
+        background: radial-gradient(circle at top right, rgba(233, 69, 96, 0.15), transparent 70%);
+        pointer-events: none;
+    }
+    .feed-card.unread .feed-icon-wrapper {
+        border-color: var(--ss-accent);
+        box-shadow: 0 0 15px rgba(233, 69, 96, 0.4);
+        color: var(--ss-accent);
+    }
+    
+    .feed-type-Complaint { color: #f59e0b; }
+    .feed-type-Safety { color: #10b981; }
+    .feed-type-Wellness { color: #a855f7; }
+    .feed-type-Emergency { color: #ef4444; }
+
+    .feed-card.unread.feed-type-Complaint .feed-icon-wrapper { border-color: #f59e0b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); color: #f59e0b; }
+    .feed-card.unread.feed-type-Safety .feed-icon-wrapper { border-color: #10b981; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); color: #10b981; }
+    .feed-card.unread.feed-type-Wellness .feed-icon-wrapper { border-color: #a855f7; box-shadow: 0 0 15px rgba(168, 85, 247, 0.4); color: #a855f7; }
+    .feed-card.unread.feed-type-Emergency .feed-icon-wrapper { border-color: #ef4444; box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); color: #ef4444; }
+
+    .feed-card.unread.feed-type-Complaint { border-left-color: #f59e0b; }
+    .feed-card.unread.feed-type-Safety { border-left-color: #10b981; }
+    .feed-card.unread.feed-type-Wellness { border-left-color: #a855f7; }
+    .feed-card.unread.feed-type-Emergency { border-left-color: #ef4444; }
+</style>
+
 <div class="row g-4">
-    <div class="col-md-8 mx-auto">
+    <div class="col-md-9 mx-auto">
         <div class="d-flex align-items-center justify-content-between mb-4 fade-in-up">
             <div>
-                <h4 class="mb-1 fw-bold text-white">🔔 Notifications</h4>
-                @if (unreadCount > 0)
-                {
-                    <span class="status-chip error mt-2" style="font-size: 12px; padding: 4px 10px;">
-                        @unreadCount unread
-                    </span>
-                }
+                <h3 class="mb-1 fw-bold text-white" style="letter-spacing: -0.5px;">Activity Feed</h3>
+                <p class="text-muted mb-0">Stay updated on recent events and alerts.</p>
             </div>
+            @if (unreadCount > 0)
+            {
+                <div class="d-flex align-items-center gap-2 px-3 py-2 rounded-pill" style="background: rgba(233, 69, 96, 0.1); border: 1px solid rgba(233, 69, 96, 0.2);">
+                    <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--ss-accent); box-shadow: 0 0 8px var(--ss-accent); animation: pulse-ring 2s infinite;"></span>
+                    <span style="font-size: 13px; font-weight: 700; color: var(--ss-accent);">@unreadCount NEW</span>
+                </div>
+            }
         </div>
 
         @if (!list.Any())
         {
-            <div class="glass-card text-center py-5 fade-in-up delay-100">
-                <div class="empty-state-icon mb-3" style="font-size: 48px; animation: float 4s ease-in-out infinite;">🔔</div>
-                <h5 class="text-white">All caught up!</h5>
-                <p class="text-muted">You have no notifications.</p>
+            <div class="glass-card text-center py-5 fade-in-up delay-100 mt-4">
+                <div class="empty-state-icon mb-3" style="font-size: 56px; color: var(--ss-border);">
+                    <i class="bi bi-inbox"></i>
+                </div>
+                <h5 class="text-white fw-bold">You're all caught up!</h5>
+                <p class="text-muted">There is no recent activity to show.</p>
             </div>
         }
         else
         {
             <!-- Category Filters -->
             <div class="d-flex flex-wrap gap-2 mb-4 fade-in-up delay-100">
-                <div class="filter-pill active" onclick="filterNotifs('All', this)">All</div>
-                <div class="filter-pill" onclick="filterNotifs('Complaint', this)">📋 Complaints</div>
-                <div class="filter-pill" onclick="filterNotifs('Safety', this)">🛡 Safety</div>
-                <div class="filter-pill" onclick="filterNotifs('Wellness', this)">💜 Wellness</div>
-                <div class="filter-pill" onclick="filterNotifs('Emergency', this)">🚨 Emergency</div>
+                <div class="filter-pill active" onclick="filterNotifs('All', this)">All Activity</div>
+                <div class="filter-pill" onclick="filterNotifs('Complaint', this)"><i class="bi bi-file-earmark-text me-1"></i>Complaints</div>
+                <div class="filter-pill" onclick="filterNotifs('Safety', this)"><i class="bi bi-shield-check me-1"></i>Safety</div>
+                <div class="filter-pill" onclick="filterNotifs('Wellness', this)"><i class="bi bi-heart-pulse me-1"></i>Wellness</div>
+                <div class="filter-pill" onclick="filterNotifs('Emergency', this)"><i class="bi bi-exclamation-triangle me-1"></i>Emergency</div>
             </div>
 
-            <div class="d-flex flex-column gap-3 fade-in-up delay-200" id="notifList">
-                @foreach (var n in list)
+            <div class="activity-feed fade-in-up delay-200" id="notifList">
+                
+                @foreach (var group in new[] { 
+                    new { Label = "Today", Items = todayList, Icon = "bi-calendar-day" }, 
+                    new { Label = "Yesterday", Items = yesterdayList, Icon = "bi-calendar-minus" }, 
+                    new { Label = "Earlier", Items = earlierList, Icon = "bi-clock-history" } 
+                })
                 {
-                    var id = n.GetProperty("id").GetInt32();
-                    var title = n.GetProperty("title").GetString();
-                    var message = n.GetProperty("message").GetString();
-                    var type = n.GetProperty("type").GetString();
-                    var isRead = n.GetProperty("isRead").GetBoolean();
-                    var createdAt = n.GetProperty("createdAt").GetString();
+                    if (!group.Items.Any()) continue;
+                    
+                    <div class="feed-group">
+                        <div class="feed-group-label">
+                            <i class="bi @group.Icon text-white"></i>
+                            @group.Label
+                        </div>
 
-                    var typeIcon = type == "Complaint" ? "📋"
-                                 : type == "Safety" ? "🛡"
-                                 : type == "Wellness" ? "💜"
-                                 : type == "Emergency" ? "🚨"
-                                 : "🔔";
+                        @foreach (var n in group.Items)
+                        {
+                            var id = n.GetProperty("id").GetInt32();
+                            var title = n.GetProperty("title").GetString();
+                            var message = n.GetProperty("message").GetString();
+                            var rawType = n.GetProperty("type").GetString() ?? "";
+                            var type = "Notification";
+                            
+                            if (rawType.Contains("COMPLAINT", StringComparison.OrdinalIgnoreCase)) type = "Complaint";
+                            else if (rawType.Contains("SOS", StringComparison.OrdinalIgnoreCase) || rawType.Contains("EMERGENCY", StringComparison.OrdinalIgnoreCase)) type = "Emergency";
+                            else if (rawType.Contains("SAFE", StringComparison.OrdinalIgnoreCase)) type = "Safety";
+                            else if (rawType.Contains("WELLNESS", StringComparison.OrdinalIgnoreCase)) type = "Wellness";
+                            else type = rawType;
 
-                    var typeClass = type == "Complaint" ? "warning"
-                                  : type == "Safety" ? "success"
-                                  : type == "Wellness" ? "info"
-                                  : type == "Emergency" ? "error"
-                                  : "neutral";
+                            var isRead = n.GetProperty("isRead").GetBoolean();
+                            var createdAtStr = n.GetProperty("createdAt").GetString();
+                            var createdAt = createdAtStr != null ? DateTime.Parse(createdAtStr) : DateTime.Now;
 
-                    <div class="glass-card notif-card hover-lift @(isRead ? "opacity-75" : "")" data-type="@type" style="padding: 20px; transition: all 0.3s ease; border-left: 4px solid @(!isRead ? "var(--ss-accent)" : "transparent");">
-                        <div class="d-flex gap-3">
-                            <div class="status-chip @typeClass d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; border-radius: 12px; font-size: 24px;">
-                                @typeIcon
-                            </div>
+                            var typeIcon = type == "Complaint" ? "bi-clipboard-data"
+                                         : type == "Safety" ? "bi-shield-check"
+                                         : type == "Wellness" ? "bi-heart-pulse"
+                                         : type == "Emergency" ? "bi-exclamation-triangle"
+                                         : "bi-bell";
 
-                            <div class="flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-start mb-1">
-                                    <h6 class="mb-0 fw-bold @(isRead ? "text-muted" : "text-white")">
-                                        @title
+                            <div class="feed-item notif-card" data-type="@type">
+                                <div class="feed-card @(!isRead ? "unread" : "") feed-type-@type">
+                                    <div class="feed-icon-wrapper">
+                                        <i class="bi @typeIcon"></i>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge rounded-pill" style="font-size: 10px; padding: 4px 8px; font-weight: 700; letter-spacing: 0.5px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--ss-text);">@type.ToUpper()</span>
+                                            <span style="font-size: 12px; font-weight: 500; color: var(--ss-muted);"><i class="bi bi-clock me-1"></i>@createdAt.ToString("h:mm tt")</span>
+                                        </div>
                                         @if (!isRead)
                                         {
-                                            <span class="badge bg-danger ms-2 rounded-circle p-1" style="width: 8px; height: 8px; display: inline-block; box-shadow: 0 0 8px rgba(239,68,68,0.6);"></span>
+                                            <form method="post" asp-action="MarkRead" class="m-0">
+                                                <input type="hidden" name="id" value="@id" />
+                                                <button type="submit" class="btn btn-sm text-white hover-lift" style="font-size: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; padding: 4px 10px;">
+                                                    <i class="bi bi-check2-all me-1"></i>Mark Read
+                                                </button>
+                                            </form>
                                         }
+                                    </div>
+                                    <h6 class="fw-bold mb-2 @(!isRead ? "text-white" : "text-muted")" style="font-size: 16px;">
+                                        @title
                                     </h6>
-                                    <span style="font-size: 12px; color: var(--ss-muted);">
-                                        @DateTime.Parse(createdAt!).ToString("dd MMM, hh:mm tt")
-                                    </span>
-                                </div>
-                                <p class="mb-3" style="font-size: 14px; color: var(--ss-text);">
-                                    @message
-                                </p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="status-chip @typeClass" style="font-size: 11px;">@type</span>
-                                    @if (!isRead)
-                                    {
-                                        <form method="post" asp-action="MarkRead" class="m-0">
-                                            <input type="hidden" name="id" value="@id" />
-                                            <button type="submit" class="btn btn-sm btn-outline-success border-0 ripple" style="background: rgba(16,185,129,0.1); border-radius: 6px; font-size: 12px;">
-                                                <i class="bi bi-check2-all me-1"></i>Mark as read
-                                            </button>
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted" style="font-size: 12px;"><i class="bi bi-check2 me-1"></i>Read</span>
-                                    }
+                                    <p class="mb-0" style="font-size: 14px; color: @(!isRead ? "rgba(255,255,255,0.85)" : "var(--ss-muted)"); line-height: 1.5;">
+                                        @message
+                                    </p>
                                 </div>
                             </div>
-                        </div>
+                        }
                     </div>
                 }
+                
             </div>
             
             <div id="noResultsMsg" class="glass-card text-center py-5 d-none mt-3 fade-in-up">
-                <div style="font-size: 40px; margin-bottom: 15px; opacity: 0.5;">📭</div>
-                <h6 class="text-white">No notifications found in this category.</h6>
+                <div style="font-size: 40px; margin-bottom: 15px; color: var(--ss-muted);"><i class="bi bi-search"></i></div>
+                <h6 class="text-white">No activity found in this category.</h6>
             </div>
         }
     </div>
@@ -129,7 +264,7 @@
                     // Trigger reflow for animation
                     void card.offsetWidth;
                     card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
+                    card.style.transform = 'translateX(0)';
                     visibleCount++;
                 } else {
                     card.style.display = 'none';
@@ -137,13 +272,38 @@
                 }
             });
 
+            // Hide/Show Group Labels based on visible children
+            let firstVisibleGroup = true;
+            document.querySelectorAll('.feed-group').forEach(group => {
+                const visibleInGroup = Array.from(group.querySelectorAll('.notif-card')).filter(c => c.style.display !== 'none').length;
+                
+                if (visibleInGroup > 0) {
+                    group.style.display = 'block';
+                    const label = group.querySelector('.feed-group-label');
+                    if (label) {
+                        if (firstVisibleGroup) {
+                            label.style.marginTop = '0';
+                            firstVisibleGroup = false;
+                        } else {
+                            label.style.marginTop = '32px';
+                        }
+                    }
+                } else {
+                    group.style.display = 'none';
+                }
+            });
+
             // Show empty state if none match
             const noResults = document.getElementById('noResultsMsg');
-            if(noResults) {
+            const notifList = document.getElementById('notifList');
+            
+            if(noResults && notifList) {
                 if (visibleCount === 0) {
                     noResults.classList.remove('d-none');
+                    notifList.style.display = 'none';
                 } else {
                     noResults.classList.add('d-none');
+                    notifList.style.display = 'block';
                 }
             }
         }
