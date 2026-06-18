@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SheSecure.NotificationService.DTOs.Requests;
 using SheSecure.NotificationService.Interfaces;
+using SheSecure.NotificationService.Services;
 
 namespace SheSecure.NotificationService.Controllers
 {
@@ -25,6 +26,19 @@ namespace SheSecure.NotificationService.Controllers
                 await _service.CreateNotificationAsync(dto);
 
             return Ok(result);
+        }
+        //email testing endpoint for development purposes
+        [HttpGet("test-email")]
+        public async Task<IActionResult> TestEmail()
+        {
+            var emailService = new EmailService();
+
+            await emailService.SendEmailAsync(
+    "harinibanda27@gmail.com",
+    "SheSecure Test",
+    "<h2>Email Service Working Successfully!</h2>");
+
+            return Ok("Mail Sent Successfully");
         }
 
         [HttpGet("all")]

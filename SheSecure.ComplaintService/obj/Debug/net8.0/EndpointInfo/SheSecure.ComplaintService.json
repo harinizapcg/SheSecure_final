@@ -251,6 +251,29 @@
         }
       }
     },
+    "/api/ComplaintFiles/{complaintId}": {
+      "get": {
+        "tags": [
+          "ComplaintFiles"
+        ],
+        "parameters": [
+          {
+            "name": "complaintId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/ComplaintStatusHistory/add": {
       "post": {
         "tags": [

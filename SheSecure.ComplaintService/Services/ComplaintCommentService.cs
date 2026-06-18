@@ -82,6 +82,15 @@ namespace SheSecure.ComplaintService.Services
                     .GetCommentsByComplaintIdAsync(
                         complaintId);
 
+            var userRole = _httpContextAccessor.HttpContext?.User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value 
+                        ?? _httpContextAccessor.HttpContext?.User.FindFirst("role")?.Value 
+                        ?? "Employee";
+
+            if (userRole != "HR" && userRole != "Admin" && userRole != "Manager")
+            {
+                comments = comments.Where(c => !c.IsInternal).ToList();
+            }
+
             return comments.Select(x =>
                 new ComplaintCommentResponseDTO
                 {

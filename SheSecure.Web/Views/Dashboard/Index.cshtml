@@ -288,7 +288,7 @@
                 <i class="bi bi-file-earmark-text me-2"></i>Raise Complaint
             </a>
             <a asp-controller="WFH" asp-action="Index" class="btn-ss text-decoration-none hover-lift">
-                <i class="bi bi-house-door me-2"></i>WFH Request
+                <i class="bi bi-house-door me-2"></i>Wellness Request
             </a>
         }
         @if (role == "HR" || role == "Admin")
@@ -300,7 +300,7 @@
         @if (role == "Manager" || role == "Admin")
         {
             <a asp-controller="WFH" asp-action="Approvals" class="btn-ss text-decoration-none hover-lift" style="background: linear-gradient(135deg, #10b981, #059669);">
-                <i class="bi bi-check2-square me-2"></i>WFH Approvals
+                <i class="bi bi-check2-square me-2"></i>Wellness Approvals
             </a>
         }
         @if (role == "Security" || role == "Admin")

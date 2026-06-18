@@ -45,7 +45,7 @@ namespace SheSecure.Web.Controllers
                 ViewBag.Requests = JsonDocument.Parse("[]").RootElement;
             }
 
-            ViewData["Title"] = "WFH Requests";
+            ViewData["Title"] = "Wellness Requests";
             return View();
         }
 
@@ -69,7 +69,7 @@ namespace SheSecure.Web.Controllers
             var response = await client.PostAsync("api/WellnessRequest/create", content);
 
             if (response.IsSuccessStatusCode)
-                TempData["Success"] = "WFH request submitted successfully!";
+                TempData["Success"] = "Wellness request submitted successfully!";
             else
                 TempData["Error"] = "Failed to submit request. Please try again.";
 
@@ -98,7 +98,7 @@ namespace SheSecure.Web.Controllers
                 ViewBag.Requests = JsonDocument.Parse("[]").RootElement;
             }
 
-            ViewData["Title"] = "WFH Approvals";
+            ViewData["Title"] = "Wellness Approvals";
             return View();
         }
 

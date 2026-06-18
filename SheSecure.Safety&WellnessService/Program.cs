@@ -50,6 +50,7 @@ builder.Services.AddScoped<IEmergencyAlertRepository, EmergencyAlertRepository>(
 builder.Services.AddScoped<IEmergencyAlertService, EmergencyAlertService>();
 builder.Services.AddScoped<IMoodLogRepository, MoodLogRepository>();
 builder.Services.AddScoped<IMoodLogService, MoodLogService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<SafeReachReminderJob>();
 
 builder.Services.AddHttpClient("NotificationService", client =>

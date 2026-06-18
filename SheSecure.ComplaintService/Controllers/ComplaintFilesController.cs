@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using SheSecure.ComplaintService.Interfaces;
 
 namespace SheSecure.ComplaintService.Controllers
@@ -25,6 +25,13 @@ namespace SheSecure.ComplaintService.Controllers
                     complaintId,
                     file);
 
+            return Ok(result);
+        }
+
+        [HttpGet("{complaintId}")]
+        public async Task<IActionResult> GetFiles(int complaintId)
+        {
+            var result = await _service.GetFilesByComplaintIdAsync(complaintId);
             return Ok(result);
         }
     }

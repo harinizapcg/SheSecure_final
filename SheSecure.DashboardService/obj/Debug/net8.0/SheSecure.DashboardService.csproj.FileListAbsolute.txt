@@ -209,3 +209,8 @@ C:\POC\SheSecureH-main\SheSecure.DashboardService\obj\Debug\net8.0\SheSecure.Das
 C:\POC\SheSecureH-main\SheSecure.DashboardService\obj\Debug\net8.0\SheSecure.DashboardService.genruntimeconfig.cache
 C:\POC\SheSecureH-main\SheSecure.DashboardService\obj\Debug\net8.0\ref\SheSecure.DashboardService.dll
 C:\POC\SheSecureH-main\SheSecure.DashboardService\obj\Debug\net8.0\SheSecure.DashboardService.sourcelink.json
+C:\POC\SheSecureH-main\SheSecure.DashboardService\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\POC\SheSecureH-main\SheSecure.DashboardService\bin\Debug\net8.0\MailKit.dll
+C:\POC\SheSecureH-main\SheSecure.DashboardService\bin\Debug\net8.0\MimeKit.dll
+C:\POC\SheSecureH-main\SheSecure.DashboardService\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\POC\SheSecureH-main\SheSecure.DashboardService\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll

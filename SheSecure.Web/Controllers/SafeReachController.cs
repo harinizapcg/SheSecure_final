@@ -74,10 +74,13 @@ namespace SheSecure.Web.Controllers
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
             var employeeId = HttpContext.Session.GetString("UserId") ?? "";
 
+            var parsedDate = DateTime.Parse(expectedArrivalTime);
+            var utcDate = parsedDate.Kind == DateTimeKind.Utc ? parsedDate : parsedDate.ToUniversalTime();
+
             var payload = JsonSerializer.Serialize(new
             {
                 employeeId,
-                expectedArrivalTime = DateTime.Parse(expectedArrivalTime).ToString("o")
+                expectedArrivalTime = utcDate.ToString("o")
             });
 
             var content = new StringContent(payload, Encoding.UTF8, "application/json");

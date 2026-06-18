@@ -59,6 +59,33 @@ namespace SheSecure.NotificationService.Services
                 await _repository.CreateNotificationAsync(
                     notification);
 
+            // --- ROLE-BASED ROUTING ---
+            var rolesToNotify = new List<string>();
+            if (dto.Type == "COMPLAINT_SUBMITTED" || dto.Type == "WELLNESS_REQUESTED")
+            {
+                rolesToNotify.AddRange(new[] { "Admin", "HR", "Manager" });
+            }
+            else if (dto.Type == "SOS_RAISED")
+            {
+                rolesToNotify.AddRange(new[] { "Admin", "Security" });
+            }
+            else if (dto.Type != null && (dto.Type.StartsWith("SAFE_REACH") || dto.Type == "Safety" || dto.Type == "Emergency"))
+            {
+                rolesToNotify.AddRange(new[] { "Admin", "Security", "HR", "Manager" });
+            }
+
+            foreach (var targetRole in rolesToNotify)
+            {
+                var roleNotif = new Notification
+                {
+                    EmployeeId = targetRole, // Store the Role as the target
+                    Title = "ACTION REQUIRED: " + dto.Title,
+                    Message = $"[From User {dto.EmployeeId}]: " + dto.Message,
+                    Type = dto.Type
+                };
+                await _repository.CreateNotificationAsync(roleNotif);
+            }
+
             return new NotificationResponseDTO
             {
                 Id = created.Id,
@@ -112,6 +139,16 @@ namespace SheSecure.NotificationService.Services
             var notifications =
                 await _repository.GetEmployeeNotificationsAsync(
                     employeeId);
+
+            // Also fetch notifications directed to this user's role
+            if (role != "Employee" && !string.IsNullOrEmpty(role))
+            {
+                var roleNotifications = await _repository.GetEmployeeNotificationsAsync(role);
+                notifications.AddRange(roleNotifications);
+                
+                // Sort by newest first
+                notifications = notifications.OrderByDescending(n => n.CreatedAt).ToList();
+            }
 
             return notifications.Select(x =>
                 new NotificationResponseDTO

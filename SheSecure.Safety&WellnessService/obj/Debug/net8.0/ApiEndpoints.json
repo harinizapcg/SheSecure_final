@@ -58,6 +58,16 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.EmergencyAlertController",
+    "Method": "TestDI",
+    "RelativePath": "api/EmergencyAlert/test-di",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SheSecure.Safety_WellnessService.Controllers.MoodController",
     "Method": "GetAll",
     "RelativePath": "api/Mood/all",

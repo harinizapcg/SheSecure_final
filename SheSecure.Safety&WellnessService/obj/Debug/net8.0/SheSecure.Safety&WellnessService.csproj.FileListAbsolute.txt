@@ -168,7 +168,6 @@ C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\staticw
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\staticwebassets.development.json
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\swae.build.ex.cache
-C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\SheSecur.01560182.Up2Date
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\SheSecure.Safety&WellnessService.dll
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\refint\SheSecure.Safety&WellnessService.dll
@@ -176,3 +175,9 @@ C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\SheSecu
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\SheSecure.Safety&WellnessService.genruntimeconfig.cache
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\ref\SheSecure.Safety&WellnessService.dll
 C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\SheSecure.Safety&WellnessService.sourcelink.json
+C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\bin\Debug\net8.0\MailKit.dll
+C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\bin\Debug\net8.0\MimeKit.dll
+C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\POC\SheSecureH-main\SheSecure.Safety&WellnessService\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

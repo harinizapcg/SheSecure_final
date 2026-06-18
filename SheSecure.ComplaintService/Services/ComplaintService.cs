@@ -122,17 +122,20 @@ namespace SheSecure.ComplaintService.Services
     public class ComplaintService : IComplaintService
     {
         private readonly IComplaintRepository _repository;
+        private readonly IComplaintStatusHistoryRepository _historyRepository;
         private readonly HttpClient _http;
         private readonly ILogger<ComplaintService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public ComplaintService(
             IComplaintRepository repository,
+            IComplaintStatusHistoryRepository historyRepository,
             IHttpClientFactory httpFactory,
             ILogger<ComplaintService> logger,
             IHttpContextAccessor httpContextAccessor)
         {
             _repository = repository;
+            _historyRepository = historyRepository;
             _http = httpFactory.CreateClient("NotificationService");
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
@@ -197,6 +200,9 @@ namespace SheSecure.ComplaintService.Services
                 Id = created.Id,
                 ComplaintNumber = created.ComplaintNumber,
                 Subject = created.Subject,
+                Category = created.Category,
+                Priority = created.Priority,
+                AssignedTo = created.AssignedTo,
                 Status = created.Status,
                 CreatedAt = created.CreatedAt
             };
@@ -223,6 +229,9 @@ namespace SheSecure.ComplaintService.Services
                     Id = x.Id,
                     ComplaintNumber = x.ComplaintNumber,
                     Subject = x.Subject,
+                    Category = x.Category,
+                    Priority = x.Priority,
+                    AssignedTo = x.AssignedTo,
                     Status = x.Status,
                     CreatedAt = x.CreatedAt
                 }).ToList();
@@ -248,6 +257,9 @@ namespace SheSecure.ComplaintService.Services
                 Id = complaint.Id,
                 ComplaintNumber = complaint.ComplaintNumber,
                 Subject = complaint.Subject,
+                Category = complaint.Category,
+                Priority = complaint.Priority,
+                AssignedTo = complaint.AssignedTo,
                 Status = complaint.Status,
                 CreatedAt = complaint.CreatedAt
             };
@@ -263,11 +275,27 @@ namespace SheSecure.ComplaintService.Services
             if (complaint == null)
                 throw new Exception("Complaint not found");
 
+            var oldStatus = complaint.Status;
             complaint.Status = dto.Status;
             complaint.ResolutionNotes = dto.ResolutionNotes;
             complaint.UpdatedAt = DateTime.UtcNow;
 
             await _repository.UpdateComplaintAsync(complaint);
+
+            var user = _httpContextAccessor.HttpContext?.User;
+            var userIdStr = user?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "1";
+            var userId = int.TryParse(userIdStr, out var uid) ? uid : 1;
+
+            var history = new ComplaintStatusHistory
+            {
+                ComplaintId = complaint.Id,
+                OldStatus = oldStatus,
+                NewStatus = dto.Status,
+                ChangedBy = userId,
+                Remarks = dto.ResolutionNotes ?? "",
+                ChangedAt = DateTime.UtcNow
+            };
+            await _historyRepository.AddHistoryAsync(history);
 
             if (!complaint.IsAnonymous)
             {
@@ -290,6 +318,11 @@ namespace SheSecure.ComplaintService.Services
                 throw new Exception("Complaint not found");
 
             complaint.AssignedTo = dto.AssignedTo;
+
+            if (complaint.Status == "Submitted" || complaint.Status == "Under Review")
+            {
+                complaint.Status = "Under Investigation";
+            }
 
             await _repository.UpdateComplaintAsync(complaint);
 
@@ -325,6 +358,9 @@ namespace SheSecure.ComplaintService.Services
                     Id = x.Id,
                     ComplaintNumber = x.ComplaintNumber,
                     Subject = x.Subject,
+                    Category = x.Category,
+                    Priority = x.Priority,
+                    AssignedTo = x.AssignedTo,
                     Status = x.Status,
                     CreatedAt = x.CreatedAt
                 }).ToList();

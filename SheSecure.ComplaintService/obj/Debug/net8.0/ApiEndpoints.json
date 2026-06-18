@@ -123,6 +123,22 @@
   },
   {
     "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintFilesController",
+    "Method": "GetFiles",
+    "RelativePath": "api/ComplaintFiles/{complaintId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "complaintId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.ComplaintService.Controllers.ComplaintFilesController",
     "Method": "UploadFile",
     "RelativePath": "api/ComplaintFiles/upload",
     "HttpMethod": "POST",

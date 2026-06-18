@@ -60,6 +60,7 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using SheSecure.Safety_WellnessService.DTOs.Requests;
 using SheSecure.Safety_WellnessService.Entities;
 using SheSecure.Safety_WellnessService.Interfaces;
@@ -72,17 +73,23 @@ namespace SheSecure.Safety_WellnessService.Services
         private readonly HttpClient _http;
         private readonly ILogger<EmergencyAlertService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IEmailService _emailService;
+        private readonly IConfiguration _configuration;
 
         public EmergencyAlertService(
             IEmergencyAlertRepository repository,
             IHttpClientFactory httpFactory,
             ILogger<EmergencyAlertService> logger,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IEmailService emailService,
+            IConfiguration configuration)
         {
             _repository = repository;
             _http = httpFactory.CreateClient("NotificationService");
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _emailService = emailService;
+            _configuration = configuration;
         }
 
         private (string employeeId, string email, string role) GetUserContext()
@@ -131,7 +138,41 @@ namespace SheSecure.Safety_WellnessService.Services
                 "Your SOS alert has been triggered. Help is on the way.",
                 "SOS_RAISED");
 
+            await SendAdminEmailNotificationAsync(created, dto);
+
             return created;
+        }
+
+        private async Task SendAdminEmailNotificationAsync(EmergencyAlert alert, CreateEmergencyAlertDTO dto)
+        {
+            try
+            {
+                var adminEmail = _configuration["AdminSettings:AdminEmail"] ?? "admin@shesecure.com";
+                var subject = "🚨 SOS Alert Triggered";
+                
+                var (userId, userEmail, role) = GetUserContext();
+                
+                var body = $@"
+                    <h2>SOS Alert Triggered</h2>
+                    <p><strong>Immediate attention is required!</strong></p>
+                    <ul>
+                        <li><strong>Alert ID:</strong> {alert.Id}</li>
+                        <li><strong>Creation Time:</strong> {alert.TriggeredAt:yyyy-MM-dd HH:mm:ss UTC}</li>
+                        <li><strong>User ID:</strong> {userId}</li>
+                        <li><strong>User Email:</strong> {userEmail}</li>
+                        <li><strong>Location:</strong> {alert.Location}</li>
+                        <li><strong>Severity:</strong> {alert.Severity}</li>
+                        <li><strong>Description:</strong> {alert.Description}</li>
+                    </ul>
+                    <p>Please log in to the dashboard to take action immediately.</p>
+                ";
+
+                await _emailService.SendEmailAsync(adminEmail, subject, body);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to send SOS email notification for Alert {AlertId}", alert.Id);
+            }
         }
 
         public async Task<List<EmergencyAlert>>

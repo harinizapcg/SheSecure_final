@@ -5,6 +5,18 @@
     "version": "1.0"
   },
   "paths": {
+    "/api/EmergencyAlert/test-di": {
+      "get": {
+        "tags": [
+          "EmergencyAlert"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/EmergencyAlert/create": {
       "post": {
         "tags": [

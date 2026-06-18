@@ -149,7 +149,6 @@ C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\staticweba
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\staticwebassets.development.json
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\staticwebassets.build.endpoints.json
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\swae.build.ex.cache
-C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\SheSecur.57C752EB.Up2Date
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\SheSecure.NotificationService.dll
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\refint\SheSecure.NotificationService.dll
@@ -157,3 +156,9 @@ C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\SheSecure.
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\SheSecure.NotificationService.genruntimeconfig.cache
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\ref\SheSecure.NotificationService.dll
 C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\SheSecure.NotificationService.sourcelink.json
+C:\POC\SheSecureH-main\SheSecure.NotificationService\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\POC\SheSecureH-main\SheSecure.NotificationService\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\POC\SheSecureH-main\SheSecure.NotificationService\bin\Debug\net8.0\MailKit.dll
+C:\POC\SheSecureH-main\SheSecure.NotificationService\bin\Debug\net8.0\MimeKit.dll
+C:\POC\SheSecureH-main\SheSecure.NotificationService\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
+C:\POC\SheSecureH-main\SheSecure.NotificationService\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll

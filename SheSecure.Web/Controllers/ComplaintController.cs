@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Text.Json;
 
@@ -80,18 +80,21 @@ namespace SheSecure.Web.Controllers
                 var complaintTask = client.GetStringAsync($"api/Complaint/{id}");
                 var commentsTask = client.GetStringAsync($"api/ComplaintComments/{id}");
                 var historyTask = client.GetStringAsync($"api/ComplaintStatusHistory/{id}");
+                var filesTask = client.GetStringAsync($"api/ComplaintFiles/{id}");
 
-                await Task.WhenAll(complaintTask, commentsTask, historyTask);
+                await Task.WhenAll(complaintTask, commentsTask, historyTask, filesTask);
 
                 ViewBag.Complaint = JsonDocument.Parse(complaintTask.Result).RootElement;
                 ViewBag.Comments = JsonDocument.Parse(commentsTask.Result).RootElement;
                 ViewBag.History = JsonDocument.Parse(historyTask.Result).RootElement;
+                ViewBag.Files = JsonDocument.Parse(filesTask.Result).RootElement;
             }
             catch
             {
                 ViewBag.Complaint = JsonDocument.Parse("{}").RootElement;
                 ViewBag.Comments = JsonDocument.Parse("[]").RootElement;
                 ViewBag.History = JsonDocument.Parse("[]").RootElement;
+                ViewBag.Files = JsonDocument.Parse("[]").RootElement;
             }
 
             ViewData["Title"] = "Complaint Detail";
@@ -152,17 +155,47 @@ namespace SheSecure.Web.Controllers
             return RedirectToAction("Detail", new { id = complaintId });
         }
 
+        // POST — Assign complaint (HR)
+        [HttpPost]
+        public async Task<IActionResult> Assign(
+            int complaintId, string assignedTo)
+        {
+            var client = GetClient();
+            var payload = JsonSerializer.Serialize(new
+            {
+                complaintId,
+                assignedTo
+            });
+            var content = new StringContent(payload, Encoding.UTF8, "application/json");
+            var response = await client.PutAsync("api/Complaint/assign", content);
+
+            if (response.IsSuccessStatusCode)
+                TempData["Success"] = "Complaint assigned successfully!";
+            else
+                TempData["Error"] = "Failed to assign complaint.";
+
+            return RedirectToAction("Detail", new { id = complaintId });
+        }
+
         // POST — Add comment
         [HttpPost]
         public async Task<IActionResult> AddComment(
             int complaintId, string comment, bool isInternal)
         {
             var client = GetClient();
-            var userId = HttpContext.Session.GetString("UserId") ?? "1";
+            var userIdStr = HttpContext.Session.GetString("UserId") ?? "1";
+            var role = HttpContext.Session.GetString("Role");
+            
+            var uid = int.TryParse(userIdStr, out var parsed) ? parsed : 1;
+            if (role == "HR" || role == "Admin")
+            {
+                uid = 0; // Use 0 as a special flag for HR/Admin commenters
+            }
+
             var payload = JsonSerializer.Serialize(new
             {
                 complaintId,
-                userId = int.TryParse(userId, out var uid) ? uid : 1,
+                userId = uid,
                 comment,
                 isInternal
             });

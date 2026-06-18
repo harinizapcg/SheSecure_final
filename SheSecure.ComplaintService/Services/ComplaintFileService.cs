@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using SheSecure.ComplaintService.DTOs.Responses;
 using SheSecure.ComplaintService.Entities;
 using SheSecure.ComplaintService.Interfaces;
@@ -55,6 +55,18 @@ namespace SheSecure.ComplaintService.Services
                 FilePath = savedFile.FilePath,
                 UploadedAt = savedFile.UploadedAt
             };
+        }
+
+        public async Task<List<ComplaintFileResponseDTO>> GetFilesByComplaintIdAsync(int complaintId)
+        {
+            var files = await _repository.GetFilesByComplaintIdAsync(complaintId);
+            return files.Select(x => new ComplaintFileResponseDTO
+            {
+                Id = x.Id,
+                FileName = x.FileName,
+                FilePath = x.FilePath,
+                UploadedAt = x.UploadedAt
+            }).ToList();
         }
     }
 }

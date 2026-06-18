@@ -87,7 +87,7 @@
                 <form method="post" asp-action="Create">
                     <div class="mb-4">
                         <label class="form-label text-muted text-uppercase fw-bold" style="font-size: 11px; letter-spacing: 1px;">Expected Arrival Time</label>
-                        <input type="datetime-local" name="expectedArrivalTime" class="form-control bg-dark border-secondary text-white py-2 px-3" style="border-radius: 8px;" required />
+                        <input type="text" name="expectedArrivalTime" class="form-control bg-dark border-secondary text-white py-2 px-3" style="border-radius: 8px;" placeholder="dd-mm-yyyy --:-- --" required />
                     </div>
                     <button type="submit" class="btn w-100 py-3 fw-bold ripple text-white" style="border-radius: 12px; background: linear-gradient(135deg, #0ea5e9, #0284c7); border: none; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3); text-transform: uppercase; letter-spacing: 1px; font-size: 14px;">
                         <i class="bi bi-play-circle me-2 fs-5"></i> Start Journey
@@ -276,9 +276,21 @@
 
 <!-- Leaflet Map Integration -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        flatpickr("input[name='expectedArrivalTime']", {
+            enableTime: true,
+            dateFormat: "Z",
+            altInput: true,
+            altFormat: "d-m-Y h:i K",
+            time_24hr: false,
+            minDate: "today"
+        });
+
         if (document.getElementById('safeReachMap')) {
             var map = L.map('safeReachMap', { zoomControl: false }).setView([17.3850, 78.4867], 14);
 
@@ -312,6 +324,32 @@
                 [17.4000, 78.4850]
             ];
             L.polyline(pathCoordinates, {color: '#f59e0b', weight: 4, opacity: 0.7, dashArray: '10, 10'}).addTo(map);
+
+            // Draw Safe Zones, Risk Areas, and Hospitals
+            L.circle([17.3850, 78.4867], {
+                color: '#10b981',
+                fillColor: '#10b981',
+                fillOpacity: 0.15,
+                weight: 2,
+                radius: 400
+            }).addTo(map).bindPopup('<b style="color:#0f172a">Safe Zone (Main Campus)</b><br><span style="color:#64748b; font-size:12px;">High security presence & surveillance.</span>');
+
+            L.circle([17.3950, 78.4800], {
+                color: '#ef4444',
+                fillColor: '#ef4444',
+                fillOpacity: 0.15,
+                weight: 2,
+                dashArray: '5, 5',
+                radius: 600
+            }).addTo(map).bindPopup('<b style="color:#ef4444">Caution: High-Risk Area</b><br><span style="color:#64748b; font-size:12px;">Recent incident reports. Avoid walking alone at night.</span>');
+
+            L.circle([17.4050, 78.4950], {
+                color: '#0ea5e9',
+                fillColor: '#0ea5e9',
+                fillOpacity: 0.2,
+                weight: 2,
+                radius: 250
+            }).addTo(map).bindPopup('<b style="color:#0ea5e9">Partnered Hospital</b><br><span style="color:#64748b; font-size:12px;">24/7 Emergency Trauma Care.</span>');
 
             marker.bindPopup('<b style=""color:#0f172a; font-size:14px;"">In Transit</b><br><span style=""color:#64748b; font-size:12px;"">Safe check-in timer is active.</span>').openPopup();
 

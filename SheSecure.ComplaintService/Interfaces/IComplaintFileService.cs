@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using SheSecure.ComplaintService.DTOs.Responses;
 
 namespace SheSecure.ComplaintService.Interfaces
@@ -8,5 +8,6 @@ namespace SheSecure.ComplaintService.Interfaces
         Task<ComplaintFileResponseDTO> UploadFileAsync(
             int complaintId,
             IFormFile file);
+        Task<List<ComplaintFileResponseDTO>> GetFilesByComplaintIdAsync(int complaintId);
     }
 }

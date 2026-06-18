@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "WFH Requests";
+    ViewData["Title"] = "Wellness Requests";
     var requests = (System.Text.Json.JsonElement)ViewBag.Requests;
 }
 
@@ -22,7 +22,7 @@
     <!-- Request Form -->
     <div class="col-md-4">
         <div class="glass-card mb-4">
-            <h5 class="section-title">🏠 New WFH Request</h5>
+            <h5 class="section-title">🏠 New Wellness Request</h5>
             <form method="post" asp-action="Create" class="mt-4">
                 <div class="mb-3">
                     <label class="form-label">Request Type</label>
@@ -60,14 +60,14 @@
     <!-- My Requests Table -->
     <div class="col-md-8">
         <div class="glass-card h-100">
-            <h5 class="section-title">📋 My WFH Requests</h5>
+            <h5 class="section-title">📋 My Wellness Requests</h5>
 
             @if (!requests.EnumerateArray().Any())
             {
                 <div class="empty-state">
                     <div class="empty-state-icon">🏠</div>
                     <h5>No requests yet</h5>
-                    <p>You haven't submitted any WFH or Flexi requests.</p>
+                    <p>You haven't submitted any Wellness or Flexi requests.</p>
                 </div>
             }
             else

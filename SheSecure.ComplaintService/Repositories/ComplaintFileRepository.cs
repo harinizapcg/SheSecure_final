@@ -1,4 +1,5 @@
-﻿using SheSecure.ComplaintService.Data;
+using SheSecure.ComplaintService.Data;
+using Microsoft.EntityFrameworkCore;
 using SheSecure.ComplaintService.Entities;
 using SheSecure.ComplaintService.Interfaces;
 
@@ -20,6 +21,13 @@ namespace SheSecure.ComplaintService.Repositories
             await _context.SaveChangesAsync();
 
             return file;
+        }
+
+        public async Task<List<ComplaintFile>> GetFilesByComplaintIdAsync(int complaintId)
+        {
+            return await _context.ComplaintFiles
+                .Where(x => x.ComplaintId == complaintId)
+                .ToListAsync();
         }
     }
 }

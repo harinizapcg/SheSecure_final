@@ -42,6 +42,32 @@
                 maxZoom: 20
             }).addTo(map);
 
+            // Draw Global Safe Zones, Risk Areas, and Hospitals
+            L.circle([17.3850, 78.4867], {
+                color: '#10b981',
+                fillColor: '#10b981',
+                fillOpacity: 0.15,
+                weight: 2,
+                radius: 400
+            }).addTo(map).bindPopup('<b style="color:#0f172a">Safe Zone (Main Campus)</b><br><span style="color:#64748b; font-size:12px;">High security presence & surveillance.</span>');
+
+            L.circle([17.3950, 78.4800], {
+                color: '#ef4444',
+                fillColor: '#ef4444',
+                fillOpacity: 0.15,
+                weight: 2,
+                dashArray: '5, 5',
+                radius: 600
+            }).addTo(map).bindPopup('<b style="color:#ef4444">Caution: High-Risk Area</b><br><span style="color:#64748b; font-size:12px;">Recent incident reports. Avoid walking alone at night.</span>');
+
+            L.circle([17.4050, 78.4950], {
+                color: '#0ea5e9',
+                fillColor: '#0ea5e9',
+                fillOpacity: 0.2,
+                weight: 2,
+                radius: 250
+            }).addTo(map).bindPopup('<b style="color:#0ea5e9">Partnered Hospital</b><br><span style="color:#64748b; font-size:12px;">24/7 Emergency Trauma Care.</span>');
+
             // Fetch alerts from the backend payload dumped into the view
             var alertsData = @Html.Raw(alerts.ToString());
             var bounds = [];

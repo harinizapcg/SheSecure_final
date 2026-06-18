@@ -1,6 +1,7 @@
 @{
     ViewData["Title"] = "All Complaints";
     var complaints = (System.Text.Json.JsonElement)ViewBag.Complaints;
+    var currentUserEmail = Context.Session.GetString("Email") ?? Context.Session.GetString("Username") ?? "current_user";
 }
 
 <div class="glass-card">
@@ -113,9 +114,28 @@
                 border-radius: 6px;
                 letter-spacing: 0.5px;
             }
+
+            .heartbeat {
+                animation: heartbeat 1.5s infinite;
+            }
+
+            @@keyframes heartbeat {
+                0% { transform: scale(1); }
+                14% { transform: scale(1.05); }
+                28% { transform: scale(1); }
+                42% { transform: scale(1.05); }
+                70% { transform: scale(1); }
+            }
         </style>
 
-        <div class="mt-4">
+        <div class="d-flex align-items-center flex-wrap gap-2 mb-4">
+            <button class="btn btn-ss filter-btn active" data-filter="all" style="border-radius: 20px; font-size: 13px; padding: 6px 16px;">All Cases</button>
+            <button class="btn btn-ss-outline filter-btn" data-filter="unassigned" style="border-radius: 20px; font-size: 13px; padding: 6px 16px;">Inbox (Unassigned)</button>
+            <button class="btn btn-ss-outline filter-btn" data-filter="mycases" style="border-radius: 20px; font-size: 13px; padding: 6px 16px;">My Cases</button>
+            <button class="btn btn-ss-outline filter-btn" data-filter="closed" style="border-radius: 20px; font-size: 13px; padding: 6px 16px;">Closed</button>
+        </div>
+
+        <div class="mt-2" id="complaintsList">
             @foreach (var c in complaints.EnumerateArray())
             {
                 var id = c.GetProperty("id").GetInt32();
@@ -123,11 +143,15 @@
                 var subject = c.GetProperty("subject").GetString();
                 var status = c.GetProperty("status").GetString() ?? "Submitted";
                 var category = c.TryGetProperty("category", out var catProp) ? catProp.GetString() ?? "General" : "General";
+                var priority = c.TryGetProperty("priority", out var priProp) ? priProp.GetString() ?? "Low" : "Low";
+                var assignedTo = c.TryGetProperty("assignedTo", out var asgProp) ? asgProp.GetString() : "";
                 var createdAtStr = c.GetProperty("createdAt").GetString();
                 var createdAt = createdAtStr != null ? TimeHelper.ToIST(createdAtStr) : DateTime.UtcNow.AddHours(5).AddMinutes(30);
 
+                var isOverdue = status == "Submitted" && (DateTime.UtcNow.AddHours(5).AddMinutes(30) - createdAt).TotalHours > 48;
+
                 int level = (status == "Resolved" || status == "Closed") ? 4 :
-                            (status == "Assigned" || status == "Under Investigation") ? 3 :
+                            (status == "Under Investigation" || !string.IsNullOrEmpty(assignedTo)) ? 3 :
                             (status == "Under Review") ? 2 : 1;
 
                 var chipClass = status == "Resolved" ? "success"
@@ -136,12 +160,31 @@
                                : status == "Closed" ? "neutral"
                                : "warning";
 
-                <div class="complaint-card fade-in-up">
-                    <div class="complaint-header">
+                var priorityClass = priority == "Critical" ? "bg-danger text-white shadow" 
+                                  : priority == "High" ? "bg-warning text-dark"
+                                  : priority == "Medium" ? "bg-info text-dark"
+                                  : "bg-secondary text-white";
+
+                <div class="complaint-card-wrapper" data-assigned="@assignedTo" data-status="@status">
+                    <div class="complaint-card fade-in-up">
+                        <div class="complaint-header">
                         <div>
-                            <div class="d-flex align-items-center gap-2 mb-2">
+                            <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
                                 <span class="complaint-ref">@(cmpNum.Length > 12 ? cmpNum.Substring(0, 12) + "..." : cmpNum)</span>
                                 <span class="badge" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--ss-muted); font-size: 11px;">@category</span>
+                                <span class="badge @priorityClass" style="font-size: 11px; letter-spacing: 0.5px;">@priority</span>
+                                @if (!string.IsNullOrEmpty(assignedTo))
+                                {
+                                    <span class="badge" style="background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(14, 165, 233, 0.3); color: var(--ss-info); font-size: 11px;">
+                                        <i class="bi bi-person-badge me-1"></i>@assignedTo
+                                    </span>
+                                }
+                                @if (isOverdue)
+                                {
+                                    <span class="badge bg-danger text-white shadow heartbeat" style="font-size: 11px; letter-spacing: 0.5px;">
+                                        <i class="bi bi-exclamation-triangle-fill me-1"></i>OVERDUE
+                                    </span>
+                                }
                             </div>
                             <h5 class="text-white fw-bold mb-1">@subject</h5>
                             <div style="font-size: 12px; color: var(--ss-muted);">
@@ -176,10 +219,49 @@
                             <div class="timeline-dot"><i class="bi bi-shield-check"></i></div>
                             <div class="timeline-label">Resolved</div>
                         </div>
+                        </div>
                     </div>
                 </div>
             }
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var currentUser = '@currentUserEmail'.toLowerCase();
+                
+                document.querySelectorAll('.filter-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // Reset all buttons
+                        document.querySelectorAll('.filter-btn').forEach(b => {
+                            b.classList.remove('active', 'btn-ss');
+                            b.classList.add('btn-ss-outline');
+                        });
+                        
+                        // Set active state
+                        this.classList.remove('btn-ss-outline');
+                        this.classList.add('active', 'btn-ss');
+                        
+                        var filter = this.getAttribute('data-filter');
+                        
+                        document.querySelectorAll('.complaint-card-wrapper').forEach(card => {
+                            var assigned = (card.getAttribute('data-assigned') || '').toLowerCase();
+                            var status = card.getAttribute('data-status');
+                            
+                            if (filter === 'all') {
+                                card.style.display = 'block';
+                            } else if (filter === 'unassigned') {
+                                card.style.display = assigned === '' ? 'block' : 'none';
+                            } else if (filter === 'mycases') {
+                                // Match if the assigned string contains the user's email or username
+                                card.style.display = (assigned !== '' && currentUser !== '' && assigned.includes(currentUser)) ? 'block' : 'none';
+                            } else if (filter === 'closed') {
+                                card.style.display = (status === 'Resolved' || status === 'Closed') ? 'block' : 'none';
+                            }
+                        });
+                    });
+                });
+            });
+        </script>
     }
 </div>
 

@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "WFH Approvals";
+    ViewData["Title"] = "Wellness Approvals";
     var requests = (System.Text.Json.JsonElement)ViewBag.Requests;
 }
 
@@ -19,14 +19,14 @@
 }
 
 <div class="glass-card">
-    <h5 class="section-title">✅ Pending WFH Approvals</h5>
+    <h5 class="section-title">✅ Pending Wellness Approvals</h5>
 
     @if (!requests.EnumerateArray().Any())
     {
         <div class="empty-state">
             <div class="empty-state-icon">✅</div>
             <h5>All caught up</h5>
-            <p>No pending WFH requests to review.</p>
+            <p>No pending Wellness requests to review.</p>
         </div>
     }
     else

@@ -313,6 +313,29 @@
         }
       }
     },
+    "/api/ComplaintFiles/{complaintId}": {
+      "get": {
+        "tags": [
+          "ComplaintFiles"
+        ],
+        "parameters": [
+          {
+            "name": "complaintId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/ComplaintStatusHistory/add": {
       "post": {
         "tags": [
@@ -441,6 +464,18 @@
       "get": {
         "tags": [
           "Dashboard"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/EmergencyAlert/test-di": {
+      "get": {
+        "tags": [
+          "EmergencyAlert"
         ],
         "responses": {
           "200": {
@@ -776,6 +811,18 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Notification/test-email": {
+      "get": {
+        "tags": [
+          "Notification"
+        ],
         "responses": {
           "200": {
             "description": "OK"
