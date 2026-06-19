@@ -22,6 +22,38 @@ namespace SheSecure.Safety_WellnessService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("SheSecure.Safety_WellnessService.Entities.AuditLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Entity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AuditLogs");
+                });
+
             modelBuilder.Entity("SheSecure.Safety_WellnessService.Entities.EmergencyAlert", b =>
                 {
                     b.Property<int>("Id")
@@ -39,6 +71,10 @@ namespace SheSecure.Safety_WellnessService.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResolutionNotes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -92,6 +128,47 @@ namespace SheSecure.Safety_WellnessService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SafeReachChecks");
+                });
+
+            modelBuilder.Entity("SheSecure.Safety_WellnessService.Entities.SystemSetting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SettingKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SettingValue")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SystemSettings");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Number of minutes to wait before escalating an unacknowledged Safe Check-in.",
+                            SettingKey = "SafeReach_Escalation_Minutes",
+                            SettingValue = "30"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Global admin email address to receive critical SOS alerts.",
+                            SettingKey = "Admin_Alert_Email",
+                            SettingValue = "admin@shesecure.com"
+                        });
                 });
 
             modelBuilder.Entity("SheSecure.Safety_WellnessService.Models.MoodLog", b =>
@@ -148,6 +225,9 @@ namespace SheSecure.Safety_WellnessService.Migrations
                     b.Property<string>("Priority")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RequestDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("RequestType")
                         .IsRequired()

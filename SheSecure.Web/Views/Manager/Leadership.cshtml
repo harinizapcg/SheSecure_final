@@ -1,0 +1,39 @@
+@{
+    ViewData["Title"] = "Team Leadership Portal";
+}
+
+<div class="glass-card mt-2 text-center p-5">
+    <i class="bi bi-diagram-3 text-primary" style="font-size: 4rem;"></i>
+    <h3 class="text-white mt-4">Welcome to the Leadership Portal</h3>
+    <p class="text-muted fs-5 mt-2">Use the sidebar to navigate your team management tools.</p>
+    
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <a asp-controller="WFH" asp-action="Approvals" class="text-decoration-none">
+                <div class="p-4 rounded text-center hover-lift" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <i class="bi bi-check2-square text-info fs-1"></i>
+                    <h5 class="text-white mt-3">Wellness Approvals</h5>
+                    <p class="text-muted small">Approve or reject leave requests</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a asp-controller="Manager" asp-action="SafeChecks" class="text-decoration-none">
+                <div class="p-4 rounded text-center hover-lift" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <i class="bi bi-shield-lock text-warning fs-1"></i>
+                    <h5 class="text-white mt-3">Team Safe Checks</h5>
+                    <p class="text-muted small">Monitor active travel statuses</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a asp-controller="Manager" asp-action="Directory" class="text-decoration-none">
+                <div class="p-4 rounded text-center hover-lift" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <i class="bi bi-people text-success fs-1"></i>
+                    <h5 class="text-white mt-3">Team Directory</h5>
+                    <p class="text-muted small">Quick emergency contacts</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

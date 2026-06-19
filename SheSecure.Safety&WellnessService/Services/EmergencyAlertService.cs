@@ -64,6 +64,8 @@ using Microsoft.Extensions.Configuration;
 using SheSecure.Safety_WellnessService.DTOs.Requests;
 using SheSecure.Safety_WellnessService.Entities;
 using SheSecure.Safety_WellnessService.Interfaces;
+using SheSecure.Safety_WellnessService.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace SheSecure.Safety_WellnessService.Services
 {
@@ -75,6 +77,7 @@ namespace SheSecure.Safety_WellnessService.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
+        private readonly WellnessDbContext _dbContext;
 
         public EmergencyAlertService(
             IEmergencyAlertRepository repository,
@@ -82,7 +85,8 @@ namespace SheSecure.Safety_WellnessService.Services
             ILogger<EmergencyAlertService> logger,
             IHttpContextAccessor httpContextAccessor,
             IEmailService emailService,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            WellnessDbContext dbContext)
         {
             _repository = repository;
             _http = httpFactory.CreateClient("NotificationService");
@@ -90,6 +94,7 @@ namespace SheSecure.Safety_WellnessService.Services
             _httpContextAccessor = httpContextAccessor;
             _emailService = emailService;
             _configuration = configuration;
+            _dbContext = dbContext;
         }
 
         private (string employeeId, string email, string role) GetUserContext()
@@ -147,7 +152,9 @@ namespace SheSecure.Safety_WellnessService.Services
         {
             try
             {
-                var adminEmail = _configuration["AdminSettings:AdminEmail"] ?? "admin@shesecure.com";
+                var adminEmailSetting = await _dbContext.SystemSettings.FirstOrDefaultAsync(s => s.SettingKey == "Admin_Alert_Email");
+                var adminEmail = adminEmailSetting != null ? adminEmailSetting.SettingValue : (_configuration["AdminSettings:AdminEmail"] ?? "admin@shesecure.com");
+                
                 var subject = "🚨 SOS Alert Triggered";
                 
                 var (userId, userEmail, role) = GetUserContext();
@@ -218,6 +225,7 @@ namespace SheSecure.Safety_WellnessService.Services
 
             alert.Status = "Resolved";
             alert.ResolvedAt = DateTime.UtcNow;
+            alert.ResolutionNotes = dto.ResolutionNotes;
 
             await _repository.UpdateAlertAsync(alert);
 

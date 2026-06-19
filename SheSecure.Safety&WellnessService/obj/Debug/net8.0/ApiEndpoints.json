@@ -1,5 +1,51 @@
 [
   {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.AuditController",
+    "Method": "GetAuditLogs",
+    "RelativePath": "api/Audit",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SheSecure.Safety_WellnessService.Entities.AuditLog, SheSecure.Safety\u0026WellnessService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.AuditController",
+    "Method": "PostAuditLog",
+    "RelativePath": "api/Audit",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "log",
+        "Type": "SheSecure.Safety_WellnessService.Entities.AuditLog",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SheSecure.Safety_WellnessService.Entities.AuditLog",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "SheSecure.Safety_WellnessService.Controllers.EmergencyAlertController",
     "Method": "GetById",
     "RelativePath": "api/EmergencyAlert/{id}",
@@ -290,6 +336,47 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.SystemSettingsController",
+    "Method": "GetSystemSettings",
+    "RelativePath": "api/SystemSettings",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[SheSecure.Safety_WellnessService.Entities.SystemSetting, SheSecure.Safety\u0026WellnessService, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "SheSecure.Safety_WellnessService.Controllers.SystemSettingsController",
+    "Method": "PutSystemSetting",
+    "RelativePath": "api/SystemSettings/{key}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "key",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "value",
+        "Type": "System.String",
         "IsRequired": true
       }
     ],

@@ -17,6 +17,16 @@ namespace SheSecure.Web.Controllers
             if (HttpContext.Session.GetString("Token") == null)
                 return RedirectToAction("Login", "Auth");
 
+            var role = HttpContext.Session.GetString("Role");
+            if (role == "Security")
+                return RedirectToAction("All", "Emergency");
+            if (role == "Admin")
+                return RedirectToAction("All", "Complaint");
+            if (role == "Manager" && HttpContext.Session.GetString("ManagerMode") != "Personal")
+                return RedirectToAction("Index", "Manager");
+            if (role == "HR" && HttpContext.Session.GetString("HRMode") != "Personal")
+                return RedirectToAction("Index", "HR");
+
             var client = _httpClientFactory.CreateClient("DashboardService");
             var token = HttpContext.Session.GetString("Token");
             client.DefaultRequestHeaders.Authorization =

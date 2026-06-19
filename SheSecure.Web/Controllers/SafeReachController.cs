@@ -29,11 +29,53 @@ namespace SheSecure.Web.Controllers
             return client;
         }
 
-        // GET — show all check-ins + form
+        // GET — show my check-ins + form
         public async Task<IActionResult> Index()
         {
             if (HttpContext.Session.GetString("Token") == null)
                 return RedirectToAction("Login", "Auth");
+
+            var client = GetClient();
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+            var userId = HttpContext.Session.GetString("UserId") ?? "1";
+            
+            try
+            {
+                var response = await client.GetAsync($"{baseUrl}api/SafeReach/by-employee/{userId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var contentString = await response.Content.ReadAsStringAsync();
+                    var records = JsonDocument.Parse(contentString).RootElement;
+                    ViewBag.Records = records;
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    _logger.LogError("API Error {StatusCode}: {ErrorContent}", response.StatusCode, errorContent);
+                    ViewBag.Records = JsonDocument.Parse("[]").RootElement;
+                    TempData["Error"] = "Unable to fetch records at this time.";
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Network error while fetching SafeReach records.");
+                ViewBag.Records = JsonDocument.Parse("[]").RootElement;
+                TempData["Error"] = "A network error occurred. Please try again later.";
+            }
+
+            ViewData["Title"] = "My Safe Check-In";
+            return View();
+        }
+
+        // GET — HR/Admin: all safe check-ins
+        public async Task<IActionResult> All()
+        {
+            if (HttpContext.Session.GetString("Token") == null)
+                return RedirectToAction("Login", "Auth");
+
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "HR" && role != "Admin" && role != "Manager")
+                return RedirectToAction("Index", "Dashboard");
 
             var client = GetClient();
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
@@ -62,7 +104,7 @@ namespace SheSecure.Web.Controllers
                 TempData["Error"] = "A network error occurred. Please try again later.";
             }
 
-            ViewData["Title"] = "Safe Check-In";
+            ViewData["Title"] = "All Safe Check-Ins";
             return View();
         }
 

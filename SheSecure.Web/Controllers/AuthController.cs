@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,12 +16,22 @@ namespace SheSecure.Web.Controllers
             _httpClientFactory = httpClientFactory;
         }
 
-        // ── LOGIN GET ──
         [HttpGet]
         public IActionResult Login()
         {
             if (HttpContext.Session.GetString("Token") != null)
+            {
+                var role = HttpContext.Session.GetString("Role");
+                if (role == "Security")
+                    return RedirectToAction("All", "Emergency");
+                if (role == "Admin")
+                    return RedirectToAction("All", "Complaint");
+                if (role == "Manager")
+                    return RedirectToAction("Index", "Manager");
+                if (role == "HR")
+                    return RedirectToAction("Index", "HR");
                 return RedirectToAction("Index", "Dashboard");
+            }
             return View();
         }
 
@@ -70,15 +80,34 @@ namespace SheSecure.Web.Controllers
             HttpContext.Session.SetString("UserName", userName);
             HttpContext.Session.SetString("UserId", userId);
 
+            if (role == "Security")
+                return RedirectToAction("All", "Emergency");
+            if (role == "Admin")
+                return RedirectToAction("All", "Complaint");
+            if (role == "Manager")
+                return RedirectToAction("Index", "Manager");
+            if (role == "HR")
+                return RedirectToAction("Index", "HR");
+
             return RedirectToAction("Index", "Dashboard");
         }
 
-        // ── REGISTER GET ──
         [HttpGet]
         public IActionResult Register()
         {
             if (HttpContext.Session.GetString("Token") != null)
+            {
+                var role = HttpContext.Session.GetString("Role");
+                if (role == "Security")
+                    return RedirectToAction("All", "Emergency");
+                if (role == "Admin")
+                    return RedirectToAction("All", "Complaint");
+                if (role == "Manager")
+                    return RedirectToAction("Index", "Manager");
+                if (role == "HR")
+                    return RedirectToAction("Index", "HR");
                 return RedirectToAction("Index", "Dashboard");
+            }
             return View();
         }
 

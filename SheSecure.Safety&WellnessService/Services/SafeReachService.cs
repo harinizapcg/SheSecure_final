@@ -127,6 +127,8 @@ using SheSecure.Safety_WellnessService.DTOs;
 using SheSecure.Safety_WellnessService.Entities;
 using SheSecure.Safety_WellnessService.Interfaces;
 using SheSecure.Safety_WellnessService.Jobs;
+using SheSecure.Safety_WellnessService.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace SheSecure.Safety_WellnessService.Services
 {
@@ -136,17 +138,20 @@ namespace SheSecure.Safety_WellnessService.Services
         private readonly HttpClient _http;
         private readonly ILogger<SafeReachService> _logger;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly WellnessDbContext _dbContext;
 
         public SafeReachService(
             ISafeReachRepository repository,
             IHttpClientFactory httpFactory,
             ILogger<SafeReachService> logger,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            WellnessDbContext dbContext)
         {
             _repository = repository;
             _http = httpFactory.CreateClient("NotificationService");
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _dbContext = dbContext;
         }
 
         private (string employeeId, string email, string role) GetUserContext()
@@ -207,8 +212,15 @@ namespace SheSecure.Safety_WellnessService.Services
                 BackgroundJob.Enqueue<SafeReachReminderJob>(
                     job => job.SendReminderAsync(check.Id));
 
-            var escalationDelay =
-                expectedUtc - now + TimeSpan.FromMinutes(30);
+            var escalationMinutesSetting = await _dbContext.SystemSettings
+                .FirstOrDefaultAsync(s => s.SettingKey == "SafeReach_Escalation_Minutes");
+            int escalationMinutes = 30; // Default
+            if (escalationMinutesSetting != null && int.TryParse(escalationMinutesSetting.SettingValue, out int parsed))
+            {
+                escalationMinutes = parsed;
+            }
+
+            var escalationDelay = expectedUtc - now + TimeSpan.FromMinutes(escalationMinutes);
             if (escalationDelay > TimeSpan.Zero)
                 BackgroundJob.Schedule<SafeReachReminderJob>(
                     job => job.CheckAndEscalateAsync(check.Id),
@@ -216,7 +228,7 @@ namespace SheSecure.Safety_WellnessService.Services
             else
                 BackgroundJob.Schedule<SafeReachReminderJob>(
                     job => job.CheckAndEscalateAsync(check.Id),
-                    TimeSpan.FromMinutes(30));
+                    TimeSpan.FromMinutes(escalationMinutes));
         }
 
         public async Task AcknowledgeAsync(
@@ -268,7 +280,7 @@ namespace SheSecure.Safety_WellnessService.Services
         public async Task<object> GetAllAsync()
         {
             var (userId, email, role) = GetUserContext();
-            if (role == "HR" || role == "Admin" || role == "Manager")
+            if (role == "HR" || role == "Admin" || role == "Manager" || role == "Security")
             {
                 return await _repository.GetAllAsync();
             }
@@ -287,7 +299,7 @@ namespace SheSecure.Safety_WellnessService.Services
                     "Safe Reach record not found");
 
             var (userId, email, role) = GetUserContext();
-            if (role != "HR" && role != "Admin" && role != "Manager" && check.EmployeeId != userId && check.EmployeeId != email)
+            if (role != "HR" && role != "Admin" && role != "Manager" && role != "Security" && check.EmployeeId != userId && check.EmployeeId != email)
             {
                 throw new UnauthorizedAccessException("You are not authorized to view this record.");
             }
@@ -299,7 +311,7 @@ namespace SheSecure.Safety_WellnessService.Services
             string employeeId)
         {
             var (userId, email, role) = GetUserContext();
-            if (role != "HR" && role != "Admin" && role != "Manager" && employeeId != userId && employeeId != email)
+            if (role != "HR" && role != "Admin" && role != "Manager" && role != "Security" && employeeId != userId && employeeId != email)
             {
                 throw new UnauthorizedAccessException("You are not authorized to view these records.");
             }

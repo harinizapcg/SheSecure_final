@@ -29,9 +29,10 @@ namespace SheSecure.Web.Controllers
                 return RedirectToAction("Login", "Auth");
 
             var client = GetClient();
+            var userId = HttpContext.Session.GetString("UserId") ?? "1";
             try
             {
-                var response = await client.GetStringAsync("api/Complaint/all");
+                var response = await client.GetStringAsync($"api/Complaint/by-employee/{userId}");
                 ViewBag.Complaints = JsonDocument.Parse(response).RootElement;
             }
             catch

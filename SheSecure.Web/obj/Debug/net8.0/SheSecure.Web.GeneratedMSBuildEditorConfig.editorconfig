@@ -22,6 +22,18 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/Admin/AuditLogs.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cQXVkaXRMb2dzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/Admin/Settings.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cU2V0dGluZ3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/Admin/Users.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cVXNlcnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/POC/SheSecureH-main/SheSecure.Web/Views/Auth/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQXV0aFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -54,12 +66,52 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1lcmdlbmN5XEFsbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/Emergency/Directory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1lcmdlbmN5XERpcmVjdG9yeS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/Emergency/Escalations.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1lcmdlbmN5XEVzY2FsYXRpb25zLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/POC/SheSecureH-main/SheSecure.Web/Views/Emergency/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1lcmdlbmN5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/Emergency/Tracking.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1lcmdlbmN5XFRyYWNraW5nLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/HR/Administration.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSFJcQWRtaW5pc3RyYXRpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/HR/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSFJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/Manager/Directory.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxEaXJlY3RvcnkuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/Manager/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/Manager/Leadership.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxMZWFkZXJzaGlwLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/Manager/SafeChecks.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWFuYWdlclxTYWZlQ2hlY2tzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/POC/SheSecureH-main/SheSecure.Web/Views/Notification/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTm90aWZpY2F0aW9uXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/POC/SheSecureH-main/SheSecure.Web/Views/SafeReach/All.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2FmZVJlYWNoXEFsbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/POC/SheSecureH-main/SheSecure.Web/Views/SafeReach/Index.cshtml]

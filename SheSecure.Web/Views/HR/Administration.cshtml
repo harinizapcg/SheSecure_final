@@ -1,0 +1,47 @@
+@{
+    ViewData["Title"] = "HR Administration Portal";
+}
+
+<div class="glass-card mt-2 text-center p-5">
+    <i class="bi bi-briefcase text-primary" style="font-size: 4rem;"></i>
+    <h3 class="text-white mt-4">Welcome to HR Administration</h3>
+    <p class="text-muted fs-5 mt-2">Use the sidebar to navigate your HR oversight tools.</p>
+    
+    <div class="row mt-5 justify-content-center">
+        <div class="col-md-4">
+            <a asp-controller="Complaint" asp-action="All" class="text-decoration-none">
+                <div class="p-4 rounded text-center hover-lift" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <i class="bi bi-folder2-open text-warning fs-1"></i>
+                    <h5 class="text-white mt-3">POSH Complaints</h5>
+                    <p class="text-muted small">Investigate and resolve issues</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a asp-controller="SafeReach" asp-action="All" class="text-decoration-none">
+                <div class="p-4 rounded text-center hover-lift" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                    <i class="bi bi-shield-lock text-success fs-1"></i>
+                    <h5 class="text-white mt-3">Global Safe Checks</h5>
+                    <p class="text-muted small">Monitor compliance metrics</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <div class="row mt-4 justify-content-center">
+        <div class="col-md-4">
+            <div class="p-4 rounded text-center" style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); opacity: 0.6;">
+                <i class="bi bi-person-lines-fill text-secondary fs-1"></i>
+                <h5 class="text-white mt-3">ROMSS</h5>
+                <p class="text-muted small">Recruitment & Onboarding</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 rounded text-center" style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1); opacity: 0.6;">
+                <i class="bi bi-bar-chart-line text-secondary fs-1"></i>
+                <h5 class="text-white mt-3">Wellness Analytics</h5>
+                <p class="text-muted small">Coming soon</p>
+            </div>
+        </div>
+    </div>
+</div>

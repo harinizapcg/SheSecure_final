@@ -244,10 +244,10 @@
                         for (int i = 0; i < historyArray.Length; i++)
                         {
                             var h = historyArray[i];
-                            var oldSt = h.GetProperty("oldStatus").GetString();
-                            var newSt = h.GetProperty("newStatus").GetString();
-                            var remarks = h.GetProperty("remarks").GetString();
-                            var changedAt = h.GetProperty("changedAt").GetString();
+                            var oldSt = h.TryGetProperty("oldStatus", out var osProp) && osProp.ValueKind != System.Text.Json.JsonValueKind.Null ? osProp.GetString() : "";
+                            var newSt = h.TryGetProperty("newStatus", out var nsProp) && nsProp.ValueKind != System.Text.Json.JsonValueKind.Null ? nsProp.GetString() : "";
+                            var remarks = h.TryGetProperty("remarks", out var rmProp) && rmProp.ValueKind != System.Text.Json.JsonValueKind.Null ? rmProp.GetString() : "";
+                            var changedAt = h.TryGetProperty("changedAt", out var caProp) && caProp.ValueKind != System.Text.Json.JsonValueKind.Null ? caProp.GetString() : "";
                             var isLatest = i == historyArray.Length - 1; // latest is at the end of the array typically, or reverse? Assuming last is latest
 
                             <div class="timeline-item @(isLatest ? "active" : "")">

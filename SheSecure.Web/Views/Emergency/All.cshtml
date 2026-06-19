@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "All Emergency Alerts";
+    ViewData["Title"] = "SOS Alerts";
     var alerts = (System.Text.Json.JsonElement)ViewBag.Alerts;
     var role = Context.Session.GetString("Role") ?? "";
 }
@@ -19,132 +19,8 @@
     </div>
 }
 
-<div class="glass-card mb-4" style="padding: 0; overflow: hidden; height: 450px; position: relative; border: 1px solid rgba(14, 165, 233, 0.4);">
-    <div id="commandCenterMap" style="height: 100%; width: 100%; z-index: 1;"></div>
-    <div style="position: absolute; top: 15px; left: 15px; z-index: 400; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); padding: 10px 16px; border-radius: 8px; border: 1px solid rgba(14, 165, 233, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
-        <i class="bi bi-globe me-2 text-info d-inline-block"></i>
-        <span class="text-white fw-bold" style="font-size: 13px; letter-spacing: 1px;">GLOBAL COMMAND CENTER - ACTIVE TRACKING</span>
-    </div>
-</div>
-
-<!-- Leaflet Map Integration & Command Center Logic -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        if (document.getElementById('commandCenterMap')) {
-            // Initialize map to Hyderabad by default
-            var map = L.map('commandCenterMap').setView([17.3850, 78.4867], 13);
-
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; OpenStreetMap',
-                subdomains: 'abcd',
-                maxZoom: 20
-            }).addTo(map);
-
-            // Draw Global Safe Zones, Risk Areas, and Hospitals
-            L.circle([17.3850, 78.4867], {
-                color: '#10b981',
-                fillColor: '#10b981',
-                fillOpacity: 0.15,
-                weight: 2,
-                radius: 400
-            }).addTo(map).bindPopup('<b style="color:#0f172a">Safe Zone (Main Campus)</b><br><span style="color:#64748b; font-size:12px;">High security presence & surveillance.</span>');
-
-            L.circle([17.3950, 78.4800], {
-                color: '#ef4444',
-                fillColor: '#ef4444',
-                fillOpacity: 0.15,
-                weight: 2,
-                dashArray: '5, 5',
-                radius: 600
-            }).addTo(map).bindPopup('<b style="color:#ef4444">Caution: High-Risk Area</b><br><span style="color:#64748b; font-size:12px;">Recent incident reports. Avoid walking alone at night.</span>');
-
-            L.circle([17.4050, 78.4950], {
-                color: '#0ea5e9',
-                fillColor: '#0ea5e9',
-                fillOpacity: 0.2,
-                weight: 2,
-                radius: 250
-            }).addTo(map).bindPopup('<b style="color:#0ea5e9">Partnered Hospital</b><br><span style="color:#64748b; font-size:12px;">24/7 Emergency Trauma Care.</span>');
-
-            // Fetch alerts from the backend payload dumped into the view
-            var alertsData = @Html.Raw(alerts.ToString());
-            var bounds = [];
-
-            alertsData.forEach(function(alert) {
-                if (alert.status !== 'Active') return; // Only plot active alerts
-
-                // Try to extract Lat/Lng
-                var match = alert.location.match(/\[Lat:([^,]+),\s*Lng:([^\]]+)\]/);
-                var lat, lng;
-                
-                if (match) {
-                    lat = parseFloat(match[1]);
-                    lng = parseFloat(match[2]);
-                } else {
-                    // Fallback for legacy records without GPS
-                    var locStr = alert.location.toLowerCase();
-                    if (locStr.includes('hyderabad')) {
-                        lat = 17.3850 + (Math.random() - 0.5) * 0.05;
-                        lng = 78.4867 + (Math.random() - 0.5) * 0.05;
-                    } else if (locStr.includes('mumbai')) {
-                        lat = 19.0760 + (Math.random() - 0.5) * 0.05;
-                        lng = 72.8777 + (Math.random() - 0.5) * 0.05;
-                    } else if (locStr.includes('pune')) {
-                        lat = 18.5204 + (Math.random() - 0.5) * 0.05;
-                        lng = 73.8567 + (Math.random() - 0.5) * 0.05;
-                    } else if (locStr.includes('chennai')) {
-                        lat = 13.0827 + (Math.random() - 0.5) * 0.05;
-                        lng = 80.2707 + (Math.random() - 0.5) * 0.05;
-                    } else if (locStr.includes('delhi') || locStr.includes('noida') || locStr.includes('gurugram')) {
-                        lat = 28.6139 + (Math.random() - 0.5) * 0.05;
-                        lng = 77.2090 + (Math.random() - 0.5) * 0.05;
-                    } else if (locStr.includes('bangalore') || locStr.includes('bengaluru')) {
-                        lat = 12.9716 + (Math.random() - 0.5) * 0.05;
-                        lng = 77.5946 + (Math.random() - 0.5) * 0.05;
-                    } else {
-                        // Default to Hyderabad if no GPS and no recognized city
-                        lat = 17.3850 + (Math.random() - 0.5) * 0.05;
-                        lng = 78.4867 + (Math.random() - 0.5) * 0.05;
-                    }
-                }
-
-                var severityColor = alert.severity === 'Critical' ? '#ef4444' : (alert.severity === 'High' ? '#f59e0b' : '#3b82f6');
-                var animationClass = alert.severity === 'Critical' ? 'pulse-sos' : '';
-
-                var customIcon = L.divIcon({
-                    className: 'custom-map-icon',
-                    html: `<div style="width: 20px; height: 20px; background: ${severityColor}; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 15px ${severityColor}; animation: ${animationClass} 1.5s infinite;"></div>`,
-                    iconSize: [20, 20],
-                    iconAnchor: [10, 10]
-                });
-
-                var marker = L.marker([lat, lng], {icon: customIcon}).addTo(map);
-                bounds.push([lat, lng]);
-
-                var cleanLocation = alert.location.replace(/\[Lat:.*\]/, '').trim();
-                
-                marker.bindPopup(`
-                    <div style="min-width: 150px;">
-                        <span class="badge bg-dark text-white mb-2 border border-secondary" style="font-family:monospace;">Alert #${alert.id}</span>
-                        <h6 style="color:#0f172a; margin-bottom:4px; font-weight:bold; font-size:14px;">${cleanLocation}</h6>
-                        <span style="color:${severityColor}; font-size:12px; font-weight:bold; text-transform:uppercase;">${alert.severity} SEVERITY</span><br>
-                        <span style="color:#64748b; font-size:11px;">Employee ID: ${alert.employeeId}</span>
-                    </div>
-                `);
-            });
-
-            // Auto-zoom map to fit all active emergencies
-            if (bounds.length > 0) {
-                map.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
-            }
-        }
-    });
-</script>
-
-<div class="glass-card">
-    <h5 class="section-title text-danger">🚨 All Emergency Alerts</h5>
+<div class="glass-card mt-2">
+    <h5 class="section-title text-danger">🚨 Active Emergency Alerts</h5>
 
     @if (!alerts.EnumerateArray().Any())
     {
@@ -232,7 +108,7 @@
             .sos-step.active .sos-label { color: var(--ss-alert); }
         </style>
 
-        <div class="mt-4">
+        <div class="mt-4 row">
             @foreach (var a in alerts.EnumerateArray())
             {
                 var id = a.GetProperty("id").GetInt32();
@@ -242,59 +118,100 @@
                 var severity = a.GetProperty("severity").GetString();
                 var status = a.GetProperty("status").GetString() ?? "Active";
                 var triggeredAt = a.GetProperty("triggeredAt").GetString();
+                string resolutionNotes = "";
+                if (a.TryGetProperty("resolutionNotes", out var rNotes) && rNotes.ValueKind == System.Text.Json.JsonValueKind.String)
+                {
+                    resolutionNotes = rNotes.GetString() ?? "";
+                }
 
                 var isResolved = status == "Resolved";
                 var severityClass = severity == "Critical" ? "error" : severity == "High" ? "warning" : "info";
 
-                <div class="sos-card @(isResolved ? "resolved" : "") fade-in-up">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <div class="d-flex align-items-center gap-2 mb-1">
-                                <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--ss-muted); font-family: monospace;">#@id</span>
-                                <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--ss-muted); font-family: monospace;"><i class="bi bi-person me-1"></i>Emp: @empId</span>
-                                <span class="status-chip @severityClass px-2 py-0" style="font-size: 10px;">@severity Severity</span>
+                <div class="col-md-6 mb-3">
+                    <div class="sos-card h-100 @(isResolved ? "resolved" : "") fade-in-up">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--ss-muted); font-family: monospace;">#@id</span>
+                                    <span class="badge" style="background: rgba(255,255,255,0.05); color: var(--ss-muted); font-family: monospace;"><i class="bi bi-person me-1"></i>Emp: @empId</span>
+                                    <span class="status-chip @severityClass px-2 py-0" style="font-size: 10px;">@severity Severity</span>
+                                </div>
+                                @{
+                                    var displayLocation = System.Text.RegularExpressions.Regex.Replace(location ?? "", @"\[Lat:.*\]", "").Trim();
+                                }
+                                <h5 class="text-white fw-bold mb-1"><i class="bi bi-geo-alt text-danger me-1"></i>@displayLocation</h5>
+                                <div style="font-size: 12px; color: var(--ss-muted);">
+                                    <i class="bi bi-clock me-1"></i> Triggered @TimeHelper.ToIST(triggeredAt!).ToString("dd MMM yyyy, hh:mm tt")
+                                </div>
                             </div>
-                            @{
-                                var displayLocation = System.Text.RegularExpressions.Regex.Replace(location ?? "", @"\[Lat:.*\]", "").Trim();
-                            }
-                            <h5 class="text-white fw-bold mb-1"><i class="bi bi-geo-alt text-danger me-1"></i>@displayLocation</h5>
-                            <div style="font-size: 12px; color: var(--ss-muted);">
-                                <i class="bi bi-clock me-1"></i> Triggered @TimeHelper.ToIST(triggeredAt!).ToString("dd MMM yyyy, hh:mm tt")
+                            <div class="d-flex flex-column align-items-end gap-2">
+                                <span class="status-chip @(isResolved ? "success" : "error") px-3 py-1 fw-bold d-flex align-items-center gap-2" style="border-radius: 8px;">
+                                    @if(!isResolved) { <span style="width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block;animation:pulse-sos 1s infinite;"></span> }
+                                    @status
+                                </span>
                             </div>
                         </div>
-                        <div class="d-flex flex-column align-items-end gap-2">
-                            <span class="status-chip @(isResolved ? "success" : "error") px-3 py-1 fw-bold d-flex align-items-center gap-2" style="border-radius: 8px;">
-                                @if(!isResolved) { <span style="width:8px;height:8px;border-radius:50%;background:currentColor;display:inline-block;animation:pulse-sos 1s infinite;"></span> }
-                                @status
-                            </span>
-                            @if (status == "Active" && (role == "Security" || role == "Admin"))
-                            {
-                                <form method="post" asp-action="Resolve" class="m-0">
-                                    <input type="hidden" name="alertId" value="@id" />
-                                    <button type="submit" class="btn-ss-outline" style="padding: 4px 12px; font-size: 12px; border-color: #10b981; color: #10b981;">
-                                        <i class="bi bi-check2-all me-1"></i>Mark Resolved
-                                    </button>
-                                </form>
-                            }
-                        </div>
-                    </div>
-                    
-                    <p class="mb-0 text-white opacity-75" style="font-size: 14px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
-                        @description
-                    </p>
+                        
+                        <p class="mb-3 text-white opacity-75" style="font-size: 14px; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px;">
+                            @description
+                        </p>
 
-                    <div class="sos-timeline">
-                        <div class="sos-step completed">
-                            <div class="sos-icon"><i class="bi bi-broadcast"></i></div>
-                            <div class="sos-label">Alert Triggered</div>
-                        </div>
-                        <div class="sos-step @(isResolved ? "completed" : "active")">
-                            <div class="sos-icon"><i class="bi @(isResolved ? "bi-check-lg" : "bi-shield-exclamation")"></i></div>
-                            <div class="sos-label">Security Dispatched</div>
-                        </div>
-                        <div class="sos-step @(isResolved ? "completed" : "")">
-                            <div class="sos-icon"><i class="bi bi-shield-check"></i></div>
-                            <div class="sos-label">Incident Resolved</div>
+                        @if (isResolved && !string.IsNullOrEmpty(resolutionNotes))
+                        {
+                            <div class="mt-3 p-3 rounded" style="background: rgba(16, 185, 129, 0.1); border-left: 3px solid #10b981;">
+                                <h6 class="text-success fw-bold mb-1" style="font-size: 12px;"><i class="bi bi-journal-text me-1"></i> Resolution Notes</h6>
+                                <p class="mb-0 text-white opacity-75" style="font-size: 13px;">@resolutionNotes</p>
+                            </div>
+                        }
+
+                        <!-- Quick Actions Row -->
+                        @if (!isResolved && (role == "Security" || role == "Admin"))
+                        {
+                            <div class="d-flex gap-2 mb-3 mt-3">
+                                <button type="button" class="btn btn-sm ms-auto" style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #10b981; font-size: 12px; font-weight: bold;" data-bs-toggle="modal" data-bs-target="#resolveModal-@id">
+                                    <i class="bi bi-check2-all me-1"></i> Mark Resolved
+                                </button>
+                            </div>
+
+                            <!-- Resolve Modal -->
+                            <div class="modal fade" id="resolveModal-@id" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content glass-card border-0" style="background: var(--ss-bg); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                                        <div class="modal-header border-secondary border-opacity-25">
+                                            <h5 class="modal-title text-success"><i class="bi bi-shield-check me-2"></i> Resolve Alert #@id</h5>
+                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form method="post" asp-action="Resolve">
+                                            <div class="modal-body">
+                                                <input type="hidden" name="alertId" value="@id" />
+                                                <div class="mb-3">
+                                                    <label class="form-label text-muted" style="font-size: 13px;">Action Log / Resolution Notes <span class="text-danger">*</span></label>
+                                                    <textarea class="form-control" name="resolutionNotes" rows="4" required placeholder="Describe the actions taken to secure the employee and resolve this emergency..."></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer border-secondary border-opacity-25">
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-success"><i class="bi bi-check-circle me-1"></i> Confirm Resolution</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="sos-timeline mt-auto">
+                            <div class="sos-step completed">
+                                <div class="sos-icon"><i class="bi bi-broadcast"></i></div>
+                                <div class="sos-label">Alert Triggered</div>
+                            </div>
+                            <div class="sos-step @(isResolved ? "completed" : "active")">
+                                <div class="sos-icon"><i class="bi @(isResolved ? "bi-check-lg" : "bi-shield-exclamation")"></i></div>
+                                <div class="sos-label">Security Dispatched</div>
+                            </div>
+                            <div class="sos-step @(isResolved ? "completed" : "")">
+                                <div class="sos-icon"><i class="bi bi-shield-check"></i></div>
+                                <div class="sos-label">Incident Resolved</div>
+                            </div>
                         </div>
                     </div>
                 </div>

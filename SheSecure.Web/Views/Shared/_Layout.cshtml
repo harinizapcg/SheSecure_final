@@ -57,10 +57,14 @@
         var userName = Context.Session.GetString("UserName") ?? "User";
         var initials = userName.Length > 0 ? userName[0].ToString().ToUpper() : "U";
         var isLoggedIn = Context.Session.GetString("Token") != null;
+        var managerMode = Context.Session.GetString("ManagerMode");
+        bool hideSidebar = ViewBag.HideSidebar == true;
     }
 
     @if (isLoggedIn)
     {
+        @if (!hideSidebar)
+        {
         <!-- Sidebar -->
         <nav id="sidebar">
             <button id="sidebarToggle" class="btn btn-sm text-white d-none d-md-flex align-items-center justify-content-center" style="position: absolute; right: -15px; top: 30px; background: var(--ss-card); border: 1px solid var(--ss-border); border-radius: 50%; width: 30px; height: 30px; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: all 0.3s ease;">
@@ -73,15 +77,18 @@
             </div>
 
             <div class="sidebar-nav mt-2">
-                <!-- All roles -->
-                <div class="nav-section sidebar-text">Main</div>
-                <a asp-controller="Dashboard" asp-action="Index"
-                       class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
-                    <i class="bi bi-speedometer2"></i> <span class="sidebar-text">Dashboard</span>
-                </a>
+                <!-- All roles (except Security and Admin) -->
+                @if (role != "Security" && role != "Admin")
+                {
+                    <div class="nav-section sidebar-text">Main</div>
+                    <a asp-controller="Dashboard" asp-action="Index"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
+                        <i class="bi bi-speedometer2"></i> <span class="sidebar-text">Dashboard</span>
+                    </a>
+                }
 
-                <!-- Employee & above -->
-                @if (role == "Employee" || role == "Manager" || role == "HR" || role == "Admin")
+                <!-- Employee & above (Personal Features) -->
+                @if (role == "Employee" || (role == "HR" && Context.Session.GetString("HRMode") == "Personal") || (role == "Manager" && managerMode == "Personal"))
                 {
                     <div class="nav-section sidebar-text">Safety</div>
                     <a asp-controller="SafeReach" asp-action="Index"
@@ -115,32 +122,110 @@
                 }
 
                 <!-- HR / POSH -->
-                @if (role == "HR" || role == "Admin")
+                @if (role == "HR" && Context.Session.GetString("HRMode") == "Administration")
                 {
-                    <div class="nav-section sidebar-text">HR / POSH</div>
+                    <div class="nav-section sidebar-text">HR Administration</div>
                     <a asp-controller="Complaint" asp-action="All"
-                           class="nav-item nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Complaint" && ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
                         <i class="bi bi-folder2-open"></i> <span class="sidebar-text">All Complaints</span>
+                    </a>
+                    <a asp-controller="SafeReach" asp-action="All"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "SafeReach" && ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
+                        <i class="bi bi-shield-lock"></i> <span class="sidebar-text">All Safe Check-Ins</span>
                     </a>
                 }
 
                 <!-- Manager -->
-                @if (role == "Manager" || role == "Admin")
+                @if (role == "Manager" && managerMode == "Leadership")
                 {
                     <div class="nav-section sidebar-text">Manager</div>
+                    <a asp-controller="Manager" asp-action="SafeChecks"
+                        class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Manager" && ViewContext.RouteData.Values["action"]?.ToString() == "SafeChecks" ? "active" : "")">
+                        <i class="bi bi-shield-lock"></i> <span class="sidebar-text">Team Safe Checks</span>
+                    </a>
                     <a asp-controller="WFH" asp-action="Approvals"
                         class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "WFH" && ViewContext.RouteData.Values["action"]?.ToString() == "Approvals" ? "active" : "")">
                         <i class="bi bi-check2-square"></i> <span class="sidebar-text">Wellness Approvals</span>
                     </a>
+                    <a asp-controller="Manager" asp-action="Directory"
+                        class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Manager" && ViewContext.RouteData.Values["action"]?.ToString() == "Directory" ? "active" : "")">
+                        <i class="bi bi-people"></i> <span class="sidebar-text">Team Directory</span>
+                    </a>
                 }
 
                 <!-- Security -->
-                @if (role == "Security" || role == "Admin")
+                @if (role == "Security")
                 {
                     <div class="nav-section sidebar-text">Security</div>
+                    
+                    <a asp-controller="Emergency" asp-action="Tracking"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" && ViewContext.RouteData.Values["action"]?.ToString() == "Tracking" ? "active" : "")">
+                        <i class="bi bi-geo-alt-fill"></i> <span class="sidebar-text">Active Tracking</span>
+                    </a>
+                    
                     <a asp-controller="Emergency" asp-action="All"
-                           class="nav-item nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
-                        <i class="bi bi-bell-fill"></i> <span class="sidebar-text">All Alerts</span>
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" && ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
+                        <i class="bi bi-bell-fill"></i> <span class="sidebar-text">SOS Alerts</span>
+                    </a>
+
+                    <a asp-controller="Emergency" asp-action="Escalations"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" && ViewContext.RouteData.Values["action"]?.ToString() == "Escalations" ? "active" : "")">
+                        <i class="bi bi-shield-exclamation"></i> <span class="sidebar-text">Escalations</span>
+                    </a>
+
+                    <a asp-controller="Emergency" asp-action="Directory"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" && ViewContext.RouteData.Values["action"]?.ToString() == "Directory" ? "active" : "")">
+                        <i class="bi bi-journal-medical"></i> <span class="sidebar-text">Emergency Directory</span>
+                    </a>
+                }
+
+                <!-- System Admin Oversight -->
+                @if (role == "Admin")
+                {
+                    <div class="nav-section sidebar-text">System Oversight</div>
+                    
+                    <a asp-controller="Admin" asp-action="Users"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")">
+                        <i class="bi bi-people-fill"></i> <span class="sidebar-text">User Management</span>
+                    </a>
+
+                    <a asp-controller="Admin" asp-action="Settings"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Settings" ? "active" : "")">
+                        <i class="bi bi-sliders"></i> <span class="sidebar-text">System Settings</span>
+                    </a>
+
+                    <a asp-controller="Admin" asp-action="AuditLogs"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "AuditLogs" ? "active" : "")">
+                        <i class="bi bi-shield-check"></i> <span class="sidebar-text">Audit Logs</span>
+                    </a>
+                    
+                    <a asp-controller="Complaint" asp-action="All"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Complaint" && ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
+                        <i class="bi bi-folder2-open"></i> <span class="sidebar-text">All Complaints</span>
+                    </a>
+                    <a asp-controller="SafeReach" asp-action="All"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "SafeReach" && ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
+                        <i class="bi bi-shield-lock"></i> <span class="sidebar-text">All Safe Check-Ins</span>
+                    </a>
+                    <a asp-controller="WFH" asp-action="Approvals"
+                        class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "WFH" && ViewContext.RouteData.Values["action"]?.ToString() == "Approvals" ? "active" : "")">
+                        <i class="bi bi-check2-square"></i> <span class="sidebar-text">Wellness Approvals</span>
+                    </a>
+                    <a asp-controller="Emergency" asp-action="Tracking"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" && ViewContext.RouteData.Values["action"]?.ToString() == "Tracking" ? "active" : "")">
+                        <i class="bi bi-geo-alt-fill"></i> <span class="sidebar-text">Active Tracking</span>
+                    </a>
+                    <a asp-controller="Emergency" asp-action="All"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" && ViewContext.RouteData.Values["action"]?.ToString() == "All" ? "active" : "")">
+                        <i class="bi bi-bell-fill"></i> <span class="sidebar-text">SOS Alerts</span>
+                    </a>
+                    <a asp-controller="Emergency" asp-action="Escalations"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" && ViewContext.RouteData.Values["action"]?.ToString() == "Escalations" ? "active" : "")">
+                        <i class="bi bi-shield-exclamation"></i> <span class="sidebar-text">Escalations</span>
+                    </a>
+                    <a asp-controller="Emergency" asp-action="Directory"
+                           class="nav-item nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Emergency" && ViewContext.RouteData.Values["action"]?.ToString() == "Directory" ? "active" : "")">
+                        <i class="bi bi-journal-medical"></i> <span class="sidebar-text">Emergency Directory</span>
                     </a>
                 }
 
@@ -160,14 +245,37 @@
                         <div class="status-chip neutral mt-1" style="font-size:10px;padding:2px 6px;">@role</div>
                     </div>
                 </div>
+                
+                @if (role == "Manager")
+                {
+                    <form method="post" asp-action="SetMode" asp-controller="Manager" class="mb-2 w-100">
+                        <input type="hidden" name="mode" value="@(managerMode == "Personal" ? "Leadership" : "Personal")" />
+                        <button type="submit" class="btn btn-outline-info w-100 text-center" style="font-size: 13px; border-radius: 8px;">
+                            <i class="bi bi-arrow-left-right me-1"></i> Switch to @(managerMode == "Personal" ? "Leadership" : "Personal")
+                        </button>
+                    </form>
+                }
+                
+                @if (role == "HR")
+                {
+                    var hrMode = Context.Session.GetString("HRMode");
+                    <form method="post" asp-action="SetMode" asp-controller="HR" class="mb-2 w-100">
+                        <input type="hidden" name="mode" value="@(hrMode == "Personal" ? "Administration" : "Personal")" />
+                        <button type="submit" class="btn btn-outline-warning w-100 text-center" style="font-size: 13px; border-radius: 8px;">
+                            <i class="bi bi-arrow-left-right me-1"></i> Switch to @(hrMode == "Personal" ? "Administration" : "Personal")
+                        </button>
+                    </form>
+                }
+                
                 <a asp-controller="Auth" asp-action="Logout" class="btn-ss-outline w-100 text-center d-block nav-item nav-link" style="text-decoration:none;">
                     <i class="bi bi-box-arrow-right"></i> <span class="sidebar-text">Logout</span>
                 </a>
             </div>
         </nav>
+        }
 
         <!-- Main -->
-        <div id="main-content">
+        <div id="main-content" style="@(hideSidebar ? "margin-left: 0; width: 100%;" : "")">
             <div id="topbar">
                 <div class="topbar-title">@ViewData["Title"]</div>
                 <div class="topbar-right">
@@ -179,10 +287,13 @@
                         <i class="bi bi-fonts"></i>
                     </button>
 
-                    <button class="sos-btn hover-lift" onclick="triggerSOS()" title="Emergency SOS" style="position: relative;">
-                        <span style="position:absolute; inset:-2px; border-radius:50%; border:2px solid rgba(239,68,68,0.5); animation: pulse-ring 1.5s infinite;"></span>
-                        SOS
-                    </button>
+                    @if (role != "Security" && role != "Admin")
+                    {
+                        <button class="sos-btn hover-lift" onclick="triggerSOS()" title="Emergency SOS" style="position: relative;">
+                            <span style="position:absolute; inset:-2px; border-radius:50%; border:2px solid rgba(239,68,68,0.5); animation: pulse-ring 1.5s infinite;"></span>
+                            SOS
+                        </button>
+                    }
                     <a asp-controller="Notification" asp-action="Index" style="text-decoration:none">
                         <button class="notif-btn hover-lift">
                             <i class="bi bi-bell"></i>
@@ -205,6 +316,8 @@
         @RenderBody()
     }
 
+        @if (!hideSidebar)
+        {
         <!-- Mobile Bottom Nav -->
         <div class="mobile-bottom-nav">
             <a asp-controller="Dashboard" asp-action="Index" class="mobile-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
@@ -217,13 +330,16 @@
             </a>
             
             <!-- Center FAB -->
-            <div style="position: relative; width: 56px; height: 56px;">
-                <div class="mobile-fab-container">
-                    <button class="mobile-fab" onclick="triggerSOS()">
-                        🚨
-                    </button>
+            @if (role != "Security" && role != "Admin")
+            {
+                <div style="position: relative; width: 56px; height: 56px;">
+                    <div class="mobile-fab-container">
+                        <button class="mobile-fab" onclick="triggerSOS()">
+                            🚨
+                        </button>
+                    </div>
                 </div>
-            </div>
+            }
 
             <a asp-controller="Complaint" asp-action="Index" class="mobile-nav-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Complaint" ? "active" : "")">
                 <i class="bi bi-file-earmark-text"></i>
@@ -234,6 +350,7 @@
                 <span>Alerts</span>
             </a>
         </div>
+        }
 
     <!-- Global Direct SOS Confirmation Overlay -->
     <div id="globalSosConfirmOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); flex-direction: column; align-items: center; justify-content: center; padding: 20px;">

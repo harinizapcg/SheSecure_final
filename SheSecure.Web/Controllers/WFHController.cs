@@ -52,7 +52,7 @@ namespace SheSecure.Web.Controllers
         // POST — Create WFH request
         [HttpPost]
         public async Task<IActionResult> Create(
-            string requestType, string description, string priority)
+            string requestType, string description, string priority, DateTime requestDate)
         {
             var client = GetClient();
             var employeeId = HttpContext.Session.GetString("UserId") ?? "";
@@ -62,7 +62,8 @@ namespace SheSecure.Web.Controllers
                 employeeId,
                 requestType,
                 description,
-                priority
+                priority,
+                requestDate
             });
 
             var content = new StringContent(payload, Encoding.UTF8, "application/json");

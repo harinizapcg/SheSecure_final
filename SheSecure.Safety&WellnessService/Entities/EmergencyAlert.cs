@@ -20,5 +20,7 @@ namespace SheSecure.Safety_WellnessService.Entities
         public DateTime TriggeredAt { get; set; } = DateTime.UtcNow;
 
         public DateTime? ResolvedAt { get; set; }
+
+        public string ResolutionNotes { get; set; } = string.Empty;
     }
 }

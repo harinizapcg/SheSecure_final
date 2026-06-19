@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Team Directory";
+    var users = (System.Text.Json.JsonElement)ViewBag.Users;
+}
+
+<div class="glass-card mt-2">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h5 class="section-title text-primary mb-1"><i class="bi bi-people me-2"></i>Team Roster</h5>
+            <p class="text-muted" style="font-size: 14px;">Contact information for your direct reports.</p>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-dark table-hover" style="background: transparent; margin-bottom: 0;">
+            <thead style="background: rgba(255,255,255,0.05);">
+                <tr>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">Employee ID</th>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">Name</th>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">Email</th>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">Role</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in users.EnumerateArray())
+                {
+                    // For MVP, we show all employees. If there was a department field, we'd filter here.
+                    var role = user.GetProperty("role").GetString();
+                    if (role != "Employee" && role != "Manager") continue; // Just show relevant team members
+                    
+                    var id = user.GetProperty("id").GetString();
+                    var name = user.GetProperty("fullName").GetString();
+                    var email = user.GetProperty("email").GetString();
+
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td class="align-middle text-white opacity-75" style="font-size: 13px; font-family: monospace;">
+                            @(id?.Length > 8 ? id.Substring(0, 8) + "..." : id)
+                        </td>
+                        <td class="align-middle text-white fw-bold" style="font-size: 14px;">
+                            @name
+                        </td>
+                        <td class="align-middle text-white opacity-75" style="font-size: 13px;">
+                            <a href="mailto:@email" class="text-info text-decoration-none">@email</a>
+                        </td>
+                        <td class="align-middle">
+                            <span class="badge @(role == "Manager" ? "bg-info text-dark" : "bg-secondary")">@role</span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

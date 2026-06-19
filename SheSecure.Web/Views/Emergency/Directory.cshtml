@@ -1,0 +1,135 @@
+@{
+    ViewData["Title"] = "Emergency Contacts Directory";
+    var role = Context.Session.GetString("Role") ?? "";
+}
+
+<div class="glass-card mt-2">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h5 class="section-title text-info mb-1"><i class="bi bi-journal-medical me-2"></i>Emergency Contacts</h5>
+            <p class="text-muted" style="font-size: 14px;">Quick reference directory for critical situations and escalations.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Police / Law Enforcement -->
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100" style="border-top: 4px solid #3b82f6; background: rgba(59, 130, 246, 0.05);">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="me-3 p-3 rounded-circle bg-primary bg-opacity-10 text-primary">
+                        <i class="bi bi-shield-lock-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-0">Law Enforcement</h6>
+                        <span class="text-muted" style="font-size: 12px;">Local Police Precinct</span>
+                    </div>
+                </div>
+                <hr class="border-secondary opacity-25">
+                <div class="mb-2">
+                    <span class="text-muted d-block" style="font-size: 11px; text-transform: uppercase;">Emergency Dispatch</span>
+                    <a href="tel:100" class="text-white fw-bold fs-5 text-decoration-none"><i class="bi bi-telephone-fill me-2 text-primary"></i>100</a>
+                </div>
+                <div class="mb-2">
+                    <span class="text-muted d-block" style="font-size: 11px; text-transform: uppercase;">Cyber Crime Cell</span>
+                    <a href="tel:1930" class="text-white fw-bold fs-6 text-decoration-none"><i class="bi bi-telephone-fill me-2 text-primary"></i>1930</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fire Department -->
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100" style="border-top: 4px solid #ef4444; background: rgba(239, 68, 68, 0.05);">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="me-3 p-3 rounded-circle bg-danger bg-opacity-10 text-danger">
+                        <i class="bi bi-fire fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-0">Fire Department</h6>
+                        <span class="text-muted" style="font-size: 12px;">Fire & Rescue Services</span>
+                    </div>
+                </div>
+                <hr class="border-secondary opacity-25">
+                <div class="mb-2">
+                    <span class="text-muted d-block" style="font-size: 11px; text-transform: uppercase;">Emergency Dispatch</span>
+                    <a href="tel:101" class="text-white fw-bold fs-5 text-decoration-none"><i class="bi bi-telephone-fill me-2 text-danger"></i>101</a>
+                </div>
+                <div class="mb-2">
+                    <span class="text-muted d-block" style="font-size: 11px; text-transform: uppercase;">Disaster Management</span>
+                    <a href="tel:108" class="text-white fw-bold fs-6 text-decoration-none"><i class="bi bi-telephone-fill me-2 text-danger"></i>108</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Partnered Hospitals -->
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100" style="border-top: 4px solid #10b981; background: rgba(16, 185, 129, 0.05);">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="me-3 p-3 rounded-circle bg-success bg-opacity-10 text-success">
+                        <i class="bi bi-hospital-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-0">Partnered Hospitals</h6>
+                        <span class="text-muted" style="font-size: 12px;">Ambulance & Trauma Care</span>
+                    </div>
+                </div>
+                <hr class="border-secondary opacity-25">
+                <div class="mb-2">
+                    <span class="text-muted d-block" style="font-size: 11px; text-transform: uppercase;">Apollo Emergency (Primary)</span>
+                    <a href="tel:1066" class="text-white fw-bold fs-5 text-decoration-none"><i class="bi bi-telephone-fill me-2 text-success"></i>1066</a>
+                </div>
+                <div class="mb-2">
+                    <span class="text-muted d-block" style="font-size: 11px; text-transform: uppercase;">National Ambulance</span>
+                    <a href="tel:102" class="text-white fw-bold fs-6 text-decoration-none"><i class="bi bi-telephone-fill me-2 text-success"></i>102</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Building Security / Operations -->
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100" style="border-top: 4px solid #f59e0b; background: rgba(245, 158, 11, 0.05);">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="me-3 p-3 rounded-circle bg-warning bg-opacity-10 text-warning">
+                        <i class="bi bi-building-fill-exclamation fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-0">Building Management</h6>
+                        <span class="text-muted" style="font-size: 12px;">Facilities & Campus Security</span>
+                    </div>
+                </div>
+                <hr class="border-secondary opacity-25">
+                <div class="mb-2">
+                    <span class="text-muted d-block" style="font-size: 11px; text-transform: uppercase;">Main Security Gate</span>
+                    <a href="tel:04012345678" class="text-white fw-bold fs-6 text-decoration-none"><i class="bi bi-telephone-fill me-2 text-warning"></i>040-1234-5678</a>
+                </div>
+                <div class="mb-2">
+                    <span class="text-muted d-block" style="font-size: 11px; text-transform: uppercase;">Facilities Head (Night Shift)</span>
+                    <a href="tel:9876543210" class="text-white fw-bold fs-6 text-decoration-none"><i class="bi bi-telephone-fill me-2 text-warning"></i>+91 98765 43210</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- HR Escalation -->
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100" style="border-top: 4px solid #8b5cf6; background: rgba(139, 92, 246, 0.05);">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="me-3 p-3 rounded-circle bg-purple text-purple" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
+                        <i class="bi bi-person-badge-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-0">HR Leadership</h6>
+                        <span class="text-muted" style="font-size: 12px;">Critical Employee Incidents</span>
+                    </div>
+                </div>
+                <hr class="border-secondary opacity-25">
+                <div class="mb-2">
+                    <span class="text-muted d-block" style="font-size: 11px; text-transform: uppercase;">CHRO (Emergency Only)</span>
+                    <a href="tel:9988776655" class="text-white fw-bold fs-6 text-decoration-none"><i class="bi bi-telephone-fill me-2" style="color: #8b5cf6;"></i>+91 99887 76655</a>
+                </div>
+                <div class="mb-2">
+                    <span class="text-muted d-block" style="font-size: 11px; text-transform: uppercase;">Legal Team</span>
+                    <a href="mailto:legal@shesecure.com" class="text-white fw-bold fs-6 text-decoration-none"><i class="bi bi-envelope-fill me-2" style="color: #8b5cf6;"></i>legal@shesecure.com</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

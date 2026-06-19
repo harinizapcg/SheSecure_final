@@ -184,6 +184,17 @@ namespace SheSecure.ComplaintService.Services
             var created =
                 await _repository.CreateComplaintAsync(complaint);
 
+            var empIdInt = int.TryParse(employeeId, out var parsedId) ? parsedId : 1;
+            await _historyRepository.AddHistoryAsync(new ComplaintStatusHistory
+            {
+                ComplaintId = created.Id,
+                OldStatus = "-",
+                NewStatus = "Submitted",
+                ChangedBy = empIdInt,
+                Remarks = "Complaint submitted.",
+                ChangedAt = DateTime.UtcNow
+            });
+
             // Don't notify if anonymous — employee chose not
             // to be identified
             if (!dto.IsAnonymous)
@@ -317,6 +328,7 @@ namespace SheSecure.ComplaintService.Services
             if (complaint == null)
                 throw new Exception("Complaint not found");
 
+            var oldStatus = complaint.Status;
             complaint.AssignedTo = dto.AssignedTo;
 
             if (complaint.Status == "Submitted" || complaint.Status == "Under Review")
@@ -325,6 +337,20 @@ namespace SheSecure.ComplaintService.Services
             }
 
             await _repository.UpdateComplaintAsync(complaint);
+
+            var user = _httpContextAccessor.HttpContext?.User;
+            var userIdStr = user?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "1";
+            var userId = int.TryParse(userIdStr, out var uid) ? uid : 1;
+
+            await _historyRepository.AddHistoryAsync(new ComplaintStatusHistory
+            {
+                ComplaintId = complaint.Id,
+                OldStatus = oldStatus,
+                NewStatus = complaint.Status,
+                ChangedBy = userId,
+                Remarks = $"Assigned to investigator: {dto.AssignedTo}",
+                ChangedAt = DateTime.UtcNow
+            });
 
             if (!complaint.IsAnonymous)
             {

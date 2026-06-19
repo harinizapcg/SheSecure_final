@@ -1,0 +1,128 @@
+@{
+    ViewData["Title"] = "Active Tracking";
+    var alerts = (System.Text.Json.JsonElement)ViewBag.Alerts;
+    var role = Context.Session.GetString("Role") ?? "";
+}
+
+<div class="glass-card mb-4" style="padding: 0; overflow: hidden; height: 75vh; position: relative; border: 1px solid rgba(14, 165, 233, 0.4);">
+    <div id="commandCenterMap" style="height: 100%; width: 100%; z-index: 1;"></div>
+    <div style="position: absolute; top: 15px; left: 15px; z-index: 400; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); padding: 10px 16px; border-radius: 8px; border: 1px solid rgba(14, 165, 233, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
+        <i class="bi bi-globe me-2 text-info d-inline-block"></i>
+        <span class="text-white fw-bold" style="font-size: 13px; letter-spacing: 1px;">GLOBAL COMMAND CENTER - ACTIVE TRACKING</span>
+    </div>
+</div>
+
+<!-- Leaflet Map Integration & Command Center Logic -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (document.getElementById('commandCenterMap')) {
+            // Initialize map to Hyderabad by default
+            var map = L.map('commandCenterMap').setView([17.3850, 78.4867], 13);
+
+            L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                attribution: '&copy; <a href="https://www.google.com/intl/en_us/help/terms_maps.html">Google Maps</a>',
+                maxZoom: 20
+            }).addTo(map);
+
+            // Draw Global Safe Zones, Risk Areas, and Hospitals
+            L.circle([17.3850, 78.4867], {
+                color: '#10b981',
+                fillColor: '#10b981',
+                fillOpacity: 0.15,
+                weight: 2,
+                radius: 400
+            }).addTo(map).bindPopup('<b style="color:#0f172a">Safe Zone (Main Campus)</b><br><span style="color:#64748b; font-size:12px;">High security presence & surveillance.</span>');
+
+            L.circle([17.3950, 78.4800], {
+                color: '#ef4444',
+                fillColor: '#ef4444',
+                fillOpacity: 0.15,
+                weight: 2,
+                dashArray: '5, 5',
+                radius: 600
+            }).addTo(map).bindPopup('<b style="color:#ef4444">Caution: High-Risk Area</b><br><span style="color:#64748b; font-size:12px;">Recent incident reports. Avoid walking alone at night.</span>');
+
+            L.circle([17.4050, 78.4950], {
+                color: '#0ea5e9',
+                fillColor: '#0ea5e9',
+                fillOpacity: 0.2,
+                weight: 2,
+                radius: 250
+            }).addTo(map).bindPopup('<b style="color:#0ea5e9">Partnered Hospital</b><br><span style="color:#64748b; font-size:12px;">24/7 Emergency Trauma Care.</span>');
+
+            // Fetch alerts from the backend payload dumped into the view
+            var alertsData = @Html.Raw(alerts.ToString());
+            var bounds = [];
+
+            alertsData.forEach(function(alert) {
+                if (alert.status !== 'Active') return; // Only plot active alerts
+
+                // Try to extract Lat/Lng
+                var match = alert.location.match(/\[Lat:([^,]+),\s*Lng:([^\]]+)\]/);
+                var lat, lng;
+                
+                if (match) {
+                    lat = parseFloat(match[1]);
+                    lng = parseFloat(match[2]);
+                } else {
+                    // Fallback for legacy records without GPS
+                    var locStr = alert.location.toLowerCase();
+                    if (locStr.includes('hyderabad')) {
+                        lat = 17.3850 + (Math.random() - 0.5) * 0.05;
+                        lng = 78.4867 + (Math.random() - 0.5) * 0.05;
+                    } else if (locStr.includes('mumbai')) {
+                        lat = 19.0760 + (Math.random() - 0.5) * 0.05;
+                        lng = 72.8777 + (Math.random() - 0.5) * 0.05;
+                    } else if (locStr.includes('pune')) {
+                        lat = 18.5204 + (Math.random() - 0.5) * 0.05;
+                        lng = 73.8567 + (Math.random() - 0.5) * 0.05;
+                    } else if (locStr.includes('chennai')) {
+                        lat = 13.0827 + (Math.random() - 0.5) * 0.05;
+                        lng = 80.2707 + (Math.random() - 0.5) * 0.05;
+                    } else if (locStr.includes('delhi') || locStr.includes('noida') || locStr.includes('gurugram')) {
+                        lat = 28.6139 + (Math.random() - 0.5) * 0.05;
+                        lng = 77.2090 + (Math.random() - 0.5) * 0.05;
+                    } else if (locStr.includes('bangalore') || locStr.includes('bengaluru')) {
+                        lat = 12.9716 + (Math.random() - 0.5) * 0.05;
+                        lng = 77.5946 + (Math.random() - 0.5) * 0.05;
+                    } else {
+                        // Default to Hyderabad if no GPS and no recognized city
+                        lat = 17.3850 + (Math.random() - 0.5) * 0.05;
+                        lng = 78.4867 + (Math.random() - 0.5) * 0.05;
+                    }
+                }
+
+                var severityColor = alert.severity === 'Critical' ? '#ef4444' : (alert.severity === 'High' ? '#f59e0b' : '#3b82f6');
+                var animationClass = alert.severity === 'Critical' ? 'pulse-sos' : '';
+
+                var customIcon = L.divIcon({
+                    className: 'custom-map-icon',
+                    html: `<div style="width: 20px; height: 20px; background: ${severityColor}; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 15px ${severityColor}; animation: ${animationClass} 1.5s infinite;"></div>`,
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 10]
+                });
+
+                var marker = L.marker([lat, lng], {icon: customIcon}).addTo(map);
+                bounds.push([lat, lng]);
+
+                var cleanLocation = alert.location.replace(/\[Lat:.*\]/, '').trim();
+                
+                marker.bindPopup(`
+                    <div style="min-width: 150px;">
+                        <span class="badge bg-dark text-white mb-2 border border-secondary" style="font-family:monospace;">Alert #${alert.id}</span>
+                        <h6 style="color:#0f172a; margin-bottom:4px; font-weight:bold; font-size:14px;">${cleanLocation}</h6>
+                        <span style="color:${severityColor}; font-size:12px; font-weight:bold; text-transform:uppercase;">${alert.severity} SEVERITY</span><br>
+                        <span style="color:#64748b; font-size:11px;">Employee ID: ${alert.employeeId}</span>
+                    </div>
+                `);
+            });
+
+            // Auto-zoom map to fit all active emergencies
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
+            }
+        }
+    });
+</script>

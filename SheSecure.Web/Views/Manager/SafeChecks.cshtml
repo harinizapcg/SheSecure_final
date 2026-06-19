@@ -1,0 +1,76 @@
+@{
+    ViewData["Title"] = "Team Safe Checks";
+    var checks = (System.Text.Json.JsonElement)ViewBag.SafeChecks;
+}
+
+<div class="glass-card mt-2">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h5 class="section-title text-primary mb-1"><i class="bi bi-shield-exclamation me-2"></i>Active Team Travel</h5>
+            <p class="text-muted" style="font-size: 14px;">Monitor your team's ongoing travel and respond to any escalated timeouts.</p>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-dark table-hover" style="background: transparent; margin-bottom: 0;">
+            <thead style="background: rgba(255,255,255,0.05);">
+                <tr>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">Employee ID</th>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">Expected Arrival</th>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">Acknowledged At</th>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var c in checks.EnumerateArray())
+                {
+                    var empId = c.GetProperty("employeeId").GetString();
+                    var expected = c.GetProperty("expectedArrivalTime").GetDateTime();
+                    var ackAtProp = c.GetProperty("acknowledgedAt");
+                    DateTime? ackAt = ackAtProp.ValueKind == System.Text.Json.JsonValueKind.Null ? null : ackAtProp.GetDateTime();
+                    var status = c.GetProperty("status").GetString();
+
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td class="align-middle text-white fw-bold" style="font-size: 14px;">
+                            @empId
+                        </td>
+                        <td class="align-middle text-white opacity-75" style="font-size: 13px;">
+                            @expected.ToString("MMM dd, yyyy HH:mm")
+                        </td>
+                        <td class="align-middle text-white opacity-75" style="font-size: 13px;">
+                            @(ackAt.HasValue ? ackAt.Value.ToString("MMM dd, yyyy HH:mm") : "-")
+                        </td>
+                        <td class="align-middle">
+                            @if (status == "Pending")
+                            {
+                                <span class="badge bg-warning text-dark"><i class="bi bi-clock me-1"></i>In Transit</span>
+                            }
+                            else if (status == "Acknowledged")
+                            {
+                                <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Arrived</span>
+                            }
+                            else if (status == "Escalated")
+                            {
+                                <span class="badge bg-danger" style="animation: pulse-sos 1.5s infinite;"><i class="bi bi-exclamation-triangle me-1"></i>Escalated</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">@status</span>
+                            }
+                        </td>
+                    </tr>
+                }
+                
+                @if (checks.GetArrayLength() == 0)
+                {
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">
+                            <i class="bi bi-shield-check fs-2 mb-2 d-block opacity-50"></i>
+                            <p class="mb-0">No active safe checks.</p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

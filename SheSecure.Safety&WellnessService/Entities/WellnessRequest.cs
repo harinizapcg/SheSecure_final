@@ -20,6 +20,8 @@ namespace SheSecure.WellnessSafetyService.Entities
 
         public int? AssignedTo { get; set; }
 
+        public DateTime? RequestDate { get; set; }
+
         public DateTime CreatedAt { get; set; }
             = DateTime.UtcNow;
     }

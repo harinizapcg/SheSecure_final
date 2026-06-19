@@ -163,5 +163,69 @@ namespace SheSecure.AuthService.Controllers
                 expiration = token.ValidTo
             });
         }
+
+        // GET USERS
+        [HttpGet("users")]
+        public async Task<IActionResult> GetUsers()
+        {
+            var users = _userManager.Users.ToList();
+            var userList = new List<object>();
+
+            foreach (var u in users)
+            {
+                var roles = await _userManager.GetRolesAsync(u);
+                userList.Add(new
+                {
+                    id = u.Id,
+                    email = u.Email,
+                    fullName = u.FullName,
+                    role = roles.FirstOrDefault() ?? "Employee"
+                });
+            }
+
+            return Ok(userList);
+        }
+
+        // CHANGE ROLE
+        [HttpPost("change-role")]
+        public async Task<IActionResult> ChangeRole([FromBody] ChangeRoleDTO dto)
+        {
+            var user = await _userManager.FindByIdAsync(dto.UserId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+            if (!await _roleManager.RoleExistsAsync(dto.NewRole))
+            {
+                await _roleManager.CreateAsync(new IdentityRole(dto.NewRole));
+            }
+
+            await _userManager.AddToRoleAsync(user, dto.NewRole);
+
+            return Ok(new { message = "Role updated successfully." });
+        }
+
+        // DELETE USER
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Failed to delete user.");
+            }
+
+            return Ok(new { message = "User deleted successfully." });
+        }
     }
 }

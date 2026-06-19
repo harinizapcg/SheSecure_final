@@ -9,5 +9,7 @@ namespace SheSecure.WellnessSafetyService.DTOs.Requests
         public string Description { get; set; }
 
         public string Priority { get; set; }
+
+        public DateTime? RequestDate { get; set; }
     }
 }

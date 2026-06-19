@@ -16,6 +16,8 @@ namespace SheSecure.WellnessSafetyService.DTOs.Responses
 
         public int? AssignedTo { get; set; }
 
+        public DateTime? RequestDate { get; set; }
+
         public DateTime CreatedAt { get; set; }
     }
 }

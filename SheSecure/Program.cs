@@ -33,7 +33,7 @@ namespace SheSecure.AuthService
                 builder.Configuration["Jwt:Key"]);
 
             builder.Services.AddAuthentication(options =>
-            {
+             {
                 options.DefaultAuthenticateScheme =
                     JwtBearerDefaults.AuthenticationScheme;
 

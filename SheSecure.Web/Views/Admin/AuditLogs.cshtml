@@ -1,0 +1,67 @@
+@{
+    ViewData["Title"] = "Audit Logs";
+    var logs = (System.Text.Json.JsonElement)ViewBag.AuditLogs;
+}
+
+<div class="glass-card mt-2">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h5 class="section-title text-primary mb-1"><i class="bi bi-shield-check me-2"></i>Security Audit Trail</h5>
+            <p class="text-muted" style="font-size: 14px;">Chronological ledger of administrative actions for compliance and accountability.</p>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-dark table-hover" style="background: transparent; margin-bottom: 0;">
+            <thead style="background: rgba(255,255,255,0.05);">
+                <tr>
+                    <th class="text-muted fw-normal" style="font-size: 13px; width: 180px;">Timestamp (UTC)</th>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">User</th>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">Action</th>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">Entity</th>
+                    <th class="text-muted fw-normal" style="font-size: 13px;">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in logs.EnumerateArray())
+                {
+                    var time = log.GetProperty("timestamp").GetDateTime();
+                    var userId = log.GetProperty("userId").GetString();
+                    var action = log.GetProperty("action").GetString();
+                    var entity = log.GetProperty("entity").GetString();
+                    var details = log.GetProperty("details").GetString();
+
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td class="align-middle text-white opacity-75" style="font-size: 13px; font-family: monospace;">
+                            @time.ToString("yyyy-MM-dd HH:mm:ss")
+                        </td>
+                        <td class="align-middle text-white fw-bold" style="font-size: 13px;">
+                            @userId
+                        </td>
+                        <td class="align-middle">
+                            <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-50" style="font-weight: 500;">
+                                @action
+                            </span>
+                        </td>
+                        <td class="align-middle text-white opacity-75" style="font-size: 13px;">
+                            @entity
+                        </td>
+                        <td class="align-middle text-white opacity-75" style="font-size: 13px;">
+                            @details
+                        </td>
+                    </tr>
+                }
+                
+                @if (logs.GetArrayLength() == 0)
+                {
+                    <tr>
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <i class="bi bi-journal-x fs-2 mb-2 d-block opacity-50"></i>
+                            <p class="mb-0">No audit logs recorded yet.</p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

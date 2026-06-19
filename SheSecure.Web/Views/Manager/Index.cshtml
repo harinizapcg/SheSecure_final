@@ -1,0 +1,90 @@
+@{
+    Layout = "_Layout"; // Wait, we want to hide the sidebar. We can use a ViewBag flag in _Layout.
+    ViewData["Title"] = "Select Your Portal";
+}
+
+<style>
+    .portal-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 3rem 2rem;
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        height: 100%;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .portal-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .portal-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #e0e0e0, #888);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transition: all 0.3s ease;
+    }
+
+    .portal-card:hover .portal-icon {
+        background: linear-gradient(135deg, #fff, #aaa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        transform: scale(1.1);
+    }
+
+    .portal-title {
+        color: #fff;
+        font-weight: 600;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .portal-desc {
+        color: #aaa;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+</style>
+
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="text-center mb-5">
+        <h2 class="text-white fw-bold mb-2">Welcome back, @Context.Session.GetString("UserName")</h2>
+        <p class="text-muted fs-5">Which workspace do you need to access today?</p>
+    </div>
+
+    <div class="row g-4 w-100" style="max-width: 900px;">
+        <div class="col-md-6">
+            <form method="post" asp-action="SetMode" asp-controller="Manager" class="h-100 m-0">
+                <input type="hidden" name="mode" value="Personal" />
+                <button type="submit" class="w-100 border-0 bg-transparent text-start p-0 h-100">
+                    <div class="portal-card">
+                        <i class="bi bi-person-badge portal-icon"></i>
+                        <h3 class="portal-title">Personal Portal</h3>
+                        <p class="portal-desc">Access your own Dashboard, log your daily safe check-ins, request wellness leaves, or trigger an SOS alert for yourself.</p>
+                    </div>
+                </button>
+            </form>
+        </div>
+
+        <div class="col-md-6">
+            <form method="post" asp-action="SetMode" asp-controller="Manager" class="h-100 m-0">
+                <input type="hidden" name="mode" value="Leadership" />
+                <button type="submit" class="w-100 border-0 bg-transparent text-start p-0 h-100">
+                    <div class="portal-card">
+                        <i class="bi bi-diagram-3 portal-icon"></i>
+                        <h3 class="portal-title">Team Leadership</h3>
+                        <p class="portal-desc">Manage your direct reports. Monitor active team safe checks, respond to escalations, and review team wellness requests.</p>
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

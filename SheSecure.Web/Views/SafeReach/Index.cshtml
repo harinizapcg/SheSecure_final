@@ -115,18 +115,6 @@
     <!-- Records Table -->
     <div class="col-md-8">
         
-        <!-- Live Map Tracking -->
-        @if (hasPending)
-        {
-            <div class="glass-card mb-4 fade-in-up delay-100" style="padding: 0; overflow: hidden; height: 320px; position: relative; border: 1px solid rgba(245, 158, 11, 0.4);">
-                <div id="safeReachMap" style="height: 100%; width: 100%; z-index: 1;"></div>
-                <div style="position: absolute; top: 15px; left: 15px; z-index: 400; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(10px); padding: 10px 16px; border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.5); box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
-                    <i class="bi bi-geo-alt-fill text-warning me-2 d-inline-block" style="animation: pulse-sos 2s infinite;"></i>
-                    <span class="text-white fw-bold" style="font-size: 12px; letter-spacing: 1px;">ACTIVE ROUTE TRACKING</span>
-                </div>
-            </div>
-        }
-
         <div class="glass-card h-100 fade-in-up delay-200">
             <h5 class="section-title">📋 Activity History</h5>
 
@@ -271,14 +259,9 @@
             }
         </div>
     </div>
-</div>
-
-
-<!-- Leaflet Map Integration -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<!-- DateTime Picker -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -290,76 +273,5 @@
             time_24hr: false,
             minDate: "today"
         });
-
-        if (document.getElementById('safeReachMap')) {
-            var map = L.map('safeReachMap', { zoomControl: false }).setView([17.3850, 78.4867], 14);
-
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; OpenStreetMap',
-                subdomains: 'abcd',
-                maxZoom: 20
-            }).addTo(map);
-
-            var startIcon = L.divIcon({
-                className: 'custom-start-icon',
-                html: '<div style=""width: 20px; height: 20px; background: #10b981; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px #10b981;""></div>',
-                iconSize: [20, 20],
-                iconAnchor: [10, 10]
-            });
-
-            var trackingIcon = L.divIcon({
-                className: 'custom-tracking-icon',
-                html: '<div style=""width: 24px; height: 24px; background: #f59e0b; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 20px #f59e0b; animation: pulse-sos 2s infinite;""></div>',
-                iconSize: [24, 24],
-                iconAnchor: [12, 12]
-            });
-
-            L.marker([17.3850, 78.4867], {icon: startIcon}).addTo(map).bindPopup('<b style=""color:#0f172a"">Origin</b><br><span style=""color:#64748b; font-size:12px;"">Journey started.</span>');
-            var marker = L.marker([17.3850, 78.4867], {icon: trackingIcon}).addTo(map);
-            
-            // Draw a rough route path
-            var pathCoordinates = [
-                [17.3850, 78.4867],
-                [17.3900, 78.4900],
-                [17.4000, 78.4850]
-            ];
-            L.polyline(pathCoordinates, {color: '#f59e0b', weight: 4, opacity: 0.7, dashArray: '10, 10'}).addTo(map);
-
-            // Draw Safe Zones, Risk Areas, and Hospitals
-            L.circle([17.3850, 78.4867], {
-                color: '#10b981',
-                fillColor: '#10b981',
-                fillOpacity: 0.15,
-                weight: 2,
-                radius: 400
-            }).addTo(map).bindPopup('<b style="color:#0f172a">Safe Zone (Main Campus)</b><br><span style="color:#64748b; font-size:12px;">High security presence & surveillance.</span>');
-
-            L.circle([17.3950, 78.4800], {
-                color: '#ef4444',
-                fillColor: '#ef4444',
-                fillOpacity: 0.15,
-                weight: 2,
-                dashArray: '5, 5',
-                radius: 600
-            }).addTo(map).bindPopup('<b style="color:#ef4444">Caution: High-Risk Area</b><br><span style="color:#64748b; font-size:12px;">Recent incident reports. Avoid walking alone at night.</span>');
-
-            L.circle([17.4050, 78.4950], {
-                color: '#0ea5e9',
-                fillColor: '#0ea5e9',
-                fillOpacity: 0.2,
-                weight: 2,
-                radius: 250
-            }).addTo(map).bindPopup('<b style="color:#0ea5e9">Partnered Hospital</b><br><span style="color:#64748b; font-size:12px;">24/7 Emergency Trauma Care.</span>');
-
-            marker.bindPopup('<b style=""color:#0f172a; font-size:14px;"">In Transit</b><br><span style=""color:#64748b; font-size:12px;"">Safe check-in timer is active.</span>').openPopup();
-
-            // Simulate slight movement along the route
-            setInterval(() => {
-                var currentPos = marker.getLatLng();
-                var newLat = currentPos.lat - 0.00005;
-                var newLng = currentPos.lng + 0.00005;
-                marker.setLatLng([newLat, newLng]);
-            }, 2000);
-        }
     });
 </script>

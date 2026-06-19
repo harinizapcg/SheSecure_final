@@ -35,6 +35,10 @@
                     </select>
                 </div>
                 <div class="mb-3">
+                    <label class="form-label">Request Date</label>
+                    <input type="date" name="requestDate" class="form-control" required />
+                </div>
+                <div class="mb-3">
                     <label class="form-label">Priority</label>
                     <select name="priority" class="form-select" required>
                         <option value="Low">Low</option>
@@ -101,6 +105,7 @@
                         var priority = r.GetProperty("priority").GetString();
                         var status = r.GetProperty("status").GetString();
                         var createdAt = r.GetProperty("createdAt").GetString();
+                        var requestDate = r.TryGetProperty("requestDate", out var rd) ? rd.GetString() : null;
 
                         var statusClass = status == "Approved" ? "success"
                                        : status == "Rejected" ? "error"
@@ -137,6 +142,10 @@
                             
                             <div class="d-flex align-items-center text-muted" style="font-size: 12px;">
                                 <i class="bi bi-calendar-event me-2"></i>
+                                @if (!string.IsNullOrEmpty(requestDate))
+                                {
+                                    <span>For: @(DateTime.TryParse(requestDate, out var parsedDate) ? parsedDate.ToString("dd MMM yyyy") : requestDate) | </span>
+                                }
                                 Submitted on @TimeHelper.ToIST(createdAt!).ToString("dd MMM yyyy, hh:mm tt")
                             </div>
                         </div>

@@ -1,0 +1,48 @@
+@{
+    ViewData["Title"] = "Escalated Safe Check-Ins";
+    var escalatedRecords = (System.Text.Json.JsonElement)(ViewBag.EscalatedSafeReaches ?? System.Text.Json.JsonDocument.Parse("[]").RootElement);
+    var role = Context.Session.GetString("Role") ?? "";
+}
+
+<div class="glass-card mt-2" style="border: 1px solid rgba(245, 158, 11, 0.4); background: radial-gradient(circle at top right, rgba(245, 158, 11, 0.05), rgba(30, 41, 59, 0.4));">
+    <h5 class="section-title text-warning">⚠️ Escalated Safe Check-Ins</h5>
+    <p style="font-size: 14px; color: var(--ss-muted); margin-bottom: 24px;">
+        Employees below missed their safe arrival acknowledgment time and were escalated by their manager. Immediate action is required.
+    </p>
+
+    @if (!escalatedRecords.EnumerateArray().Any())
+    {
+        <div class="empty-state py-5">
+            <div class="empty-state-icon" style="font-size: 56px; margin-bottom: 15px; opacity: 0.5;">🛡️</div>
+            <h5 class="text-white">No Active Escalations</h5>
+            <p class="text-muted">All employees have acknowledged their safe arrivals.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var r in escalatedRecords.EnumerateArray())
+            {
+                var rId = r.GetProperty("id").GetInt32();
+                var rEmpId = r.GetProperty("employeeId").GetString();
+                var expectedTime = r.GetProperty("expectedArrivalTime").GetString();
+
+                <div class="col-md-6 mb-4">
+                    <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; padding: 20px; border-radius: 12px; height: 100%;">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <span class="badge bg-dark text-warning border border-warning fs-6 mb-2" style="font-family:monospace;">Emp: @rEmpId</span>
+                                <div class="text-white fw-bold fs-5">Missed Check-in</div>
+                            </div>
+                            <span class="badge bg-danger text-white fs-6 px-3 py-2">Escalated</span>
+                        </div>
+                        
+                        <div class="mb-2" style="font-size: 14px; color: var(--ss-muted);">
+                            Expected Arrival: <span class="text-warning fw-bold">@TimeHelper.ToIST(expectedTime!).ToString("dd MMM yyyy, hh:mm tt")</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

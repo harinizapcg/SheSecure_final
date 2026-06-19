@@ -159,9 +159,15 @@
             <!-- Category Filters -->
             <div class="d-flex flex-wrap gap-2 mb-4 fade-in-up delay-100">
                 <div class="filter-pill active" onclick="filterNotifs('All', this)">All Activity</div>
-                <div class="filter-pill" onclick="filterNotifs('Complaint', this)"><i class="bi bi-file-earmark-text me-1"></i>Complaints</div>
+                @if (Context.Session.GetString("Role") != "Security")
+                {
+                    <div class="filter-pill" onclick="filterNotifs('Complaint', this)"><i class="bi bi-file-earmark-text me-1"></i>Complaints</div>
+                }
                 <div class="filter-pill" onclick="filterNotifs('Safety', this)"><i class="bi bi-shield-check me-1"></i>Safety</div>
-                <div class="filter-pill" onclick="filterNotifs('Wellness', this)"><i class="bi bi-heart-pulse me-1"></i>Wellness</div>
+                @if (Context.Session.GetString("Role") != "Security")
+                {
+                    <div class="filter-pill" onclick="filterNotifs('Wellness', this)"><i class="bi bi-heart-pulse me-1"></i>Wellness</div>
+                }
                 <div class="filter-pill" onclick="filterNotifs('Emergency', this)"><i class="bi bi-exclamation-triangle me-1"></i>Emergency</div>
             </div>
 

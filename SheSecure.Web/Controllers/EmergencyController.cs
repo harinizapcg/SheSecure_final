@@ -64,7 +64,78 @@ namespace SheSecure.Web.Controllers
                 ViewBag.Alerts = JsonDocument.Parse("[]").RootElement;
             }
 
-            ViewData["Title"] = "All Emergency Alerts";
+            ViewData["Title"] = "SOS Alerts";
+            return View();
+        }
+
+        // GET — Security: tracking map
+        public async Task<IActionResult> Tracking()
+        {
+            if (HttpContext.Session.GetString("Token") == null)
+                return RedirectToAction("Login", "Auth");
+
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Security" && role != "Admin" && role != "Manager")
+                return RedirectToAction("Index", "Dashboard");
+
+            var client = GetClient();
+            try
+            {
+                var response = await client.GetStringAsync("api/EmergencyAlert/all");
+                ViewBag.Alerts = JsonDocument.Parse(response).RootElement;
+            }
+            catch
+            {
+                ViewBag.Alerts = JsonDocument.Parse("[]").RootElement;
+            }
+
+            ViewData["Title"] = "Active Tracking";
+            return View();
+        }
+
+        // GET — Security: escalations
+        public async Task<IActionResult> Escalations()
+        {
+            if (HttpContext.Session.GetString("Token") == null)
+                return RedirectToAction("Login", "Auth");
+
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Security" && role != "Admin" && role != "Manager")
+                return RedirectToAction("Index", "Dashboard");
+
+            var client = GetClient();
+            try
+            {
+                var safeReachResponse = await client.GetStringAsync("api/SafeReach/all");
+                var allSafeReaches = JsonDocument.Parse(safeReachResponse).RootElement;
+                
+                var escalated = allSafeReaches.EnumerateArray()
+                    .Where(r => r.GetProperty("status").GetString() == "Escalated")
+                    .ToList();
+
+                var jsonStr = JsonSerializer.Serialize(escalated);
+                ViewBag.EscalatedSafeReaches = JsonDocument.Parse(jsonStr).RootElement;
+            }
+            catch
+            {
+                ViewBag.EscalatedSafeReaches = JsonDocument.Parse("[]").RootElement;
+            }
+
+            ViewData["Title"] = "Escalated Safe Check-Ins";
+            return View();
+        }
+
+        // GET — Security: Emergency Directory
+        public IActionResult Directory()
+        {
+            if (HttpContext.Session.GetString("Token") == null)
+                return RedirectToAction("Login", "Auth");
+
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Security" && role != "Admin" && role != "Manager")
+                return RedirectToAction("Index", "Dashboard");
+
+            ViewData["Title"] = "Emergency Contacts Directory";
             return View();
         }
 
@@ -97,10 +168,10 @@ namespace SheSecure.Web.Controllers
 
         // POST — Resolve alert (Security)
         [HttpPost]
-        public async Task<IActionResult> Resolve(int alertId)
+        public async Task<IActionResult> Resolve(int alertId, string resolutionNotes)
         {
             var client = GetClient();
-            var payload = JsonSerializer.Serialize(new { alertId });
+            var payload = JsonSerializer.Serialize(new { alertId, resolutionNotes });
             var content = new StringContent(payload, Encoding.UTF8, "application/json");
 
             var response = await client.PutAsync("api/EmergencyAlert/resolve", content);

@@ -176,7 +176,8 @@ namespace SheSecure.WellnessSafetyService.Services
                 EmployeeId = dto.EmployeeId,
                 RequestType = dto.RequestType,
                 Description = dto.Description,
-                Priority = dto.Priority
+                Priority = dto.Priority,
+                RequestDate = dto.RequestDate
             };
 
             var saved =
@@ -197,6 +198,7 @@ namespace SheSecure.WellnessSafetyService.Services
                 Priority = saved.Priority,
                 Status = saved.Status,
                 AssignedTo = saved.AssignedTo,
+                RequestDate = saved.RequestDate,
                 CreatedAt = saved.CreatedAt
             };
         }
@@ -226,6 +228,7 @@ namespace SheSecure.WellnessSafetyService.Services
                     Priority = x.Priority,
                     Status = x.Status,
                     AssignedTo = x.AssignedTo,
+                    RequestDate = x.RequestDate,
                     CreatedAt = x.CreatedAt
                 }).ToList();
         }
@@ -253,6 +256,7 @@ namespace SheSecure.WellnessSafetyService.Services
                 Priority = request.Priority,
                 Status = request.Status,
                 AssignedTo = request.AssignedTo,
+                RequestDate = request.RequestDate,
                 CreatedAt = request.CreatedAt
             };
         }
@@ -299,6 +303,7 @@ namespace SheSecure.WellnessSafetyService.Services
                 Priority = r.Priority,
                 Status = r.Status,
                 AssignedTo = r.AssignedTo,
+                RequestDate = r.RequestDate,
                 CreatedAt = r.CreatedAt
             }).ToList();
         }
